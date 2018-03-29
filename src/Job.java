@@ -58,4 +58,28 @@ public class Job
 	{
 		return "Job ID: " + id + "Executed time: " + executedTime + "Total time: " + totalTime;
 	}
+
+	/**
+	 * Checks if two Jobs equal each other based off of:
+	 * executed time
+	 * total time
+	 * id
+	 * @param obj
+	 * @return
+	 */
+	@Override
+	public boolean equals(Object obj)
+	{
+
+		if(!(obj instanceof  Job))
+		{
+			return false;
+		}
+
+		Job job = (Job) obj;
+
+		return (this.executedTime == job.getExecutedTime()
+				&& this.totalTime == job.getTotalTime()
+				&& this.id == job.getId());
+	}
 }
