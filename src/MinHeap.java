@@ -32,22 +32,22 @@ public class MinHeap
 		heapPropertyMaintained = false;
 
 		int currentIndex = lastHeapIndex;
-
 		while(!heapPropertyMaintained)
 		{
 			// Current index is 0, we are at the root
-			if(currentIndex)
+			if(currentIndex == 0)
 			{
 				break;
 			}
 
 			Job current = heapArray[currentIndex];
-			Job parent = heapArray[currentIndex / 2];
+			Job parent = heapArray[(currentIndex-1) / 2];
 
 			if(parent.getExecutedTime() > current.getExecutedTime())
 			{
-				heapArray[currentIndex / 2] = current;
+				heapArray[(currentIndex-1) / 2] = current;
 				heapArray[currentIndex] = parent;
+				currentIndex = (currentIndex-1)/2;
 			}
 			else
 			{
@@ -79,7 +79,6 @@ public class MinHeap
 	{
 		if(lastHeapIndex == -1)
 		{
-			System.out.println("Size is 0");
 			return null;
 		}
 
@@ -98,6 +97,7 @@ public class MinHeap
 		// Grab last element
 		heapArray[0] = heapArray[lastHeapIndex];
 		heapPropertyMaintained = false;
+		heapArray[lastHeapIndex] = null;
 		lastHeapIndex--;
 
 		while(!heapPropertyMaintained)
@@ -108,6 +108,7 @@ public class MinHeap
 			// Check for existing children
 			leftExist = ((2 * parentIndex) + 1) <= lastHeapIndex;
 			rightExist = ((2 * parentIndex) + 2) <= lastHeapIndex;
+
 
 			if(leftExist)
 			{
@@ -129,7 +130,7 @@ public class MinHeap
 			else if(rightExist && rightChild.getExecutedTime() < leftChild.getExecutedTime()
 					&& parent.getExecutedTime() > rightChild.getExecutedTime())
 			{
-				minChild = ((2 * parentIndex) + 1);
+				minChild = ((2 * parentIndex) + 2);
 			}
 			// The parent is smaller than both children, our heap property is now
 			// maintained
@@ -151,6 +152,18 @@ public class MinHeap
 		return min;
 	}
 
+	public void printHeap()
+	{
+		int count = 0;
+		for (Job job:
+		     heapArray)
+		{
+			if(job != null)
+			{
+				System.out.println("Index:  " + count++ + " " + job.toString());
+			}
+		}
+	}
 
 
 }

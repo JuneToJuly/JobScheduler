@@ -1,21 +1,22 @@
 /**
  * @author Ian Thomas
  */
-public class RedBlackTree<J>
+public class RedBlackTree
 {
-	private J[] data;
+	private Job[] data;
 
 	public RedBlackTree()
 	{
-		data = new J[1];
+		data = new Job[1];
 	}
 
-	public void add(J currentJob)
+	public void add(Job currentJob)
 	{
 
 	}
 
-	public J get(int id)
+	public Job get(int id)
 	{
+		return null;
 	}
 }

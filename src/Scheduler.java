@@ -3,16 +3,16 @@
  */
 public class Scheduler
 {
-	private MinHeap<Job> minHeap;
-	private RedBlackTree<Job> rbt;
+	private MinHeap minHeap;
+	private RedBlackTree rbt;
 
 	/**
 	 * Creates the min-heap and red black tree.
 	 */
 	public Scheduler()
 	{
-		minHeap = new MinHeap<>();
-		rbt = new RedBlackTree<>();
+		minHeap = new MinHeap();
+		rbt = new RedBlackTree();
 	}
 
 	/**
@@ -57,10 +57,10 @@ public class Scheduler
 		Job currentJob;
 		for (int i = low; i < high; i++)
 		{
-			if((currentJob = rbt.get(i)) != null)
-			{
-				System.out.println(currentJob.toString());
-			}
+//			if((currentJob = rbt.get(i)) != null)
+//			{
+//				System.out.println(currentJob.toString());
+//			}
 		}
 	}
 

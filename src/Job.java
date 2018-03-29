@@ -14,6 +14,18 @@ public class Job
 		this.totalTime = totalTime;
 	}
 
+	/** Test constructor
+	 *
+	 * @param id
+	 * @param totalTime
+	 */
+	public Job(int id, int totalTime, int executedTime)
+	{
+		this.id = id;
+		this.executedTime = executedTime;
+		this.totalTime = totalTime;
+	}
+
 	/**
 	 *  Sets the total time for a job.
 	 * @param totalTime total time the job should take in ms.
@@ -56,7 +68,7 @@ public class Job
 	@Override
 	public String toString()
 	{
-		return "Job ID: " + id + "Executed time: " + executedTime + "Total time: " + totalTime;
+		return "Job ID: " + id + " Executed time: " + executedTime + " Total time: " + totalTime;
 	}
 
 	/**
