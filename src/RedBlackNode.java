@@ -1,3 +1,6 @@
+/**
+ * @author Ian
+ */
 public class RedBlackNode
 {
 	private Job job;
@@ -10,7 +13,8 @@ public class RedBlackNode
 	public RedBlackNode(Job job, RedBlackTree.Color color)
 	{
 		this.job = job;
-		this.key = job.getId();
+
+		if (job !=null)	this.key = job.getId();
 		this.color = color;
 
 		parent = null;
