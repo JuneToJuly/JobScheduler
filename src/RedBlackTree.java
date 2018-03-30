@@ -1,4 +1,5 @@
 import com.sun.org.apache.regexp.internal.REDebugCompiler;
+import sun.plugin.dom.core.CoreConstants;
 
 import java.util.Queue;
 
@@ -71,6 +72,9 @@ public class RedBlackTree
 
 		int degree = checkDegreeOfDeletion(next);
 		RedBlackNode deficientNode = findDeficientNode(degree, next);
+
+		System.out.println("I am a deficient node: " + deficientNode.getKey());
+		System.out.println("My Parent is: " + deficientNode.getParent().getKey());
 
 		// We have fixed the problem with a one degree black that has a red child
 		// and a one degree red that has a black child.
@@ -258,6 +262,7 @@ public class RedBlackTree
 
 	private void performDeleteRotation(RedBlackNode deletedNode, DeleteRotation deleteRotation)
 	{
+		Color initRootColor = null;
 
 		RedBlackNode nodeC = null;
 		RedBlackNode nodeB = null;
@@ -293,8 +298,10 @@ public class RedBlackTree
 				break;
 			case Rb11:
 				// Change colors first
+				initRootColor = deletedNode.getParent().getColor();
 				deletedNode.getParent().getLeftChild().getLeftChild().setColor(Color.BLACK);
 				deletedNode.getParent().setColor(Color.BLACK);
+				deletedNode.getParent().getLeftChild().setColor(initRootColor);
 
 				// V Parent
 				if(parentToGrandParent == Child.RIGHT)
@@ -320,7 +327,8 @@ public class RedBlackTree
 				break;
 			case Rb12:
 				// Color nodes first
-				deletedNode.getParent().getLeftChild().getRightChild().setColor(Color.BLACK);
+				initRootColor = deletedNode.getParent().getColor();
+				deletedNode.getParent().getLeftChild().getRightChild().setColor(initRootColor);
 
 				// W to GP
 				if(parentToGrandParent == Child.RIGHT)
@@ -355,7 +363,8 @@ public class RedBlackTree
 				break;
 			case Rb2:
 				// Color nodes first
-				deletedNode.getParent().getLeftChild().getRightChild().setColor(Color.BLACK);
+				initRootColor = deletedNode.getParent().getColor();
+				deletedNode.getParent().getLeftChild().getRightChild().setColor(initRootColor);
 
 				// W to GP
 				if(parentToGrandParent == Child.RIGHT)
@@ -536,6 +545,9 @@ public class RedBlackTree
 				a = deletedNode.getParent().getRightChild().getRightChild();
 				b = deletedNode.getParent().getRightChild().getLeftChild();
 
+				initRootColor = deletedNode.getParent().getColor();
+				v.setColor(initRootColor);
+
 				a.setColor(Color.BLACK);
 
 				// V to GP
@@ -562,6 +574,9 @@ public class RedBlackTree
 				w = deletedNode.getParent().getRightChild().getLeftChild();
 				b = deletedNode.getParent().getRightChild().getLeftChild().getRightChild();
 				c = deletedNode.getParent().getRightChild().getLeftChild().getLeftChild();
+
+				initRootColor = deletedNode.getParent().getColor();
+				w.setColor(initRootColor);
 
 				// W to GP
 				if(parentToGrandParent == Child.RIGHT)
@@ -598,6 +613,8 @@ public class RedBlackTree
 				b = deletedNode.getParent().getRightChild().getLeftChild().getRightChild();
 				c = deletedNode.getParent().getRightChild().getLeftChild().getLeftChild();
 
+				initRootColor = deletedNode.getParent().getColor();
+				w.setColor(initRootColor);
 
 				// W to GP
 				if(parentToGrandParent == Child.RIGHT)
