@@ -430,137 +430,155 @@ public class RedBlackTree
 
 				break;
 			case Rr0:
-				// Color change
-				deletedNode.getParent().getLeftChild().getRightChild().setColor(Color.RED);
-				deletedNode.getParent().getLeftChild().setColor(Color.BLACK);
+				py = deletedNode.getParent();
+				v = deletedNode.getParent().getLeftChild();
+				a = deletedNode.getParent().getLeftChild().getLeftChild();
+				b = deletedNode.getParent().getLeftChild().getRightChild();
 
-				// V Parent
+				v.setColor(Color.BLACK);
+				b.setColor(Color.RED);
+
+				// W to GP
 				if(parentToGrandParent == Child.RIGHT)
 				{
-					deletedNode.getParent().getParent().setRightChild(deletedNode.getParent().getLeftChild());
+					deletedNode.getParent().getParent().setRightChild(v);
 				}
 				else
 				{
-					deletedNode.getParent().getParent().setLeftChild(deletedNode.getParent().getLeftChild());
+					deletedNode.getParent().getParent().setLeftChild(v);
 				}
-				deletedNode.getParent().getLeftChild().setParent(deletedNode.getParent().getParent());
+				v.setParent(deletedNode.getParent().getParent());
 
-				nodeB = deletedNode.getParent().getLeftChild().getRightChild();
+				// B to Py
+				b.setParent(py);
+				py.setLeftChild(b);
 
-				// V right child now Old Parent
-				deletedNode.getParent().getLeftChild().setRightChild(deletedNode.getParent());
-				deletedNode.getParent().setParent(deletedNode.getParent().getLeftChild());
-
-				// B Taken Care of
-				deletedNode.getParent().setLeftChild(nodeB);
-				deletedNode.getParent().getLeftChild().setParent(deletedNode.getParent());
+				//  Py to W
+				v.setRightChild(py);
+				py.setParent(v);
 				break;
 			case Rr11:
-				// Color nodes first
-				deletedNode.getParent().getLeftChild().getRightChild().getLeftChild().setColor(Color.BLACK);
+
+				py = deletedNode.getParent();
+				v = deletedNode.getParent().getLeftChild();
+				a = deletedNode.getParent().getLeftChild().getLeftChild();
+				w = deletedNode.getParent().getLeftChild().getRightChild();
+				b = deletedNode.getParent().getLeftChild().getRightChild().getLeftChild();
+				c = deletedNode.getParent().getLeftChild().getRightChild().getRightChild();
+
+				w.setColor(Color.BLACK);
+				py.setColor(Color.BLACK);
+				b.setColor(Color.BLACK);
 
 				// W to GP
 				if(parentToGrandParent == Child.RIGHT)
 				{
-					deletedNode.getParent().getParent().setRightChild(deletedNode.getParent().getLeftChild().getRightChild());
+					deletedNode.getParent().getParent().setRightChild(w);
 				}
 				else
 				{
-					deletedNode.getParent().getParent().setLeftChild(deletedNode.getParent().getLeftChild().getRightChild());
+					deletedNode.getParent().getParent().setLeftChild(w);
 				}
-				deletedNode.getParent().getLeftChild().getRightChild().setParent(deletedNode.getParent().getParent());
-
-				// C
-				nodeC = deletedNode.getParent().getLeftChild().getRightChild().getRightChild();
-				nodeB = deletedNode.getParent().getLeftChild().getRightChild().getLeftChild();
-
-				// W to Py
-				deletedNode.getParent().setParent(deletedNode.getParent().getLeftChild().getRightChild());
-				deletedNode.getParent().getLeftChild().getRightChild().setRightChild(deletedNode.getParent());
-
-				// V to W
-				deletedNode.getParent().getLeftChild().setParent(deletedNode.getParent().getLeftChild().getRightChild());
-				deletedNode.getParent().getLeftChild().getRightChild().setLeftChild(deletedNode.getParent().getLeftChild());
+				w.setParent(py.getParent());
 
 				// B to V
-				deletedNode.getParent().getLeftChild().setRightChild(nodeB);
-				deletedNode.getParent().getLeftChild().getRightChild().setParent(deletedNode.getParent().getLeftChild());
+				b.setParent(v);
+				v.setRightChild(b);
 
-				// C to Py
-				deletedNode.getParent().setLeftChild(nodeC);
-				deletedNode.getParent().getLeftChild().setParent(deletedNode.getParent());
+				// C to py
+				py.setLeftChild(c);
+				c.setParent(py);
+
+				// V to W
+				w.setLeftChild(v);
+				v.setParent(w);
+
+				//  Py to W
+				w.setRightChild(py);
+				py.setParent(w);
+
+				py.setRightChild(externalNode);
+
 				break;
 			case Rr12:
+				py = deletedNode.getParent();
+				v = deletedNode.getParent().getLeftChild();
+				a = deletedNode.getParent().getLeftChild().getLeftChild();
+				w = deletedNode.getParent().getLeftChild().getRightChild();
+				b = deletedNode.getParent().getLeftChild().getRightChild().getLeftChild();
+				x = w.getRightChild();
+				c = x.getLeftChild();
+				d = x.getRightChild();
 
-				// Color nodes first
-				deletedNode.getParent().getLeftChild().getRightChild().getRightChild().setColor(Color.BLACK);
+				x.setColor(Color.BLACK);
 
-				// W to GP
+				// X to GP
 				if(parentToGrandParent == Child.RIGHT)
 				{
-					deletedNode.getParent().getParent().setRightChild(deletedNode.getParent().getLeftChild().getRightChild().getRightChild());
+					deletedNode.getParent().getParent().setRightChild(x);
 				}
 				else
 				{
-					deletedNode.getParent().getParent().setLeftChild(deletedNode.getParent().getLeftChild().getRightChild().getRightChild());
+					deletedNode.getParent().getParent().setLeftChild(x);
 				}
-				deletedNode.getParent().getLeftChild().getRightChild().getRightChild().setParent(deletedNode.getParent().getParent());
-
-				// C
-				nodeC = deletedNode.getParent().getLeftChild().getRightChild().getRightChild().getLeftChild();
-				nodeD = deletedNode.getParent().getLeftChild().getRightChild().getRightChild().getRightChild();
-
-				// W to Py
-				deletedNode.getParent().setParent(deletedNode.getParent().getLeftChild().getRightChild().getRightChild());
-				deletedNode.getParent().getLeftChild().getRightChild().getRightChild().setRightChild(deletedNode.getParent());
-
-				// V to W
-				deletedNode.getParent().getLeftChild().setParent(deletedNode.getParent().getLeftChild().getRightChild().getRightChild());
-				deletedNode.getParent().getLeftChild().getRightChild().getRightChild().setLeftChild(deletedNode.getParent().getLeftChild());
+				x.setParent(py.getParent());
 
 				// C to W
-				deletedNode.getParent().getLeftChild().getRightChild().setRightChild(nodeC);
-				deletedNode.getParent().getLeftChild().getRightChild().setParent(deletedNode.getParent().getLeftChild());
+				c.setParent(w);
+				w.setRightChild(c);
 
 				// D to Py
-				deletedNode.getParent().setLeftChild(nodeD);
-				deletedNode.getParent().getLeftChild().setParent(deletedNode.getParent());
+				py.setLeftChild(d);
+				d.setParent(py);
 
+				// V to X
+				x.setLeftChild(v);
+				v.setParent(x);
+
+				//  Py to X
+				x.setRightChild(py);
+				py.setParent(x);
+				py.setRightChild(RedBlackTree.externalNode);
 				break;
 			case Rr2:
-				// Color nodes first
-				deletedNode.getParent().getLeftChild().getRightChild().getRightChild().setColor(Color.BLACK);
+				py = deletedNode.getParent();
+				v = deletedNode.getParent().getLeftChild();
+				a = deletedNode.getParent().getLeftChild().getLeftChild();
+				w = deletedNode.getParent().getLeftChild().getRightChild();
+				b = deletedNode.getParent().getLeftChild().getRightChild().getLeftChild();
+				x = w.getRightChild();
+				c = x.getLeftChild();
+				d = x.getRightChild();
 
-				// W to GP
+				x.setColor(Color.BLACK);
+
+				// X to GP
 				if(parentToGrandParent == Child.RIGHT)
 				{
-					deletedNode.getParent().getParent().setRightChild(deletedNode.getParent().getLeftChild().getRightChild().getRightChild());
+					deletedNode.getParent().getParent().setRightChild(x);
 				}
 				else
 				{
-					deletedNode.getParent().getParent().setLeftChild(deletedNode.getParent().getLeftChild().getRightChild().getRightChild());
+					deletedNode.getParent().getParent().setLeftChild(x);
 				}
-				deletedNode.getParent().getLeftChild().getRightChild().getRightChild().setParent(deletedNode.getParent().getParent());
-
-				// C
-				nodeC = deletedNode.getParent().getLeftChild().getRightChild().getRightChild().getLeftChild();
-				nodeD = deletedNode.getParent().getLeftChild().getRightChild().getRightChild().getRightChild();
-
-				// W to Py
-				deletedNode.getParent().setParent(deletedNode.getParent().getLeftChild().getRightChild().getRightChild());
-				deletedNode.getParent().getLeftChild().getRightChild().getRightChild().setRightChild(deletedNode.getParent());
-
-				// V to W
-				deletedNode.getParent().getLeftChild().setParent(deletedNode.getParent().getLeftChild().getRightChild().getRightChild());
-				deletedNode.getParent().getLeftChild().getRightChild().getRightChild().setLeftChild(deletedNode.getParent().getLeftChild());
+				x.setParent(py.getParent());
 
 				// C to W
-				deletedNode.getParent().getLeftChild().getRightChild().setRightChild(nodeC);
-				deletedNode.getParent().getLeftChild().getRightChild().setParent(deletedNode.getParent().getLeftChild());
+				c.setParent(w);
+				w.setRightChild(c);
 
 				// D to Py
-				deletedNode.getParent().setLeftChild(nodeD);
-				deletedNode.getParent().getLeftChild().setParent(deletedNode.getParent());
+				py.setLeftChild(d);
+				d.setParent(py);
+
+				// V to X
+				x.setLeftChild(v);
+				v.setParent(x);
+
+				//  Py to X
+				x.setRightChild(py);
+				py.setParent(x);
+				py.setRightChild(RedBlackTree.externalNode);
 				break;
 			case Lb01:
 				// Color Change
@@ -696,7 +714,7 @@ public class RedBlackTree
 
 				// B to Py
 				b.setParent(py);
-				py.setLeftChild(b);
+				py.setRightChild(b);
 
 				//  Py to W
 				v.setLeftChild(py);
@@ -746,8 +764,8 @@ public class RedBlackTree
 				w = deletedNode.getParent().getRightChild().getLeftChild();
 				b = deletedNode.getParent().getRightChild().getLeftChild().getRightChild();
 				x = w.getLeftChild();
-				c = x.getLeftChild();
-				d = x.getRightChild();
+				c = x.getRightChild();
+				d = x.getLeftChild();
 
 
 				x.setColor(Color.BLACK);
@@ -1152,7 +1170,9 @@ public class RedBlackTree
 			if ((parent.getColor() == Color.BLACK)
 					&& (parentLeftChild.getColor() == Color.RED)
 					&& (pLLeftChild.getColor() == Color.BLACK)
-					&& (pLRightChild.getColor() == Color.BLACK))
+					&& (pLRightChild.getColor() == Color.BLACK)
+					&& (pLRLeftChild.getColor() == Color.BLACK)
+					&& (pLRRightChild.getColor() == Color.BLACK))
 			{
 				return DeleteRotation.Rr0;
 			}
