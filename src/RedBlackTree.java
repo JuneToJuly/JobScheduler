@@ -711,6 +711,7 @@ public class RedBlackTree
 				b = deletedNode.getParent().getRightChild().getLeftChild();
 
 				v.setColor(Color.BLACK);
+				py.setColor(Color.BLACK);
 				b.setColor(Color.RED);
 
 				// W to GP
@@ -722,7 +723,7 @@ public class RedBlackTree
 				{
 					deletedNode.getParent().getParent().setLeftChild(v);
 				}
-				v.setParent(deletedNode.getParent().getParent());
+				v.setParent(py.getParent());
 
 				// B to Py
 				b.setParent(py);
@@ -731,6 +732,9 @@ public class RedBlackTree
 				//  Py to W
 				v.setLeftChild(py);
 				py.setParent(v);
+
+				py.setParent(v);
+				py.setLeftChild(externalNode);
 				break;
 			case Lr11:
 				py = deletedNode.getParent();
@@ -1123,98 +1127,98 @@ public class RedBlackTree
 	 */
 	private DeleteRotation classifyDeleteRotation(RedBlackNode deleteNode)
 	{
-		RedBlackNode parent = deleteNode.getParent();
+		RedBlackNode py = deleteNode.getParent();
 
 		Child parentToDelete = null;
 
-		if(parent.getParent() != null)
+		if(py.getParent() != null)
 		{
-			parentToDelete = deleteNode.getKey() > parent.getKey()
+			parentToDelete = deleteNode.getKey() > py.getKey()
 					? Child.RIGHT
 					: Child.LEFT;
 		}
 
 		if(parentToDelete == Child.RIGHT)
 		{
-			RedBlackNode parentLeftChild = parent.getLeftChild();
-			RedBlackNode pLLeftChild = parentLeftChild.getLeftChild();
-			RedBlackNode pLRightChild = parentLeftChild.getRightChild();
-			RedBlackNode pLRRightChild = pLRightChild.getRightChild();
-			RedBlackNode pLRLeftChild  = pLRightChild.getLeftChild();
+			RedBlackNode v = py.getLeftChild();
+			RedBlackNode a = v.getLeftChild();
+			RedBlackNode b = v.getRightChild();
+			RedBlackNode b_right = b.getRightChild();
+			RedBlackNode b_left  = b.getLeftChild();
 
-			if ((parent.getColor() == Color.BLACK)
-					&& (parentLeftChild.getColor() == Color.BLACK)
-					&& (pLLeftChild.getColor() == Color.BLACK)
-					&& (pLRightChild.getColor() == Color.BLACK))
+			if ((py.getColor() == Color.BLACK)
+					&& (v.getColor() == Color.BLACK)
+					&& (a.getColor() == Color.BLACK)
+					&& (b.getColor() == Color.BLACK))
 			{
 				return DeleteRotation.Rb01;
 			}
 
-			if ((parent.getColor() == Color.RED)
-					&& (parentLeftChild.getColor() == Color.BLACK)
-					&& (pLLeftChild.getColor() == Color.BLACK)
-					&& (pLRightChild.getColor() == Color.BLACK))
+			if ((py.getColor() == Color.RED)
+					&& (v.getColor() == Color.BLACK)
+					&& (a.getColor() == Color.BLACK)
+					&& (b.getColor() == Color.BLACK))
 			{
 				return DeleteRotation.Rb02;
 			}
 
-			if ((parentLeftChild.getColor() == Color.BLACK)
-					&& (pLLeftChild.getColor() == Color.RED)
-					&& (pLRightChild.getColor() == Color.BLACK))
+			if ((v.getColor() == Color.BLACK)
+					&& (a.getColor() == Color.RED)
+					&& (b.getColor() == Color.BLACK))
 			{
 				return DeleteRotation.Rb11;
 			}
 
-			if ((parentLeftChild.getColor() == Color.BLACK)
-					&& (pLLeftChild.getColor() == Color.BLACK)
-					&& (pLRightChild.getColor() == Color.RED))
+			if ((v.getColor() == Color.BLACK)
+					&& (a.getColor() == Color.BLACK)
+					&& (b.getColor() == Color.RED))
 			{
 				return DeleteRotation.Rb12;
 			}
 
-			if ((parentLeftChild.getColor() == Color.BLACK)
-					&& (pLLeftChild.getColor() == Color.RED)
-					&& (pLRightChild.getColor() == Color.RED))
+			if ((v.getColor() == Color.BLACK)
+					&& (a.getColor() == Color.RED)
+					&& (b.getColor() == Color.RED))
 			{
 				return DeleteRotation.Rb2;
 			}
 
-			if ((parent.getColor() == Color.BLACK)
-					&& (parentLeftChild.getColor() == Color.RED)
-					&& (pLLeftChild.getColor() == Color.BLACK)
-					&& (pLRightChild.getColor() == Color.BLACK)
-					&& (pLRLeftChild.getColor() == Color.BLACK)
-					&& (pLRRightChild.getColor() == Color.BLACK))
+			if ((py.getColor() == Color.BLACK)
+					&& (v.getColor() == Color.RED)
+					&& (a.getColor() == Color.BLACK)
+					&& (b.getColor() == Color.BLACK)
+					&& (b_left.getColor() == Color.BLACK)
+					&& (b_right.getColor() == Color.BLACK))
 			{
 				return DeleteRotation.Rr0;
 			}
 
-			if ((parent.getColor() == Color.BLACK)
-					&& (parentLeftChild.getColor() == Color.RED)
-					&& (pLLeftChild.getColor() == Color.BLACK)
-					&& (pLRightChild.getColor() == Color.BLACK)
-					&& (pLRLeftChild.getColor() == Color.RED)
-					&& (pLRRightChild.getColor() == Color.BLACK))
+			if ((py.getColor() == Color.BLACK)
+					&& (v.getColor() == Color.RED)
+					&& (a.getColor() == Color.BLACK)
+					&& (b.getColor() == Color.BLACK)
+					&& (b_left.getColor() == Color.RED)
+					&& (b_right.getColor() == Color.BLACK))
 			{
 				return DeleteRotation.Rr11;
 			}
 
-			if ((parent.getColor() == Color.BLACK)
-					&& (parentLeftChild.getColor() == Color.RED)
-					&& (pLLeftChild.getColor() == Color.BLACK)
-					&& (pLRightChild.getColor() == Color.BLACK)
-					&& (pLRLeftChild.getColor() == Color.BLACK)
-					&& (pLRRightChild.getColor() == Color.RED))
+			if ((py.getColor() == Color.BLACK)
+					&& (v.getColor() == Color.RED)
+					&& (a.getColor() == Color.BLACK)
+					&& (b.getColor() == Color.BLACK)
+					&& (b_left.getColor() == Color.BLACK)
+					&& (b_right.getColor() == Color.RED))
 			{
 				return DeleteRotation.Rr12;
 			}
 
-			if ((parent.getColor() == Color.BLACK)
-					&& (parentLeftChild.getColor() == Color.RED)
-					&& (pLLeftChild.getColor() == Color.BLACK)
-					&& (pLRightChild.getColor() == Color.BLACK)
-					&& (pLRLeftChild.getColor() == Color.RED)
-					&& (pLRRightChild.getColor() == Color.RED))
+			if ((py.getColor() == Color.BLACK)
+					&& (v.getColor() == Color.RED)
+					&& (a.getColor() == Color.BLACK)
+					&& (b.getColor() == Color.BLACK)
+					&& (b_left.getColor() == Color.RED)
+					&& (b_right.getColor() == Color.RED))
 			{
 				return DeleteRotation.Rr2;
 			}
@@ -1223,83 +1227,84 @@ public class RedBlackTree
 
 		else
 		{
-			RedBlackNode parentRightChild = parent.getRightChild();
-			RedBlackNode pRLeftChild = parentRightChild.getLeftChild();
-			RedBlackNode pRRightChild = parentRightChild.getRightChild();
-			RedBlackNode pRLLeftChild = pRLeftChild.getLeftChild();
-			RedBlackNode pRLRightChild = pRLeftChild.getRightChild();
+			RedBlackNode v = py.getRightChild();
+			RedBlackNode b = v.getLeftChild();
+			RedBlackNode a = v.getRightChild();
+			RedBlackNode b_left = b.getLeftChild();
+			RedBlackNode b_right = b.getRightChild();
 
-			if ((parent.getColor() == Color.BLACK)
-			&& (parentRightChild.getColor() == Color.BLACK)
-			&& (pRLeftChild.getColor() == Color.BLACK)
-			&& (pRRightChild.getColor() == Color.BLACK))
+			if ((py.getColor() == Color.BLACK)
+			&& (v.getColor() == Color.BLACK)
+			&& (b.getColor() == Color.BLACK)
+			&& (a.getColor() == Color.BLACK))
 			{
 				return DeleteRotation.Lb01;
 			}
 
-			if ((parent.getColor() == Color.RED)
-					&& (parentRightChild.getColor() == Color.BLACK)
-					&& (pRLeftChild.getColor() == Color.BLACK)
-					&& (pRRightChild.getColor() == Color.BLACK))
+			if ((py.getColor() == Color.RED)
+					&& (v.getColor() == Color.BLACK)
+					&& (b.getColor() == Color.BLACK)
+					&& (a.getColor() == Color.BLACK))
 			{
 				return DeleteRotation.Lb02;
 			}
 
-			if ((parentRightChild.getColor() == Color.BLACK)
-					&& (pRLeftChild.getColor() == Color.BLACK)
-					&& (pRRightChild.getColor() == Color.RED))
+			if ((v.getColor() == Color.BLACK)
+					&& (b.getColor() == Color.BLACK)
+					&& (a.getColor() == Color.RED))
 			{
+				System.out.println("For some reaosn I clas this");
 				return DeleteRotation.Lb11;
 			}
 
-			if ((parentRightChild.getColor() == Color.BLACK)
-					&& (pRLeftChild.getColor() == Color.RED)
-					&& (pRRightChild.getColor() == Color.BLACK))
+			if ((v.getColor() == Color.BLACK)
+					&& (b.getColor() == Color.RED)
+					&& (a.getColor() == Color.BLACK))
 			{
 				return DeleteRotation.Lb12;
 			}
 
-			if ((parentRightChild.getColor() == Color.BLACK)
-					&& (pRLeftChild.getColor() == Color.RED)
-					&& (pRRightChild.getColor() == Color.RED))
+			if ((v.getColor() == Color.BLACK)
+					&& (b.getColor() == Color.RED)
+					&& (a.getColor() == Color.RED))
 			{
 				return DeleteRotation.Lb2;
 			}
 
-			if ((parent.getColor() == Color.BLACK)
-					&& (parentRightChild.getColor() == Color.RED)
-					&& (pRLeftChild.getColor() == Color.BLACK)
-					&& (pRRightChild.getColor() == Color.BLACK))
+			if ((py.getColor() == Color.BLACK)
+					&& (v.getColor() == Color.RED)
+					&& (b.getColor() == Color.BLACK)
+					&& (a.getColor() == Color.BLACK))
 			{
 				return DeleteRotation.Lr0;
 			}
 
-			if ((parent.getColor() == Color.BLACK)
-					&& (parentRightChild.getColor() == Color.RED)
-					&& (pRLeftChild.getColor() == Color.BLACK)
-					&& (pRRightChild.getColor() == Color.BLACK)
-					&& (pRLRightChild.getColor() == Color.RED)
-					&& (pRLLeftChild.getColor() == Color.BLACK))
+			if ((py.getColor() == Color.BLACK)
+					&& (v.getColor() == Color.RED)
+					&& (b.getColor() == Color.BLACK)
+					&& (a.getColor() == Color.BLACK)
+					&& (b_right.getColor() == Color.RED)
+					&& (b_left.getColor() == Color.BLACK))
 			{
 				return DeleteRotation.Lr11;
 			}
 
-			if ((parent.getColor() == Color.BLACK)
-					&& (parentRightChild.getColor() == Color.RED)
-					&& (pRLeftChild.getColor() == Color.BLACK)
-					&& (pRRightChild.getColor() == Color.BLACK)
-					&& (pRLRightChild.getColor() == Color.BLACK)
-					&& (pRLLeftChild.getColor() == Color.RED))
+			if ((py.getColor() == Color.BLACK)
+					&& (v.getColor() == Color.RED)
+					&& (b.getColor() == Color.BLACK)
+					&& (a.getColor() == Color.BLACK)
+					&& (b_right.getColor() == Color.BLACK)
+					&& (b_left.getColor() == Color.RED))
 			{
 				return DeleteRotation.Lr12;
 			}
 
-			if ((parent.getColor() == Color.BLACK)
-					&& (parentRightChild.getColor() == Color.RED)
-					&& (pRLeftChild.getColor() == Color.BLACK)
-					&& (pRRightChild.getColor() == Color.BLACK)
-					&& (pRLRightChild.getColor() == Color.RED)
-					&& (pRLLeftChild.getColor() == Color.RED))
+			if ((py.getColor() == Color.BLACK)
+					&& (v.getColor() == Color.RED)
+					&& (b.getColor() == Color.BLACK)
+					&& (a.getColor() == Color.BLACK)
+					&& (b_right.getColor() == Color.RED)
+					&& (b_left.getColor() == Color.RED))
 			{
 				return DeleteRotation.Lr2;
 			}

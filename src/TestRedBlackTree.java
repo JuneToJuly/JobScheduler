@@ -38,8 +38,8 @@ public class TestRedBlackTree
 		testLb11();
 		testLb12();
 		testLb2();
-//		testLr0();
-//		testLr11();
+		testLr0();
+		testLr11();
 //		testLr12();
 //		testLr2();
 //
@@ -55,6 +55,77 @@ public class TestRedBlackTree
 		Job job9 = new Job(21,22, 1);
 		Job job10 = new Job(24,22, 1);
 		Job job11 = new Job(28,22, 1);
+	}
+
+	private void testLr11()
+	{
+
+	}
+
+	private void testLr0()
+	{
+		Job y = new Job(15,22, 1);
+		Job pyG = new Job(10,22, 90);
+		Job py = new Job(25,20, 4);
+
+		Job v = new Job(25,22, 3);
+		Job a = new Job(40,22, 2);
+		Job b = new Job(32,22, 6);
+
+		// All Black
+		RedBlackNode nodeY = new RedBlackNode(y, RedBlackTree.Color.BLACK);
+		RedBlackNode nodePYG = new RedBlackNode(pyG, RedBlackTree.Color.BLACK);
+		RedBlackNode nodePY = new RedBlackNode(py, RedBlackTree.Color.BLACK);
+		RedBlackNode nodeV = new RedBlackNode(v, RedBlackTree.Color.RED);
+		RedBlackNode nodeA = new RedBlackNode(a, RedBlackTree.Color.BLACK);
+		RedBlackNode nodeB = new RedBlackNode(b, RedBlackTree.Color.BLACK);
+
+		nodePYG.setParent(RedBlackTree.rootNode);
+		nodePYG.setRightChild(nodePY);
+		nodePYG.setLeftChild(RedBlackTree.externalNode);
+
+		nodePY.setParent(nodePYG);
+		nodePY.setRightChild(nodeV);
+		nodePY.setLeftChild(nodeY);
+
+		nodeY.setParent(nodePY);
+		nodeY.setLeftChild(RedBlackTree.externalNode);
+		nodeY.setRightChild(RedBlackTree.externalNode);
+
+		nodeV.setParent(nodePY);
+		nodeV.setLeftChild(nodeB);
+		nodeV.setRightChild(nodeA);
+
+		nodeB.setParent(nodeV);
+		nodeB.setLeftChild(RedBlackTree.externalNode);
+		nodeB.setRightChild(RedBlackTree.externalNode);
+
+		nodeA.setParent(nodeV);
+		nodeA.setLeftChild(RedBlackTree.externalNode);
+		nodeA.setRightChild(RedBlackTree.externalNode);
+
+
+		rbt.setHead(nodePYG);
+		rbt.delete(y);
+
+		if((nodePY.getLeftChild() == RedBlackTree.externalNode)
+//				&& (nodePY.getRightChild() == nodeB)
+//				&& (nodePY.getParent() == nodeV)
+//				&& nodeV.getParent() == nodePYG
+//				&& (nodeV.getRightChild() == nodeA)
+//				&& (nodeV.getLeftChild() == nodePY)
+//				&& nodeB.getParent() == nodePY
+				&& (nodeV.getColor() == RedBlackTree.Color.BLACK)
+				&& (nodeB.getColor() == RedBlackTree.Color.RED)
+				&& (nodePY.getColor() == RedBlackTree.Color.BLACK))
+		{
+			System.out.println("Lr0: Test passed");
+		}
+		else
+		{
+			System.out.println("Lr0: Test failed");
+		}
+
 	}
 
 	private void testLb2()
