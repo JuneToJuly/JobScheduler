@@ -14,6 +14,8 @@ public class TestRedBlackTree
 		Job job7 = new Job(19,22, 1);
 		Job job8 = new Job(18,22, 1);
 		Job job9 = new Job(21,22, 1);
+		Job job10 = new Job(24,22, 1);
+		Job job11 = new Job(28,22, 1);
 
 		rbt.add(job);
 		rbt.add(job1);
@@ -23,7 +25,13 @@ public class TestRedBlackTree
 		rbt.add(job5);
 		rbt.add(job6);
 		rbt.add(job7);
-		rbt.delete(job3);
+		rbt.delete(job7);
+		rbt.add(job10);
+		rbt.delete(job2);
+
+//		rbt.delete(job2);
+//		rbt.delete(job3);
+//		rbt.delete(job7);
 //		rbt.add(job8);
 //		rbt.add(job9);
 		rbt.printNodeStyle(null);

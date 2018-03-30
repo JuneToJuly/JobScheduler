@@ -73,8 +73,6 @@ public class RedBlackTree
 		int degree = checkDegreeOfDeletion(next);
 		RedBlackNode deficientNode = findDeficientNode(degree, next);
 
-		System.out.println("I am a deficient node: " + deficientNode.getKey());
-		System.out.println("My Parent is: " + deficientNode.getParent().getKey());
 
 		// We have fixed the problem with a one degree black that has a red child
 		// and a one degree red that has a black child.
@@ -84,6 +82,9 @@ public class RedBlackTree
 		{
 			return;
 		}
+
+		System.out.println("I am a deficient node: " + deficientNode.getKey());
+		System.out.println("My Parent is: " + deficientNode.getParent().getKey());
 
 		// Classify this one degree rotation
 		DeleteRotation deleteRotation =  classifyDeleteRotation(deficientNode);
@@ -116,6 +117,7 @@ public class RedBlackTree
 		// Degree one node:
 
 		// Black leaf node, we have a deficiency regardless.
+		System.out.println(node.getColor() + node.getJob().toString());
 		if(degree == 0 && node.getColor() == Color.BLACK)
 		{
 			return node;
@@ -123,6 +125,14 @@ public class RedBlackTree
 		// Red Leaf node, we are done.
 		else if(degree == 0 && node.getColor() == Color.RED)
 		{
+			if(parentToDeletion == Child.RIGHT)
+			{
+				node.getParent().setRightChild(externalNode);
+			}
+			else
+			{
+				node.getParent().setLeftChild(externalNode);
+			}
 			return null;
 		}
 
@@ -149,14 +159,14 @@ public class RedBlackTree
 			if(node.getLeftChild().getColor() == Color.RED)
 			{
 				y = node.getLeftChild();
-				y.setColor(Color.BLACK);
+//				y.setColor(Color.BLACK);
 				y.setParent(node.getParent());
 				defiecientNode = null;
 			}
 			else if(node.getRightChild().getColor() == Color.RED)
 			{
 				y = node.getRightChild();
-				y.setColor(Color.BLACK);
+//				y.setColor(Color.BLACK);
 				y.setParent(node.getParent());
 				defiecientNode = null;
 			}
@@ -183,7 +193,7 @@ public class RedBlackTree
 			// black. We still have a deficiency.
 			if(node.getColor() == Color.BLACK
 					&& node.getRightChild() != externalNode
-					&& node.getLeftChild().getColor() == Color.BLACK)
+					&& node.getRightChild().getColor() == Color.BLACK)
 			{
 				y = node.getRightChild();
 				y.setParent(node.getParent());
@@ -192,7 +202,7 @@ public class RedBlackTree
 
 			if(node.getColor() == Color.BLACK
 					&& node.getLeftChild() != externalNode
-					&& node.getRightChild().getColor() == Color.BLACK)
+					&& node.getLeftChild().getColor() == Color.BLACK)
 			{
 				y = node.getLeftChild();
 				y.setParent(node.getParent());
@@ -210,6 +220,7 @@ public class RedBlackTree
 			{
 				node.getParent().setLeftChild(y);
 			}
+			y.setColor(Color.BLACK);
 
 			return defiecientNode;
 		}
@@ -257,6 +268,7 @@ public class RedBlackTree
 		{
 			degree++;
 		}
+		System.out.println("I am a degree: " + degree + " node.");
 		return degree;
 	}
 
