@@ -69,41 +69,61 @@ public class RedBlackTree
 		{
 			return;
 		}
-
-		int degree = checkDegreeOfDeletion(next);
-		RedBlackNode deficientNode = findDeficientNode(degree, next);
-
-
-		// We have fixed the problem with a one degree black that has a red child
-		// and a one degree red that has a black child.
-		// In case with one degree black having a black child, or a two degree
-		// black or red, we still have our deficiency, we need to correct this now.
-		if(deficientNode == null)
+		DeleteRotation deleteRotation = null;
+		RedBlackNode deficientNode = null;
+		System.out.println("New Deletion");
+		do
 		{
-			return;
-		}
 
+			int degree = checkDegreeOfDeletion(next);
 
-		// Classify this one degree rotation
-		DeleteRotation deleteRotation =  classifyDeleteRotation(deficientNode);
-		System.out.println("Rotation is: " + deleteRotation);
-		performDeleteRotation(deficientNode, deleteRotation);
+			if (deficientNode == null)
+			{
+				deficientNode = findDeficientNode(degree, next);
+			}
+			// We have fixed the problem with a one degree black that has a red child
+			// and a one degree red that has a black child.
+			// In case with one degree black having a black child, or a two degree
+			// black or red, we still have our deficiency, we need to correct this now.
+			if (deficientNode == null)
+			{
+				return;
+			}
 
-		//  Delete the node
-		if (next.getKey() > next.getParent().getKey())
-		{
-			next.getParent().setRightChild(externalNode);
-		}
-		else
-		{
-			next.getParent().setLeftChild(externalNode);
-		}
+			// Classify this one degree rotation
+			deleteRotation = classifyDeleteRotation(deficientNode);
+			System.out.println("Rotation is: " + deleteRotation);
+			System.out.println("Job is: " + next.getJob());
+			performDeleteRotation(deficientNode, deleteRotation);
+
+			// Only things that can keep the tree from working;
+			if (deleteRotation == DeleteRotation.Rb01
+					|| deleteRotation == DeleteRotation.Lb01)
+			{
+
+			}
+			//  Delete the node
+			// MAy be duplicate code but not sure
+			if (next.getKey() > next.getParent().getKey())
+			{
+				next.getParent().setRightChild(externalNode);
+			}
+			else
+			{
+				next.getParent().setLeftChild(externalNode);
+			}
+
+			next = deficientNode.getParent();
+		}while(deleteRotation == DeleteRotation.Rb01
+				|| deleteRotation == DeleteRotation.Lb01
+				&& next != rootNode);
 
 
 	}
 
 	private RedBlackNode findDeficientNode(int degree, RedBlackNode node)
 	{
+
 		Child parentToDeletion = node.getKey() >
 				node.getParent().getKey()
 				? Child.RIGHT
@@ -112,8 +132,12 @@ public class RedBlackTree
 		RedBlackNode y = null;
 		RedBlackNode defiecientNode = null;
 
-		// Degree one node:
 
+//		if(node.getParent() == rootNode)
+//		{
+//			return null;
+//		}
+		// Degree one node:
 		// Black leaf node, we have a deficiency regardless.
 		if(degree == 0 && node.getColor() == Color.BLACK)
 		{
@@ -337,26 +361,30 @@ public class RedBlackTree
 				deletedNode.getParent().setColor(Color.BLACK);
 				deletedNode.getParent().getLeftChild().setColor(initRootColor);
 
+				py = deletedNode.getParent();
+				v = deletedNode.getParent().getLeftChild();
+				a = deletedNode.getParent().getLeftChild().getLeftChild();
+				b = deletedNode.getParent().getLeftChild().getRightChild();
+
 				// V Parent
 				if(parentToGrandParent == Child.RIGHT)
 				{
-					deletedNode.getParent().getParent().setRightChild(deletedNode.getParent().getLeftChild());
+					deletedNode.getParent().getParent().setRightChild(v);
 				}
 				else
 				{
-					deletedNode.getParent().getParent().setLeftChild(deletedNode.getParent().getLeftChild());
+					deletedNode.getParent().getParent().setLeftChild(v);
 				}
-				deletedNode.getParent().getLeftChild().setParent(deletedNode.getParent().getParent());
+				v.setParent(py.getParent());
 
-				RedBlackNode nodeBb = deletedNode.getParent().getLeftChild().getRightChild();
 
 				// V right child now Old Parent
-				deletedNode.getParent().getLeftChild().setRightChild(deletedNode.getParent());
-				deletedNode.getParent().setParent(deletedNode.getParent().getLeftChild());
+				v.setRightChild(py);
+				py.setParent(v);
 
 				// B Taken Care of
-				deletedNode.getParent().setLeftChild(nodeBb);
-				deletedNode.getParent().getLeftChild().setParent(deletedNode.getParent());
+				b.setParent(py);
+				py.setLeftChild(b);
 
 				if(v.getParent() == rootNode)
 				{
