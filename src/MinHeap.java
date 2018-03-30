@@ -166,4 +166,7 @@ public class MinHeap
 	}
 
 
+	public void increaseKey(Job runningJob, int i)
+	{
+	}
 }

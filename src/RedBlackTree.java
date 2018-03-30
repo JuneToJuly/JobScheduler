@@ -25,6 +25,18 @@ public class RedBlackTree
 		rootNode.setRightChild(externalNode);
 	}
 
+	public String search(Job newJob)
+	{
+	}
+
+	public String next(Job newJob)
+	{
+	}
+
+	public String previous(Job newJob)
+	{
+	}
+
 
 	public enum Color { RED, BLACK}
 
