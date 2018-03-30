@@ -22,6 +22,10 @@ public class RedBlackNode
 		rightChild = null;
 	}
 
+	public void setJob(Job job)
+	{
+		this.job = job;
+	}
 	public RedBlackTree.Color getColor()
 	{
 		return color;

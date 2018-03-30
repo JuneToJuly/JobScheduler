@@ -23,8 +23,9 @@ public class TestRedBlackTree
 		rbt.add(job5);
 		rbt.add(job6);
 		rbt.add(job7);
-		rbt.add(job8);
-		rbt.add(job9);
+		rbt.delete(job3);
+//		rbt.add(job8);
+//		rbt.add(job9);
 		rbt.printNodeStyle(null);
 
 	}

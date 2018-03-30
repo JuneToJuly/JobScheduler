@@ -32,7 +32,8 @@ public class RedBlackTree
 	public enum Child {LEFT, RIGHT}
 
 	public enum DeleteRotation { Rb01, Rb02, Rb11, Rb12, Rb2, Rr0, Rr11, Rr12, Rr2,
-								 Lb01, Lb02, Lb11, Lb12, Lb2, Lr0, Lr11, Lr12, Lr2}
+								 Lb01, Lb02, Lb11, Lb12, Lb2, Lr0, Lr11, Lr12, Lr2,
+								 CUTCOLOR}
 
 	private RedBlackNode head;
 
@@ -68,8 +69,68 @@ public class RedBlackTree
 		{
 			return;
 		}
-		DeleteRotation deleteRotation =  classifyDeleteRotation(next);
-		performDeleteRotation(next, deleteRotation);
+
+		int degree = checkDegreeOfDeletion(next);
+		RedBlackNode deficientNode = findDeficientNode(degree, next);
+
+		DeleteRotation deleteRotation =  classifyDeleteRotation(deficientNode);
+		System.out.println("Rotation is: " + deleteRotation);
+		performDeleteRotation(deficientNode, deleteRotation);
+
+		//  Delete the node
+		if (next.getKey() > next.getParent().getKey())
+		{
+			next.getParent().setRightChild(externalNode);
+		}
+		else
+		{
+			next.getParent().setLeftChild(externalNode);
+		}
+
+
+	}
+
+	private RedBlackNode findDeficientNode(int degree, RedBlackNode node)
+	{
+		// The node we are deleting is red and we want to recolour the child to black
+		if(degree == 1)
+		{
+			return node;
+		}
+		if(degree == 2)
+		{
+			RedBlackNode leftSubStree = node.getLeftChild();
+			RedBlackNode largestNode = leftSubStree;
+			RedBlackNode nextNode = leftSubStree;
+
+			while(nextNode != externalNode)
+			{
+				largestNode = nextNode;
+				nextNode.getRightChild();
+			}
+
+			// Swap the keys because we don't ever delete this node
+			node.setJob(largestNode.getJob());
+
+			// We just deleted this node pretty much
+			// it is now the deficient node
+			return largestNode;
+		}
+		return null;
+	}
+
+	private int checkDegreeOfDeletion(RedBlackNode next)
+	{
+		int degree = 0;
+		if(next.getLeftChild() != externalNode)
+		{
+			degree++;
+		}
+		if(next.getRightChild()!= externalNode)
+		{
+			degree++;
+		}
+		return degree;
 	}
 
 	private void performDeleteRotation(RedBlackNode deletedNode, DeleteRotation deleteRotation)
@@ -94,6 +155,10 @@ public class RedBlackTree
 				? Child.RIGHT
 				: Child.LEFT;
 
+		Child parentToDeletion = deletedNode.getParent().getKey() >
+				deletedNode.getParent().getParent().getKey()
+				? Child.RIGHT
+				: Child.LEFT;
 		switch (deleteRotation)
 		{
 			case Rb01:
@@ -106,6 +171,7 @@ public class RedBlackTree
 			case Rb11:
 				// Change colors first
 				deletedNode.getParent().getLeftChild().getLeftChild().setColor(Color.BLACK);
+				deletedNode.getParent().setColor(Color.BLACK);
 
 				// V Parent
 				if(parentToGrandParent == Child.RIGHT)
