@@ -341,13 +341,14 @@ public class RedBlackTree
 				py = deletedNode.getParent();
 				v = deletedNode.getParent().getLeftChild();
 				a = deletedNode.getParent().getLeftChild().getLeftChild();
-				w = deletedNode.getParent().getParent().getRightChild();
+				w = deletedNode.getParent().getLeftChild().getRightChild();
 				b = deletedNode.getParent().getLeftChild().getRightChild().getLeftChild();
 				c = deletedNode.getParent().getLeftChild().getRightChild().getRightChild();
 
 
 				initRootColor = deletedNode.getParent().getColor();
 				w.setColor(initRootColor);
+				py.setColor(Color.BLACK);
 
 				// W to GP
 				if(parentToGrandParent == Child.RIGHT)
@@ -358,6 +359,7 @@ public class RedBlackTree
 				{
 					deletedNode.getParent().getParent().setLeftChild(w);
 				}
+
 				w.setParent(py.getParent());
 
 				// B to V
@@ -378,42 +380,53 @@ public class RedBlackTree
 
 				py.setRightChild(externalNode);
 
+				System.out.println(py.getKey());
+
 				break;
 			case Rb2:
-				// Color nodes first
+				py = deletedNode.getParent();
+				v = deletedNode.getParent().getLeftChild();
+				a = deletedNode.getParent().getLeftChild().getLeftChild();
+				w = deletedNode.getParent().getLeftChild().getRightChild();
+				b = deletedNode.getParent().getLeftChild().getRightChild().getLeftChild();
+				c = deletedNode.getParent().getLeftChild().getRightChild().getRightChild();
+
+
 				initRootColor = deletedNode.getParent().getColor();
-				deletedNode.getParent().getLeftChild().getRightChild().setColor(initRootColor);
+				w.setColor(initRootColor);
+				py.setColor(Color.BLACK);
 
 				// W to GP
 				if(parentToGrandParent == Child.RIGHT)
 				{
-					deletedNode.getParent().getParent().setRightChild(deletedNode.getParent().getLeftChild().getRightChild());
+					deletedNode.getParent().getParent().setRightChild(w);
 				}
 				else
 				{
-					deletedNode.getParent().getParent().setLeftChild(deletedNode.getParent().getLeftChild().getRightChild());
+					deletedNode.getParent().getParent().setLeftChild(w);
 				}
-				deletedNode.getParent().getLeftChild().getRightChild().setParent(deletedNode.getParent().getParent());
 
-				// C
-				nodeC = deletedNode.getParent().getLeftChild().getRightChild().getRightChild();
-				nodeB = deletedNode.getParent().getLeftChild().getRightChild().getLeftChild();
-
-				// W to Py
-				deletedNode.getParent().setParent(deletedNode.getParent().getLeftChild().getRightChild());
-				deletedNode.getParent().getLeftChild().getRightChild().setRightChild(deletedNode.getParent());
-
-				// V to W
-				deletedNode.getParent().getLeftChild().setParent(deletedNode.getParent().getLeftChild().getRightChild());
-				deletedNode.getParent().getLeftChild().getRightChild().setLeftChild(deletedNode.getParent().getLeftChild());
+				w.setParent(py.getParent());
 
 				// B to V
-				deletedNode.getParent().getLeftChild().setRightChild(nodeB);
-				deletedNode.getParent().getLeftChild().getRightChild().setParent(deletedNode.getParent().getLeftChild());
+				b.setParent(v);
+				v.setRightChild(b);
 
-				// C to Py
-				deletedNode.getParent().setLeftChild(nodeC);
-				deletedNode.getParent().getLeftChild().setParent(deletedNode.getParent());
+				// C to py
+				py.setLeftChild(c);
+				c.setParent(py);
+
+				// V to W
+				w.setLeftChild(v);
+				v.setParent(w);
+
+				//  Py to W
+				w.setRightChild(py);
+				py.setParent(w);
+
+				py.setRightChild(externalNode);
+
+				System.out.println(py.getKey());
 
 				break;
 			case Rr0:
@@ -1418,8 +1431,14 @@ public class RedBlackTree
 		{
 			System.out.println("Head: " + head.getJob().toString() + " Color: " + head.getColor());
 			System.out.println("Parent: " + head.getParent().getKey());
-			System.out.println("Left: " + head.getLeftChild().getJob().toString() + " Color: " + head.getLeftChild().getColor());
-			System.out.println("Right: " + head.getRightChild().getJob().toString() + " Color: " + head.getRightChild().getColor());
+			if(head.getLeftChild() != externalNode)
+			{
+				System.out.println("Left: " + head.getLeftChild().getJob().toString() + " Color: " + head.getLeftChild().getColor());
+			}
+			if(head.getRightChild() != externalNode)
+			{
+				System.out.println("Right: " + head.getRightChild().getJob().toString() + " Color: " + head.getRightChild().getColor());
+			}
 			printNodeStyle(head.getLeftChild());
 			printNodeStyle(head.getRightChild());
 			return;
