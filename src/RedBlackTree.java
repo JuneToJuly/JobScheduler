@@ -1,3 +1,5 @@
+import java.util.Queue;
+
 /**
  * @author Ian Thomas
  */
@@ -75,12 +77,15 @@ public class RedBlackTree
 		// Set ourselves to our parent's right child because we are larger
 		if(insertKey > insertNode.getParent().getKey())
 		{
-
+			System.out.println("My key is: " + insertKey + " And I just found a parent" +
+					                   "whose key is: " + insertNode.getParent().getKey());
 			insertNode.getParent().setRightChild(insertNode);
 		}
 		// Else we are smaller, set to left child
 		else
 		{
+			System.out.println("My key is: " + insertKey + " And I just found a parent" +
+					                   "whose key is: " + insertNode.getParent().getKey());
 			insertNode.getParent().setLeftChild(insertNode);
 		}
 
@@ -107,9 +112,14 @@ public class RedBlackTree
 				insertNode.getParent().setColor(Color.BLACK);
 				insertNode.getParent().getParent().setColor(Color.RED);
 				insertNode.getParent().getParent().getLeftChild().setColor(Color.BLACK);
+
+				if (insertNode.getParent().getParent() == head)
+				{
+					head.setColor(Color.BLACK);
+				}
 				break;
 			case RRb:
-				greatGrandUpdate(insertNode);
+//				greatGrandUpdate(insertNode);
 
 				// Give my parent's left node to the grandparent's right child
 				insertNode.getParent().getParent().setRightChild(insertNode.getParent().getLeftChild());
@@ -121,34 +131,53 @@ public class RedBlackTree
 				// Set my grandparent's old parent to my parent's parent
 				insertNode.getParent().setParent(insertNode.getParent().getParent().getParent());
 
+				// Set my granparent's parent to my parent
+				insertNode.getParent().getLeftChild().setParent(insertNode.getParent());
+
+				insertNode.getParent().setColor(Color.BLACK);
+				insertNode.getParent().getLeftChild().setColor(Color.RED);
+				insertNode.getParent().getRightChild().setColor(Color.RED);
+
 				if(insertNode.getParent().getParent() == rootNode)
 				{
 					head = insertNode.getParent();
 					head.setColor(Color.BLACK);
 				}
-
 				break;
 			case LLr:
 				insertNode.getParent().setColor(Color.BLACK);
 				insertNode.getParent().getParent().setColor(Color.RED);
 				insertNode.getParent().getParent().getRightChild().setColor(Color.BLACK);
+
+				if (insertNode.getParent().getParent() == head)
+				{
+					head.setColor(Color.BLACK);
+				}
 				break;
 			case LLb:
-				greatGrandUpdate(insertNode);
-				// Temp so we can have the parent's right
-				RedBlackNode parentRight  = insertNode.getParent().getRightChild();
+				greatGrandUpdate(insertNode, "parent");
+				// Give my parent's left node to the grandparent's right child
+				insertNode.getParent().getParent().setLeftChild(insertNode.getParent().getRightChild());
 
-				// Set right child of parent to grand parent
+				// Set my parent's right child to my grandparent
 				insertNode.getParent().setRightChild(insertNode.getParent().getParent());
+				insertNode.getParent().getRightChild().setColor(Color.RED);
 
-				// Set parent's parent to grandparent's old parent
-				insertNode.getParent().setParent(insertNode.getParent().getRightChild().getParent());
+				// Set my grandparent's old parent to my parent's parent
+				insertNode.getParent().setParent(insertNode.getParent().getParent().getParent());
 
-				// Set grandparent's parent to parent
+				// Set my granparent's parent to my parent
 				insertNode.getParent().getRightChild().setParent(insertNode.getParent());
 
-				// Set parent's old right child to the left of old grandparent
-				insertNode.getParent().getRightChild().setLeftChild(parentRight);
+				insertNode.getParent().setColor(Color.BLACK);
+				insertNode.getParent().getLeftChild().setColor(Color.RED);
+				insertNode.getParent().getRightChild().setColor(Color.RED);
+
+				if(insertNode.getParent().getParent() == rootNode)
+				{
+					head = insertNode.getParent();
+					head.setColor(Color.BLACK);
+				}
 				break;
 			case RLr:
 				insertNode.getParent().setColor(Color.BLACK);
@@ -156,7 +185,8 @@ public class RedBlackTree
 				insertNode.getParent().getParent().getLeftChild().setColor(Color.BLACK);
 				break;
 			case RLb:
-				greatGrandUpdate(insertNode);
+				greatGrandUpdate(insertNode ,"");
+
 				// Set my parent's left to my right, and grandparent's right to my left
 				insertNode.getParent().getParent().setRightChild(insertNode.getLeftChild());
 				insertNode.getParent().setLeftChild(insertNode.getRightChild());
@@ -166,7 +196,7 @@ public class RedBlackTree
 				insertNode.setLeftChild(insertNode.getParent().getParent());
 
 				// Hold onto my grandparent's old parent
-				grandParentsParent = insertNode.getParent().getParent();
+				grandParentsParent = insertNode.getParent().getParent().getParent();
 
 				// Set my parent and grandparent to myself
 				insertNode.getRightChild().setParent(insertNode);
@@ -174,6 +204,17 @@ public class RedBlackTree
 
 				// Set my parent to my grandparent's old parent
 				insertNode.setParent(grandParentsParent);
+
+				insertNode.setColor(Color.BLACK);
+				insertNode.getLeftChild().setColor(Color.RED);
+				insertNode.getRightChild().setColor(Color.RED);
+
+				if(insertNode.getParent() == rootNode)
+				{
+					System.out.println("New root node");
+					head = insertNode;
+					head.setColor(Color.BLACK);
+				}
 				break;
 			case LRr:
 				insertNode.getParent().setColor(Color.BLACK);
@@ -181,7 +222,7 @@ public class RedBlackTree
 				insertNode.getParent().getParent().getRightChild().setColor(Color.BLACK);
 				break;
 			case LRb:
-				greatGrandUpdate(insertNode);
+				greatGrandUpdate(insertNode, "");
 
 				// Set my parent's right to my left, and grandparent's left to my right
 				insertNode.getParent().getParent().setLeftChild(insertNode.getRightChild());
@@ -192,7 +233,7 @@ public class RedBlackTree
 				insertNode.setRightChild(insertNode.getParent().getParent());
 
 				// Hold onto my grandparent's old parent
-				grandParentsParent = insertNode.getParent().getParent();
+				grandParentsParent = insertNode.getParent().getParent().getParent();
 
 				// Set my parent and grandparent to myself
 				insertNode.getLeftChild().setParent(insertNode);
@@ -200,13 +241,19 @@ public class RedBlackTree
 
 				// Set my parent to my grandparent's old parent
 				insertNode.setParent(grandParentsParent);
+
+				insertNode.setColor(Color.BLACK);
+				insertNode.getLeftChild().setColor(Color.RED);
+				insertNode.getRightChild().setColor(Color.RED);
+
+				if(insertNode.getParent() == rootNode)
+				{
+					System.out.println("New root node");
+					head = insertNode;
+					head.setColor(Color.BLACK);
+				}
 				break;
 				default:
-		}
-		if(insertNode.getParent() == rootNode)
-		{
-			System.out.println("H");
-			head = insertNode;
 		}
 	}
 
@@ -301,13 +348,16 @@ public class RedBlackTree
 		return InsertRotation.NONE;
 	}
 
-	/**
-	 *  Userd in a lot of calls, just set the great grandparent to the current
-	 *  node when a rotation happens.
-	 * @param insertNode node to set great grand parent's child to
-	 * @return the child of the greatGrandparent
+	/*
+	 * All Rotations require the great grand parent to be set to the new
+	 * node at the grand parent level. XXb calls for parent to be set.
+	 * XYb calls for the node to be set because it moves up two levels
+	 *
+	 * @param insertNode node to check off of
+	 * @param node parent or node
+	 * @return which side the grand parent is of it's parent
 	 */
-	private Child greatGrandUpdate(RedBlackNode insertNode)
+	private Child greatGrandUpdate(RedBlackNode insertNode, String node)
 	{
 
 		if(insertNode.getParent().getParent().getParent() == rootNode)
@@ -320,17 +370,29 @@ public class RedBlackTree
 				? Child.RIGHT
 				: Child.LEFT;
 
-
-
-
 		// Need to set the child of great grand parent to our node
 		if(greatToGrand == Child.RIGHT)
 		{
-			insertNode.getParent().getParent().getParent().setRightChild(insertNode);
+			if(node.contains("parent"))
+			{
+				insertNode.getParent().getParent().getParent().setRightChild(insertNode.getParent());
+			}
+			else
+			{
+				insertNode.getParent().getParent().getParent().setRightChild(insertNode);
+			}
 		}
 		else
 		{
-			insertNode.getParent().getParent().getParent().setLeftChild(insertNode);
+			if(node.contains("parent"))
+			{
+				insertNode.getParent().getParent().getParent().setLeftChild(insertNode.getParent());
+			}
+			else
+			{
+				insertNode.getParent().getParent().getParent().setLeftChild(insertNode);
+			}
+
 		}
 		return greatToGrand;
 	}
@@ -341,13 +403,42 @@ public class RedBlackTree
 		return null;
 	}
 
-	public void print()
+	/**
+	 * Prints the red black tree.
+	 * @param node starting node to print from, if null, starts at head.
+	 */
+	public void printNodeStyle(RedBlackNode node)
 	{
-		System.out.println(head.getJob().toString() + " Color: " + head.getColor());
-		System.out.println(head.getRightChild().getJob() + " Color: " + head.getRightChild().getColor());
-		System.out.println(head.getLeftChild().getJob() + " Color: " + head.getLeftChild().getColor());
-//		System.out.println(head.getLeftChild().getJob().toString());
-//		System.out.println(head.getRightChild().getJob().toString() + " Color: " + head.getRightChild().getColor());
+		if(node == null)
+		{
+			System.out.println("Head: " + head.getJob().toString() + " Color: " + head.getColor());
+			System.out.println("Parent: " + head.getParent().getKey());
+			System.out.println("Left: " + head.getLeftChild().getJob().toString() + " Color: " + head.getLeftChild().getColor());
+			System.out.println("Right: " + head.getRightChild().getJob().toString() + " Color: " + head.getRightChild().getColor());
+			printNodeStyle(head.getLeftChild());
+			printNodeStyle(head.getRightChild());
+			return;
+		}
+		if(node == externalNode)
+		{
+			return;
+		}
+
+		System.out.println("\n\n\t\t\t\tNode at top: " + node.getKey() + " Color: " + node.getColor());
+		System.out.println("\t\t\t\tParent: " + node.getParent().getKey() + " Color: " + node.getParent().getColor());
+
+		if(node.getLeftChild() != externalNode)
+		{
+			System.out.print("\t\tLeft: " + node.getLeftChild().getKey() + " Color: " + node.getLeftChild().getColor() + " ------ ");
+		}
+
+		if(node.getRightChild() != externalNode)
+		{
+			System.out.print("Right: " + node.getRightChild().getKey() + " Color: " + node.getRightChild().getColor());
+		}
+
+		printNodeStyle(node.getLeftChild());
+		printNodeStyle(node.getRightChild());
 	}
 }
 
