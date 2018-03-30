@@ -18,10 +18,10 @@
 3. Lb11 -- **Works**
 4. Lb12 -- **Works**
 5. Lb2 -- **Works**
-7. Lr0
-8. Lr11
-9. Lr12
-10. Lr2,
+7. Lr0 -- **Works**
+8. Lr11 -- **Works**
+9. Lr12 -- **Works**
+10. Lr2 -- **Works**
 
 * Delete Red Leaf -- **Works**
 * Delete Black Leaf

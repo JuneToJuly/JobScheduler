@@ -438,6 +438,7 @@ public class RedBlackTree
 
 				v.setColor(Color.BLACK);
 				b.setColor(Color.RED);
+				py.setRightChild(externalNode);
 
 				// W to GP
 				if(parentToGrandParent == Child.RIGHT)
@@ -755,7 +756,7 @@ public class RedBlackTree
 				{
 					deletedNode.getParent().getParent().setLeftChild(w);
 				}
-				w.setParent(deletedNode.getParent().getParent());
+				w.setParent(py.getParent());
 
 				// B to V
 				b.setParent(v);
@@ -772,6 +773,8 @@ public class RedBlackTree
 				//  Py to W
 				w.setLeftChild(py);
 				py.setParent(w);
+
+				py.setLeftChild(externalNode);
 				break;
 			case Lr12:
 				py = deletedNode.getParent();
@@ -785,6 +788,7 @@ public class RedBlackTree
 
 
 				x.setColor(Color.BLACK);
+				py.setLeftChild(externalNode);
 
 				// X to GP
 				if(parentToGrandParent == Child.RIGHT)
@@ -799,11 +803,11 @@ public class RedBlackTree
 
 				// C to W
 				c.setParent(w);
-				c.setLeftChild(w);
+				w.setLeftChild(c);
 
-				// D to Py
-				py.setRightChild(d);
-				d.setParent(py);
+				// B to Py
+				py.setRightChild(b);
+				b.setParent(py);
 
 				// V to X
 				x.setRightChild(v);
@@ -812,6 +816,10 @@ public class RedBlackTree
 				//  Py to X
 				x.setLeftChild(py);
 				py.setParent(x);
+
+				d.setParent(w);
+				w.setRightChild(d);
+
 				break;
 			case Lr2:
 				py = deletedNode.getParent();
@@ -820,9 +828,10 @@ public class RedBlackTree
 				w = deletedNode.getParent().getRightChild().getLeftChild();
 				b = deletedNode.getParent().getRightChild().getLeftChild().getRightChild();
 				x = w.getLeftChild();
-				c = x.getLeftChild();
-				d = x.getRightChild();
+				c = x.getRightChild();
+				d = x.getLeftChild();
 
+				py.setLeftChild(externalNode);
 
 				x.setColor(Color.BLACK);
 
@@ -839,11 +848,11 @@ public class RedBlackTree
 
 				// C to W
 				c.setParent(w);
-				c.setLeftChild(w);
+				w.setLeftChild(c);
 
-				// D to Py
-				py.setRightChild(d);
-				d.setParent(py);
+				// B to Py
+				py.setRightChild(b);
+				b.setParent(py);
 
 				// V to X
 				x.setRightChild(v);
@@ -852,6 +861,9 @@ public class RedBlackTree
 				//  Py to X
 				x.setLeftChild(py);
 				py.setParent(x);
+
+				d.setParent(w);
+				w.setRightChild(d);
 				break;
 
 			default:
@@ -1274,7 +1286,9 @@ public class RedBlackTree
 			if ((py.getColor() == Color.BLACK)
 					&& (v.getColor() == Color.RED)
 					&& (b.getColor() == Color.BLACK)
-					&& (a.getColor() == Color.BLACK))
+					&& (a.getColor() == Color.BLACK)
+					&& (b_right.getColor() == Color.BLACK)
+					&& (b_left.getColor() == Color.BLACK))
 			{
 				return DeleteRotation.Lr0;
 			}
