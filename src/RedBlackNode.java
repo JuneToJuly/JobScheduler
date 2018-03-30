@@ -25,6 +25,7 @@ public class RedBlackNode
 	public void setJob(Job job)
 	{
 		this.job = job;
+		this.key = job.getId();
 	}
 	public RedBlackTree.Color getColor()
 	{

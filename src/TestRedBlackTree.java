@@ -1,28 +1,17 @@
+import sun.reflect.generics.tree.Tree;
+
 public class TestRedBlackTree
 {
 	public RedBlackTree rbt = new RedBlackTree();
+	StringBuilder sb = new StringBuilder();
 	public static void main(String[] args)
 	{
-		RedBlackTree rbt = new RedBlackTree();
-
-		Job job = new Job(12,20, 4);
-		Job job1 = new Job(13,22, 3);
-		Job job2 = new Job(20,22, 2);
-		Job job3 = new Job(44,22, 6);
-		Job job4 = new Job(30,22, 90);
-		Job job5 = new Job(1,22, 1);
-		Job job6 = new Job(2,22, 1);
-		Job job7 = new Job(19,22, 1);
-		Job job8 = new Job(18,22, 1);
-		Job job9 = new Job(21,22, 1);
-		Job job10 = new Job(24,22, 1);
-		Job job11 = new Job(28,22, 1);
-
 		new TestRedBlackTree();
 	}
 
 	public TestRedBlackTree()
 	{
+		sb.append("Test Results\n");
 		testRb01();
 		testRb02();
 		testRb11();
@@ -42,19 +31,173 @@ public class TestRedBlackTree
 		testLr11();
 		testLr12();
 		testLr2();
-//
-//		testDeleteRedLeaf();
-//		testDeleteBlackLeaf();
-//		testDeleteBlackDegreeOneWithRedChild();
-//		testDeleteDegree2();
-//		testDeleteMin();
 
-		Job job6 = new Job(2,22, 1);
-		Job job7 = new Job(19,22, 1);
-		Job job8 = new Job(18,22, 1);
-		Job job9 = new Job(21,22, 1);
-		Job job10 = new Job(24,22, 1);
-		Job job11 = new Job(28,22, 1);
+		testDeleteRedLeaf();
+		testDeleteBlackDegreeOneWithRedChild();
+		testDeleteDegree2();
+		testDeleteColorChangePropagtation();
+		testDeleteMin();
+
+		System.out.println(sb.toString());
+	}
+
+	private void testDeleteMin()
+	{
+
+	}
+
+	private void testDeleteColorChangePropagtation()
+	{
+
+	}
+
+	private void testDeleteDegree2()
+	{
+		Job a = new Job(4,22, 1);
+		Job b = new Job(2,22, 1);
+		Job c = new Job(15,22, 1);
+		Job d = new Job(30,22, 1);
+		Job e = new Job(40,22, 1);
+		Job f = new Job(45,22, 1);
+		Job g = new Job(33,22, 1);
+		Job h = new Job(32,22, 90);
+		Job i = new Job(35,22, 90);
+		Job j = new Job(37,22, 90);
+
+		RedBlackNode nodeA = new RedBlackNode(a, RedBlackTree.Color.RED);
+		RedBlackNode nodeB = new RedBlackNode(b, RedBlackTree.Color.BLACK);
+		RedBlackNode nodeC = new RedBlackNode(c, RedBlackTree.Color.BLACK);
+		RedBlackNode nodeD = new RedBlackNode(d, RedBlackTree.Color.BLACK);
+		RedBlackNode nodeE = new RedBlackNode(e, RedBlackTree.Color.BLACK);
+		RedBlackNode nodeF = new RedBlackNode(f, RedBlackTree.Color.BLACK);
+		RedBlackNode nodeG = new RedBlackNode(g, RedBlackTree.Color.RED);
+		RedBlackNode nodeH = new RedBlackNode(h, RedBlackTree.Color.BLACK);
+		RedBlackNode nodeI = new RedBlackNode(i, RedBlackTree.Color.BLACK);
+		RedBlackNode nodeJ = new RedBlackNode(j, RedBlackTree.Color.RED);
+
+		nodeD.setParent(RedBlackTree.rootNode);
+		nodeD.setLeftChild(nodeC);
+		nodeD.setRightChild(nodeE);
+
+		nodeC.setParent(nodeD);
+		nodeC.setLeftChild(nodeB);
+		nodeC.setRightChild(RedBlackTree.externalNode);
+
+		nodeB.setParent(nodeC);
+		nodeB.setRightChild(nodeA);
+		nodeB.setLeftChild(RedBlackTree.externalNode);
+
+		nodeA.setParent(nodeB);
+		nodeA.setRightChild(RedBlackTree.externalNode);
+		nodeA.setLeftChild(RedBlackTree.externalNode);
+
+		nodeE.setParent(nodeD);
+		nodeE.setRightChild(nodeF);
+		nodeE.setLeftChild(nodeG);
+
+		nodeF.setParent(nodeE);
+		nodeF.setLeftChild(RedBlackTree.externalNode);
+		nodeF.setRightChild(RedBlackTree.externalNode);
+
+		nodeG.setParent(nodeE);
+		nodeG.setLeftChild(nodeH);
+		nodeG.setRightChild(nodeI);
+
+		nodeH.setParent(nodeG);
+		nodeH.setLeftChild(RedBlackTree.externalNode);
+		nodeH.setRightChild(RedBlackTree.externalNode);
+
+		nodeI.setParent(nodeG);
+		nodeI.setLeftChild(RedBlackTree.externalNode);
+		nodeI.setRightChild(nodeJ);
+
+		nodeJ.setParent(nodeI);
+		nodeJ.setLeftChild(RedBlackTree.externalNode);
+		nodeJ.setRightChild(RedBlackTree.externalNode);
+
+		rbt.setHead(nodeD);
+		rbt.printNodeStyle(null);
+		rbt.delete(g);
+		System.out.println("This is after deleted!n\n\n");
+		rbt.printNodeStyle(null);
+
+	}
+
+	private void testDeleteBlackDegreeOneWithRedChild()
+	{
+		Job y = new Job(30,22, 1);
+		Job v = new Job(15,22, 1);
+		Job pyG = new Job(18,22, 90);
+		Job py = new Job(25,20, 4);
+
+		RedBlackNode nodeV = new RedBlackNode(v, RedBlackTree.Color.BLACK);
+		RedBlackNode nodeY = new RedBlackNode(y, RedBlackTree.Color.RED);
+		RedBlackNode nodePYG = new RedBlackNode(pyG, RedBlackTree.Color.BLACK);
+		RedBlackNode nodePY = new RedBlackNode(py, RedBlackTree.Color.BLACK);
+
+		nodePYG.setParent(RedBlackTree.rootNode);
+		nodePYG.setRightChild(nodePY);
+		nodePYG.setLeftChild(nodeV);
+
+		nodeV.setParent(nodePYG);
+		nodeV.setRightChild(RedBlackTree.externalNode);
+		nodeV.setLeftChild(RedBlackTree.externalNode);
+
+		nodePY.setParent(nodePYG);
+		nodePY.setRightChild(nodeY);
+		nodePY.setLeftChild(RedBlackTree.externalNode);
+
+		nodeY.setParent(nodePY);
+		nodeY.setRightChild(RedBlackTree.externalNode);
+		nodeY.setLeftChild(RedBlackTree.externalNode);
+
+		rbt.setHead(nodePYG);
+//		rbt.printNodeStyle(null);
+		rbt.delete(py);
+//		rbt.printNodeStyle(null);
+
+		if(nodePYG.getRightChild() == nodeY
+			&& nodeY.getParent() == nodePYG
+				&& nodeY.getColor() == RedBlackTree.Color.BLACK)
+		{
+			sb.append("Delete Black Degree One with Red Leaf: passed\n");
+		}
+		else
+		{
+			sb.append("Delete Black Degree One with Red Leaf: failed\n");
+		}
+	}
+
+	private void testDeleteRedLeaf()
+	{
+		Job y = new Job(15,22, 1);
+		Job pyG = new Job(10,22, 90);
+		Job py = new Job(25,20, 4);
+
+		RedBlackNode nodeY = new RedBlackNode(y, RedBlackTree.Color.BLACK);
+		RedBlackNode nodePYG = new RedBlackNode(pyG, RedBlackTree.Color.BLACK);
+		RedBlackNode nodePY = new RedBlackNode(py, RedBlackTree.Color.RED);
+
+		nodePYG.setParent(RedBlackTree.rootNode);
+		nodePYG.setRightChild(nodePY);
+		nodePYG.setLeftChild(RedBlackTree.externalNode);
+
+		nodePY.setParent(nodePYG);
+		nodePY.setRightChild(RedBlackTree.externalNode);
+		nodePY.setLeftChild(RedBlackTree.externalNode);
+
+		rbt.setHead(nodePYG);
+		rbt.delete(py);
+
+		if(nodePYG.getRightChild() == RedBlackTree.externalNode)
+		{
+
+			sb.append("Delete RedLeaf: passed\n");
+		}
+		else
+		{
+			sb.append("Delete RedLeaf: failed\n");
+		}
 	}
 
 	private void testLr2()
@@ -145,11 +288,11 @@ public class TestRedBlackTree
 				&& nodeV.getColor() == RedBlackTree.Color.RED
 				&& nodeX.getColor() == RedBlackTree.Color.BLACK)
 		{
-			System.out.println("Lr2: Test passed");
+			sb.append("Lr2: Test passed\n");
 		}
 		else
 		{
-			System.out.println("Lr2: Test failed");
+			sb.append("Lr2: Test failed\n");
 		}
 	}
 
@@ -240,11 +383,11 @@ public class TestRedBlackTree
 				&& nodeV.getColor() == RedBlackTree.Color.RED
 				&& nodeX.getColor() == RedBlackTree.Color.BLACK)
 		{
-			System.out.println("Lr12: Test passed");
+			sb.append("Lr12: Test passed\n");
 		}
 		else
 		{
-			System.out.println("Lr12: Test failed");
+			sb.append("Lr12: Test failed\n");
 		}
 	}
 
@@ -322,11 +465,11 @@ public class TestRedBlackTree
 				&& nodeW.getColor() == RedBlackTree.Color.BLACK
 				&& (nodePY.getColor() == RedBlackTree.Color.BLACK))
 		{
-			System.out.println("Lr11: Test passed");
+			sb.append("Lr11: Test passed\n");
 		}
 		else
 		{
-			System.out.println("Lr11: Test failed");
+			sb.append("Lr11: Test failed\n");
 		}
 	}
 
@@ -387,11 +530,11 @@ public class TestRedBlackTree
 				&& (nodeB.getColor() == RedBlackTree.Color.RED)
 				&& (nodePY.getColor() == RedBlackTree.Color.BLACK))
 		{
-			System.out.println("Lr0: Test passed");
+			sb.append("Lr0: Test passed\n");
 		}
 		else
 		{
-			System.out.println("Lr0: Test failed");
+			sb.append("Lr0: Test failed\n");
 		}
 
 	}
@@ -470,11 +613,11 @@ public class TestRedBlackTree
 				&& nodeA.getColor() == RedBlackTree.Color.RED
 				&& (nodePY.getColor() == RedBlackTree.Color.BLACK))
 		{
-			System.out.println("LB2: Test passed");
+			sb.append("LB2: Test passed\n");
 		}
 		else
 		{
-			System.out.println("LB2: Test failed");
+			sb.append("LB2: Test failed\n");
 		}
 	}
 
@@ -551,11 +694,11 @@ public class TestRedBlackTree
 				&& nodeW.getColor() == initStartColor
 				&& (nodePY.getColor() == RedBlackTree.Color.BLACK))
 		{
-			System.out.println("LB12: Test passed");
+			sb.append("LB12: Test passed\n");
 		}
 		else
 		{
-			System.out.println("LB12: Test failed");
+			sb.append("LB12: Test failed\n");
 		}
 	}
 
@@ -617,11 +760,11 @@ public class TestRedBlackTree
 				&& (nodeA.getColor() == RedBlackTree.Color.BLACK)
 				&& (nodePY.getColor() == RedBlackTree.Color.BLACK))
 		{
-			System.out.println("LB11: Test passed");
+			sb.append("LB11: Test passed\n");
 		}
 		else
 		{
-			System.out.println("LB11: Test failed");
+			sb.append("LB11: Test failed\n");
 		}
 	}
 
@@ -679,11 +822,11 @@ public class TestRedBlackTree
 				&& (nodeV.getColor() == RedBlackTree.Color.RED)
 				&& (nodePY.getColor() == RedBlackTree.Color.BLACK))
 		{
-			System.out.println("LB02: Test passed");
+			sb.append("LB02: Test passed\n");
 		}
 		else
 		{
-			System.out.println("LB02: Test failed");
+			sb.append("LB02: Test failed\n");
 		}
 
 	}
@@ -741,11 +884,11 @@ public class TestRedBlackTree
 				&& (nodeV.getParent() == nodePY)
 				&& (nodeV.getColor() == RedBlackTree.Color.RED))
 		{
-			System.out.println("LB01: Test passed");
+			sb.append("LB01: Test passed\n");
 		}
 		else
 		{
-			System.out.println("LB01: Test failed");
+			sb.append("LB01: Test failed\n");
 		}
 
 	}
@@ -838,11 +981,10 @@ public class TestRedBlackTree
 				&& nodeV.getColor() == RedBlackTree.Color.RED
 				&& (nodePY.getColor() == RedBlackTree.Color.BLACK))
 		{
-			System.out.println("Rr2: Test passed");
+			sb.append("Rr2: Test passed\n");
 		}
 		else{
-			System.out.println("Rr2: Test Failed");
-			rbt.printNodeStyle(null);
+			sb.append("Rr2: Test Failed\n");
 		}
 	}
 
@@ -931,11 +1073,10 @@ public class TestRedBlackTree
 				&& nodeV.getColor() == RedBlackTree.Color.RED
 				&& (nodePY.getColor() == RedBlackTree.Color.BLACK))
 		{
-			System.out.println("Rr12: Test passed");
+			sb.append("Rr12: Test passed\n");
 		}
 		else{
-			System.out.println("Rr12: Test Failed");
-			rbt.printNodeStyle(null);
+			sb.append("Rr12: Test Failed\n");
 		}
 	}
 
@@ -1013,11 +1154,10 @@ public class TestRedBlackTree
 				&& nodeV.getColor() == RedBlackTree.Color.RED
 				&& (nodePY.getColor() == RedBlackTree.Color.BLACK))
 		{
-			System.out.println("Rr11: Test passed");
+			sb.append("Rr11: Test passed\n");
 		}
 		else{
-			System.out.println("Rr11: Test Failed");
-			rbt.printNodeStyle(null);
+			sb.append("Rr11: Test Failed\n");
 		}
 	}
 
@@ -1078,10 +1218,10 @@ public class TestRedBlackTree
 				&& (nodePY.getColor() == RedBlackTree.Color.BLACK)
 				&& (nodeB.getColor() == RedBlackTree.Color.RED))
 		{
-			System.out.println("Rr0: Test passed");
+			sb.append("Rr0: Test passed\n");
 		}
 		else{
-			System.out.println("Rr0: Test Failed");
+			sb.append("Rr0: Test Failed\n");
 		}
 	}
 
@@ -1143,7 +1283,6 @@ public class TestRedBlackTree
 		nodeC.setRightChild(RedBlackTree.externalNode);
 
 		rbt.setHead(nodePYG);
-		rbt.printNodeStyle(null);
 		rbt.delete(y);
 
 		if (nodePY.getRightChild() == RedBlackTree.externalNode
@@ -1162,11 +1301,10 @@ public class TestRedBlackTree
 				&& nodeW.getColor() == startingColor
 				&& (nodePY.getColor() == RedBlackTree.Color.BLACK))
 		{
-			System.out.println("RB2: Test passed");
+			sb.append("RB2: Test passed\n");
 		}
 		else{
-			System.out.println("RB2: Test Failed");
-			rbt.printNodeStyle(null);
+			sb.append("RB2: Test Failed\n");
 		}
 
 	}
@@ -1229,7 +1367,6 @@ public class TestRedBlackTree
 		nodeC.setRightChild(RedBlackTree.externalNode);
 
 		rbt.setHead(nodePYG);
-		rbt.printNodeStyle(null);
 		rbt.delete(y);
 
 		if (nodePY.getRightChild() == RedBlackTree.externalNode
@@ -1247,11 +1384,10 @@ public class TestRedBlackTree
 				&& nodeW.getColor() == startingColor
 				&& (nodePY.getColor() == RedBlackTree.Color.BLACK))
 		{
-			System.out.println("RB12: Test passed");
+			sb.append("RB12: Test passed\n");
 		}
 		else{
-			System.out.println("RB12: Test Failed");
-			rbt.printNodeStyle(null);
+			sb.append("RB12: Test Failed\n");
 		}
 	}
 
@@ -1315,10 +1451,10 @@ public class TestRedBlackTree
 				&& (nodeV.getColor() == startingColor)
 				&& (nodePY.getColor() == RedBlackTree.Color.BLACK))
 		{
-			System.out.println("RB11: Test passed");
+			sb.append("RB11: Test passed\n");
 		}
 		else{
-			System.out.println("RB11: Test Failed");
+			sb.append("RB11: Test Failed\n");
 		}
 	}
 
@@ -1376,10 +1512,10 @@ public class TestRedBlackTree
 				&& (nodeV.getColor() == RedBlackTree.Color.RED)
 				&& (nodePY.getColor() == RedBlackTree.Color.BLACK))
 		{
-			System.out.println("RB02: Test passed");
+			sb.append("RB02: Test passed\n");
 		}
 		else{
-			System.out.println("RB02: Test Failed");
+			sb.append("RB02: Test Failed\n");
 		}
 	}
 
@@ -1436,7 +1572,11 @@ public class TestRedBlackTree
 			&& (nodeV.getParent() == nodePY)
 			&& (nodeV.getColor() == RedBlackTree.Color.RED))
 		{
-			System.out.println("RB01: Test passed");
+			sb.append("RB01: Test passed\n");
+		}
+		else
+		{
+			sb.append("RB01: Test failed\n");
 		}
 
 	}

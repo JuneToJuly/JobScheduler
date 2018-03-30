@@ -83,8 +83,6 @@ public class RedBlackTree
 			return;
 		}
 
-		System.out.println("I am a deficient node: " + deficientNode.getKey());
-		System.out.println("My Parent is: " + deficientNode.getParent().getKey());
 
 		// Classify this one degree rotation
 		DeleteRotation deleteRotation =  classifyDeleteRotation(deficientNode);
@@ -117,7 +115,6 @@ public class RedBlackTree
 		// Degree one node:
 
 		// Black leaf node, we have a deficiency regardless.
-		System.out.println(node.getColor() + node.getJob().toString());
 		if(degree == 0 && node.getColor() == Color.BLACK)
 		{
 			return node;
@@ -227,23 +224,48 @@ public class RedBlackTree
 
 		if(degree == 2)
 		{
-			RedBlackNode leftSubStree = node.getLeftChild();
-			RedBlackNode largestNode = leftSubStree;
-			RedBlackNode nextNode = leftSubStree;
+			RedBlackNode largestNode = node.getLeftChild();
+			RedBlackNode nextNode = largestNode.getRightChild();
 
 			while(nextNode != externalNode)
 			{
+				System.out.println("Entered the loops");
 				largestNode = nextNode;
-				nextNode.getRightChild();
+				nextNode = nextNode.getRightChild();
 			}
 
+
+			System.out.println("Job is: " + node.getKey());
 			// Swap the keys because we don't ever delete this node
 			node.setJob(largestNode.getJob());
 
+			System.out.println("Job is now after swap: " + node.getKey());
+			RedBlackNode deficientNode = null;
+
 			// Change left child parent to largest nodes parent
 			// Change parents right child to largest left node
-			largestNode.getLeftChild().setParent(largestNode.getParent());
-			largestNode.getParent().setRightChild(largestNode.getLeftChild());
+			if (largestNode.getLeftChild() != externalNode)
+			{
+				deficientNode = largestNode.getLeftChild();
+				deficientNode.setParent(largestNode.getParent());
+			}
+			else
+			{
+				deficientNode = new RedBlackNode(new Job(0,0,0), largestNode.getColor());
+				deficientNode.setParent(largestNode.getParent());
+				largestNode.setLeftChild(externalNode);
+				largestNode.setRightChild(externalNode);
+				System.out.println("We had to creae the node: ");
+			}
+
+			if(node.getLeftChild() != largestNode)
+			{
+				largestNode.getParent().setRightChild(deficientNode);
+			}
+			else
+			{
+				largestNode.getParent().setLeftChild(deficientNode);
+			}
 
 			// Largest node is red, could have a left child, it won't be red
 			// We are done!
@@ -252,7 +274,7 @@ public class RedBlackTree
 				return null;
 			}
 			// Else the largest node was black and we have a deficiency when deleting the black node.
-			return largestNode.getLeftChild();
+			return deficientNode;
 		}
 		return null;
 	}
@@ -381,8 +403,6 @@ public class RedBlackTree
 
 				py.setRightChild(externalNode);
 
-				System.out.println(py.getKey());
-
 				break;
 			case Rb2:
 				py = deletedNode.getParent();
@@ -426,8 +446,6 @@ public class RedBlackTree
 				py.setParent(w);
 
 				py.setRightChild(externalNode);
-
-				System.out.println(py.getKey());
 
 				break;
 			case Rr0:
@@ -878,7 +896,6 @@ public class RedBlackTree
 		if(head == null)
 		{
 			head = new RedBlackNode(currentJob, Color.BLACK);
-			System.out.println("Null head");
 			head.setParent(rootNode);
 			head.setLeftChild(externalNode);
 			head.setRightChild(externalNode);
@@ -913,20 +930,15 @@ public class RedBlackTree
 		// Set ourselves to our parent's right child because we are larger
 		if(insertKey > insertNode.getParent().getKey())
 		{
-			System.out.println("My key is: " + insertKey + " And I just found a parent" +
-					                   "whose key is: " + insertNode.getParent().getKey());
 			insertNode.getParent().setRightChild(insertNode);
 		}
 		// Else we are smaller, set to left child
 		else
 		{
-			System.out.println("My key is: " + insertKey + " And I just found a parent" +
-					                   "whose key is: " + insertNode.getParent().getKey());
 			insertNode.getParent().setLeftChild(insertNode);
 		}
 
 		InsertRotation insertRotation = classifyInsertRotation(insertNode);
-		System.out.println(insertRotation);
 		performRotation(insertNode, insertRotation);
 
 		RedBlackNode conflictingNode = null;
@@ -942,7 +954,6 @@ public class RedBlackTree
 				{
 					insertRotation = classifyInsertRotation(conflictingNode);
 					performRotation(conflictingNode, insertRotation);
-					System.out.println(insertRotation);
 				}
 
 			}
@@ -1265,7 +1276,6 @@ public class RedBlackTree
 					&& (b.getColor() == Color.BLACK)
 					&& (a.getColor() == Color.RED))
 			{
-				System.out.println("For some reaosn I clas this");
 				return DeleteRotation.Lb11;
 			}
 

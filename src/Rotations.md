@@ -24,8 +24,8 @@
 10. Lr2 -- **Works**
 
 * Delete Red Leaf -- **Works**
-* Delete Black Leaf
+* Delete Black Leaf -- **Works**
 * Delete Black Degree one with red child -- **Works**
-* Delete Degree 2
-
+* Delete Degree 2 -- **Works**
+* Delete Color Change Propagation
 
