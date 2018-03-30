@@ -33,7 +33,7 @@ public class RedBlackTree
 
 	public enum DeleteRotation { Rb01, Rb02, Rb11, Rb12, Rb2, Rr0, Rr11, Rr12, Rr2,
 								 Lb01, Lb02, Lb11, Lb12, Lb2, Lr0, Lr11, Lr12, Lr2,
-								 CUTCOLOR}
+								 REDCUTCOLOR}
 
 	private RedBlackNode head;
 
@@ -73,6 +73,13 @@ public class RedBlackTree
 		int degree = checkDegreeOfDeletion(next);
 		RedBlackNode deficientNode = findDeficientNode(degree, next);
 
+		// We have fixed the problem with a one degree black or red node
+		// In case o
+		if(deficientNode == null)
+		{
+			return;
+		}
+
 		DeleteRotation deleteRotation =  classifyDeleteRotation(deficientNode);
 		System.out.println("Rotation is: " + deleteRotation);
 		performDeleteRotation(deficientNode, deleteRotation);
@@ -92,11 +99,102 @@ public class RedBlackTree
 
 	private RedBlackNode findDeficientNode(int degree, RedBlackNode node)
 	{
-		// The node we are deleting is red and we want to recolour the child to black
+		Child parentToDeletion = node.getKey() >
+				node.getParent().getKey()
+				? Child.RIGHT
+				: Child.LEFT;
+
+		RedBlackNode y = null;
+		RedBlackNode defiecientNode = null;
+
+		// Degree one node:
+		/*
+			Node is black:
+				If Child is red, change to black.
+				Set this child to deleted nodes child and
+				set parent of child to parent of deleted node.
+				We are done!
+
+			Node is red:
+				Child should be black, otherwise we have a problem.
+				WE set this child to the deleted nodes child
+				and set parent of child to parent of deleted node.
+				We are done!
+		 */
+
+		// Node is red:
+
 		if(degree == 1)
 		{
-			return node;
+			// Deleting Black node, we have red child
+			if(node.getLeftChild().getColor() == Color.RED)
+			{
+				y = node.getLeftChild();
+				y.setColor(Color.BLACK);
+				y.setParent(node.getParent());
+				defiecientNode = null;
+			}
+			else if(node.getRightChild().getColor() == Color.RED)
+			{
+				y = node.getRightChild();
+				y.setColor(Color.BLACK);
+				y.setParent(node.getParent());
+				defiecientNode = null;
+			}
+
+			// Deleting Red Node, we have black child
+			if(node.getColor() == Color.RED
+					&& node.getRightChild() != externalNode
+					&& node.getLeftChild().getColor() == Color.BLACK)
+			{
+				y = node.getRightChild();
+				y.setParent(node.getParent());
+				defiecientNode = null;
+			}
+			else if(node.getColor() == Color.RED
+					&& node.getLeftChild() != externalNode
+					&& node.getRightChild().getColor() == Color.BLACK)
+			{
+				y = node.getLeftChild();
+				y.setParent(node.getParent());
+				defiecientNode = null;
+			}
+
+			// We are a deleting a black node and the child is
+			// black. We still have a deficiency.
+			if(node.getColor() == Color.BLACK
+					&& node.getRightChild() != externalNode
+					&& node.getLeftChild().getColor() == Color.BLACK)
+			{
+				y = node.getRightChild();
+				y.setParent(node.getParent());
+				defiecientNode = y;
+			}
+
+			if(node.getColor() == Color.BLACK
+					&& node.getLeftChild() != externalNode
+					&& node.getRightChild().getColor() == Color.BLACK)
+			{
+				y = node.getLeftChild();
+				y.setParent(node.getParent());
+				defiecientNode = y;
+			}
+
+			// Regardless, we need to set the parent of deleted
+			// node to our deleted nodes child, and our child node's
+			// parent needs to be set to our deleted nodes parent.
+			if(parentToDeletion == Child.RIGHT)
+			{
+				node.getParent().setRightChild(y);
+			}
+			else
+			{
+				node.getParent().setLeftChild(y);
+			}
+
+			return defiecientNode;
 		}
+
 		if(degree == 2)
 		{
 			RedBlackNode leftSubStree = node.getLeftChild();
@@ -931,6 +1029,16 @@ public class RedBlackTree
 			parentToDelete = deleteNode.getKey() > parent.getKey()
 					? Child.RIGHT
 					: Child.LEFT;
+		}
+
+		// Doesn't matter what side we are, we can check this
+		// by looking at
+		if((deleteNode.getLeftChild() != externalNode &&
+				deleteNode.getRightChild().getColor() == Color.RED)
+				|| deleteNode.getRightChild() != externalNode &&
+					deleteNode.getLeftChild().getColor() == Color.RED)
+		{
+			return DeleteRotation.REDCUTCOLOR;
 		}
 
 		if(parentToDelete == Child.RIGHT)
