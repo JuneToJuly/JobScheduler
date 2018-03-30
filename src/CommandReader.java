@@ -18,7 +18,7 @@ public class CommandReader
 		hasNext = true;
 	}
 
-	private Command next(int time)
+	public Command next(int time)
 	{
 		if (time != currentCommand.getTimestamp())
 		{

@@ -1,4 +1,5 @@
 import java.io.*;
+import java.util.ArrayList;
 
 /**
  * @author Ian Thomas
@@ -16,7 +17,7 @@ public class App
 		int runningJobCounter = 5;
 		Command command = new Command();
 		int  currentTime = 0;
-		while(command = commandReader.next(currentTime) != null)
+		while((command = commandReader.next(currentTime)) != null)
 		{
 			if(runningJob == 0 && (runningJob.getTotalTime()-runningJob.getExecutedTime() <= 5))
 			{
@@ -39,12 +40,13 @@ public class App
 					case "printjob":
 						if(command.getJobExecutionTime() == -1)
 						{
-							String job = rbt.search(newJob);
+							Job job = rbt.search(newJob);
 							// print this
 						}
 						else
 						{
-							// We have to print in a range
+							ArrayList<Job> jobs =
+									rbt.searchInRange(command.getId(), command.getJobExecutionTime());
 						}
 						break;
 					case "nextjob":

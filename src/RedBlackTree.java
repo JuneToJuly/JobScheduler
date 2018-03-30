@@ -1,6 +1,9 @@
 import com.sun.org.apache.regexp.internal.REDebugCompiler;
+import org.omg.CORBA.REBIND;
 import sun.plugin.dom.core.CoreConstants;
 
+import java.lang.reflect.Array;
+import java.util.ArrayList;
 import java.util.Queue;
 
 /**
@@ -25,16 +28,140 @@ public class RedBlackTree
 		rootNode.setRightChild(externalNode);
 	}
 
-	public String search(Job newJob)
+	/**
+	 * Returns the job.
+	 * @param newJob
+	 * @return
+	 */
+	public Job search(Job newJob)
 	{
+		int key = newJob.getId();
+		if(key == head.getKey())
+		{
+			return head.getJob();
+		}
+
+		if(key > head.getKey())
+		{
+			return search(head.getRightChild(), key).getJob();
+		}
+		else
+		{
+			return search(head.getLeftChild(), key).getJob();
+		}
+	}
+
+	private RedBlackNode search(RedBlackNode node, int key)
+	{
+		if(node == externalNode)
+		{
+			return null;
+		}
+		if(key == node.getKey())
+		{
+			return node;
+		}
+
+		if(key > node.getKey())
+		{
+			return search(node.getRightChild(), key);
+		}
+		else
+		{
+			return search(node.getLeftChild(), key);
+		}
 	}
 
 	public String next(Job newJob)
 	{
+		RedBlackNode foundNode = search(head, newJob.getId());
+		if(foundNode.getRightChild() == externalNode)
+		{
+			return "(0,0,0)";
+		}
+
+		RedBlackNode next = foundNode.getRightChild();
+		RedBlackNode smallest = next;
+
+		while(next != externalNode)
+		{
+			smallest = next;
+			next = next.getLeftChild();
+		}
+
+		return smallest.getJob().toString();
+
 	}
 
 	public String previous(Job newJob)
 	{
+		RedBlackNode foundNode = search(head, newJob.getId());
+		if(foundNode.getLeftChild() == externalNode)
+		{
+			return "(0,0,0)";
+		}
+
+		RedBlackNode next = foundNode.getLeftChild();
+		RedBlackNode largest = next;
+
+		while(next != externalNode)
+		{
+			largest = next;
+			next = next.getRightChild();
+		}
+
+		return largest.getJob().toString();
+	}
+
+	public ArrayList<Job> searchInRange(int id, int jobExecutionTime)
+	{
+		RedBlackNode firstFoundNode = search(head,id);
+		RedBlackNode secondFoundNode = search(head,jobExecutionTime);
+		RedBlackNode searchNode = firstFoundNode;
+		StringBuilder builder = new StringBuilder();
+		if(foundNode != null && secondFoundNode)
+		{
+			builder.append(gatherSubTree(foundNode))
+			while(searchNode != secondFoundNode)
+			{
+				if(searchNode.getLeftChild() == jobExecutionTime)
+				{
+					builder.append(gatherSubTree(searchNode) + "," + searchNode.getJob().toString());
+					break;
+				}
+				if(searchNode.getKey() > jobExecutionTime)
+				{
+					searchNode = searchNode.getLeftChild();
+				}
+				else
+				{
+					builder.append(gatherSubTree(searchNode) + "," + searchNode.getJob().toString());
+					searchNode = searchNode.getRightChild();
+				}
+			}
+		}
+
+	}
+
+	private String gatherSubTree(RedBlackNode node)
+	{
+		if(node.getRightChild() == externalNode
+				&& node.getLeftChild() != externalNode)
+		{
+			return node.getJob().toString() + printSubTree(node.getLeftChild());
+		}
+		if(node.getLeftChild() == externalNode
+				&& node.getRightChild() != externalNode)
+		{
+			return node.getJob().toString() + printSubTree(node.getRightChild());
+		}
+
+		if(node.getLeftChild() != externalNode
+				&& node.getRightChild() != externalNode)
+		{
+			return node.getJob().toString() + printSubTree(node.getLeftChild()) + printSubTree(node.getRightChild());
+		}
+
 	}
 
 
