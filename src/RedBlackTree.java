@@ -303,6 +303,7 @@ public class RedBlackTree
 		{
 			case Rb01:
 				deletedNode.getParent().getLeftChild().setColor(Color.RED);
+				deletedNode.getParent().setRightChild(externalNode);
 				break;
 			case Rb02:
 				deletedNode.getParent().setColor(Color.BLACK);
@@ -583,10 +584,12 @@ public class RedBlackTree
 			case Lb01:
 				// Color Change
 				deletedNode.getParent().getRightChild().setColor(Color.RED);
+				deletedNode.getParent().setLeftChild(RedBlackTree.externalNode);
 				break;
 			case Lb02:
 				deletedNode.getParent().setColor(Color.BLACK);
 				deletedNode.getParent().getRightChild().setColor(Color.RED);
+				deletedNode.getParent().setLeftChild(RedBlackTree.externalNode);
 				break;
 			case Lb11:
 				py = deletedNode.getParent();
@@ -596,8 +599,8 @@ public class RedBlackTree
 
 				initRootColor = deletedNode.getParent().getColor();
 				v.setColor(initRootColor);
-
 				a.setColor(Color.BLACK);
+				py.setColor(Color.BLACK);
 
 				// V to GP
 				if(parentToGrandParent == Child.RIGHT)
@@ -608,13 +611,16 @@ public class RedBlackTree
 				{
 					deletedNode.getParent().getParent().setLeftChild(v);
 				}
-				v.setParent(deletedNode.getParent().getParent());
-
+				v.setParent(py.getParent());
 
 				// B to py
 				b.setParent(py);
 				py.setRightChild(b);
 
+				py.setParent(v);
+				v.setLeftChild(py);
+
+				py.setLeftChild(RedBlackTree.externalNode);
 				break;
 			case Lb12:
 				py = deletedNode.getParent();

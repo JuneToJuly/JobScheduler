@@ -32,10 +32,10 @@ public class TestRedBlackTree
 		testRr11();
 		testRr12();
 		testRr2();
-//
-//		testLb01();
-//		testLb02();
-//		testLb11();
+
+		testLb01();
+		testLb02();
+		testLb11();
 //		testLb12();
 //		testLb2();
 //		testLr0();
@@ -56,6 +56,199 @@ public class TestRedBlackTree
 		Job job10 = new Job(24,22, 1);
 		Job job11 = new Job(28,22, 1);
 	}
+
+	private void testLb11()
+	{
+		Job y = new Job(15,22, 1);
+		Job pyG = new Job(10,22, 90);
+		Job py = new Job(25,20, 4);
+
+		Job v = new Job(25,22, 3);
+		Job a = new Job(40,22, 2);
+		Job b = new Job(32,22, 6);
+
+		RedBlackTree.Color initStartColor = RedBlackTree.Color.RED;
+		// All Black
+		RedBlackNode nodeY = new RedBlackNode(y, RedBlackTree.Color.BLACK);
+		RedBlackNode nodePYG = new RedBlackNode(pyG, RedBlackTree.Color.BLACK);
+		RedBlackNode nodePY = new RedBlackNode(py, initStartColor);
+		RedBlackNode nodeV = new RedBlackNode(v, RedBlackTree.Color.BLACK);
+		RedBlackNode nodeA = new RedBlackNode(a, RedBlackTree.Color.RED);
+		RedBlackNode nodeB = new RedBlackNode(b, RedBlackTree.Color.BLACK);
+
+		nodePYG.setParent(RedBlackTree.rootNode);
+		nodePYG.setRightChild(nodePY);
+		nodePYG.setLeftChild(RedBlackTree.externalNode);
+
+		nodePY.setParent(nodePYG);
+		nodePY.setRightChild(nodeV);
+		nodePY.setLeftChild(nodeY);
+
+		nodeY.setParent(nodePY);
+		nodeY.setLeftChild(RedBlackTree.externalNode);
+		nodeY.setRightChild(RedBlackTree.externalNode);
+
+		nodeV.setParent(nodePY);
+		nodeV.setLeftChild(nodeB);
+		nodeV.setRightChild(nodeA);
+
+		nodeB.setParent(nodeV);
+		nodeB.setLeftChild(RedBlackTree.externalNode);
+		nodeB.setRightChild(RedBlackTree.externalNode);
+
+		nodeA.setParent(nodeV);
+		nodeA.setLeftChild(RedBlackTree.externalNode);
+		nodeA.setRightChild(RedBlackTree.externalNode);
+
+
+		rbt.setHead(nodePYG);
+		rbt.delete(y);
+
+		if((nodePY.getLeftChild() == RedBlackTree.externalNode)
+				&& (nodePY.getRightChild() == nodeB)
+				&& (nodePY.getParent() == nodeV)
+				&& nodeV.getParent() == nodePYG
+				&& (nodeV.getRightChild() == nodeA)
+				&& (nodeV.getLeftChild() == nodePY)
+				&& nodeB.getParent() == nodePY
+				&& (nodeV.getColor() == initStartColor)
+				&& (nodeA.getColor() == RedBlackTree.Color.BLACK)
+				&& (nodePY.getColor() == RedBlackTree.Color.BLACK))
+		{
+			System.out.println("LB11: Test passed");
+		}
+		else
+		{
+			System.out.println("LB11: Test failed");
+		}
+	}
+
+	private void testLb02()
+	{
+		Job y = new Job(15,22, 1);
+		Job pyG = new Job(10,22, 90);
+		Job py = new Job(25,20, 4);
+
+		Job v = new Job(25,22, 3);
+		Job a = new Job(40,22, 2);
+		Job b = new Job(32,22, 6);
+
+		// All Black
+		RedBlackNode nodeY = new RedBlackNode(y, RedBlackTree.Color.BLACK);
+		RedBlackNode nodePYG = new RedBlackNode(pyG, RedBlackTree.Color.BLACK);
+		RedBlackNode nodePY = new RedBlackNode(py, RedBlackTree.Color.RED);
+		RedBlackNode nodeV = new RedBlackNode(v, RedBlackTree.Color.BLACK);
+		RedBlackNode nodeA = new RedBlackNode(a, RedBlackTree.Color.BLACK);
+		RedBlackNode nodeB = new RedBlackNode(b, RedBlackTree.Color.BLACK);
+
+		nodePYG.setParent(RedBlackTree.rootNode);
+		nodePYG.setRightChild(nodePY);
+		nodePYG.setLeftChild(RedBlackTree.externalNode);
+
+		nodePY.setParent(nodePYG);
+		nodePY.setRightChild(nodeV);
+		nodePY.setLeftChild(nodeY);
+
+		nodeY.setParent(nodePY);
+		nodeY.setLeftChild(RedBlackTree.externalNode);
+		nodeY.setRightChild(RedBlackTree.externalNode);
+
+		nodeV.setParent(nodePY);
+		nodeV.setLeftChild(nodeB);
+		nodeV.setRightChild(nodeA);
+
+		nodeB.setParent(nodeV);
+		nodeB.setLeftChild(RedBlackTree.externalNode);
+		nodeB.setRightChild(RedBlackTree.externalNode);
+
+		nodeA.setParent(nodeV);
+		nodeA.setLeftChild(RedBlackTree.externalNode);
+		nodeA.setRightChild(RedBlackTree.externalNode);
+
+
+		rbt.setHead(nodePYG);
+		rbt.delete(y);
+
+		if((nodePY.getLeftChild() == RedBlackTree.externalNode)
+				&& (nodePY.getRightChild() == nodeV)
+				&& (nodeV.getRightChild() == nodeA)
+				&& (nodeV.getLeftChild() == nodeB)
+				&& (nodeV.getParent() == nodePY)
+				&& (nodeV.getColor() == RedBlackTree.Color.RED)
+				&& (nodePY.getColor() == RedBlackTree.Color.BLACK))
+		{
+			System.out.println("LB02: Test passed");
+		}
+		else
+		{
+			System.out.println("LB02: Test failed");
+		}
+
+	}
+
+	private void testLb01()
+	{
+		Job y = new Job(15,22, 1);
+		Job pyG = new Job(10,22, 90);
+		Job py = new Job(25,20, 4);
+
+		Job v = new Job(25,22, 3);
+		Job a = new Job(40,22, 2);
+		Job b = new Job(32,22, 6);
+
+		// All Black
+		RedBlackNode nodeY = new RedBlackNode(y, RedBlackTree.Color.BLACK);
+		RedBlackNode nodePYG = new RedBlackNode(pyG, RedBlackTree.Color.BLACK);
+		RedBlackNode nodePY = new RedBlackNode(py, RedBlackTree.Color.BLACK);
+		RedBlackNode nodeV = new RedBlackNode(v, RedBlackTree.Color.BLACK);
+		RedBlackNode nodeA = new RedBlackNode(a, RedBlackTree.Color.BLACK);
+		RedBlackNode nodeB = new RedBlackNode(b, RedBlackTree.Color.BLACK);
+
+		nodePYG.setParent(RedBlackTree.rootNode);
+		nodePYG.setRightChild(nodePY);
+		nodePYG.setLeftChild(RedBlackTree.externalNode);
+
+		nodePY.setParent(nodePYG);
+		nodePY.setRightChild(nodeV);
+		nodePY.setLeftChild(nodeY);
+
+		nodeY.setParent(nodePY);
+		nodeY.setLeftChild(RedBlackTree.externalNode);
+		nodeY.setRightChild(RedBlackTree.externalNode);
+
+		nodeV.setParent(nodePY);
+		nodeV.setLeftChild(nodeB);
+		nodeV.setRightChild(nodeA);
+
+		nodeB.setParent(nodeV);
+		nodeB.setLeftChild(RedBlackTree.externalNode);
+		nodeB.setRightChild(RedBlackTree.externalNode);
+
+		nodeA.setParent(nodeV);
+		nodeA.setLeftChild(RedBlackTree.externalNode);
+		nodeA.setRightChild(RedBlackTree.externalNode);
+
+
+		rbt.setHead(nodePYG);
+		rbt.delete(y);
+
+		if((nodePY.getLeftChild() == RedBlackTree.externalNode)
+				&& (nodePY.getRightChild() == nodeV)
+				&& (nodeV.getRightChild() == nodeA)
+				&& (nodeV.getLeftChild() == nodeB)
+				&& (nodeV.getParent() == nodePY)
+				&& (nodeV.getColor() == RedBlackTree.Color.RED))
+		{
+			System.out.println("LB01: Test passed");
+		}
+		else
+		{
+			System.out.println("LB01: Test failed");
+		}
+
+	}
+
+
 
 	private void testRr2()
 	{
