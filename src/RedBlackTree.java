@@ -32,8 +32,7 @@ public class RedBlackTree
 	public enum Child {LEFT, RIGHT}
 
 	public enum DeleteRotation { Rb01, Rb02, Rb11, Rb12, Rb2, Rr0, Rr11, Rr12, Rr2,
-								 Lb01, Lb02, Lb11, Lb12, Lb2, Lr0, Lr11, Lr12, Lr2,
-								 REDCUTCOLOR}
+								 Lb01, Lb02, Lb11, Lb12, Lb2, Lr0, Lr11, Lr12, Lr2}
 
 	private RedBlackNode head;
 
@@ -73,13 +72,16 @@ public class RedBlackTree
 		int degree = checkDegreeOfDeletion(next);
 		RedBlackNode deficientNode = findDeficientNode(degree, next);
 
-		// We have fixed the problem with a one degree black or red node
-		// In case o
+		// We have fixed the problem with a one degree black that has a red child
+		// and a one degree red that has a black child.
+		// In case with one degree black having a black child, or a two degree
+		// black or red, we still have our deficiency, we need to correct this now.
 		if(deficientNode == null)
 		{
 			return;
 		}
 
+		// Classify this one degree rotation
 		DeleteRotation deleteRotation =  classifyDeleteRotation(deficientNode);
 		System.out.println("Rotation is: " + deleteRotation);
 		performDeleteRotation(deficientNode, deleteRotation);
@@ -108,12 +110,28 @@ public class RedBlackTree
 		RedBlackNode defiecientNode = null;
 
 		// Degree one node:
+
+		// Black leaf node, we have a deficiency regardless.
+		if(degree == 0 && node.getColor() == Color.BLACK)
+		{
+			return node;
+		}
+		// Red Leaf node, we are done.
+		else if(degree == 0 && node.getColor() == Color.RED)
+		{
+			return null;
+		}
+
 		/*
+			Degree 1 Node
+
 			Node is black:
 				If Child is red, change to black.
 				Set this child to deleted nodes child and
 				set parent of child to parent of deleted node.
 				We are done!
+				If Child is black, do some thing with pointers,
+				but now we have a deficiency.
 
 			Node is red:
 				Child should be black, otherwise we have a problem.
@@ -121,9 +139,6 @@ public class RedBlackTree
 				and set parent of child to parent of deleted node.
 				We are done!
 		 */
-
-		// Node is red:
-
 		if(degree == 1)
 		{
 			// Deleting Black node, we have red child
@@ -210,9 +225,19 @@ public class RedBlackTree
 			// Swap the keys because we don't ever delete this node
 			node.setJob(largestNode.getJob());
 
-			// We just deleted this node pretty much
-			// it is now the deficient node
-			return largestNode;
+			// Change left child parent to largest nodes parent
+			// Change parents right child to largest left node
+			largestNode.getLeftChild().setParent(largestNode.getParent());
+			largestNode.getParent().setRightChild(largestNode.getLeftChild());
+
+			// Largest node is red, could have a left child, it won't be red
+			// We are done!
+			if(largestNode.getColor() == Color.RED)
+			{
+				return null;
+			}
+			// Else the largest node was black and we have a deficiency when deleting the black node.
+			return largestNode.getLeftChild();
 		}
 		return null;
 	}
@@ -1029,16 +1054,6 @@ public class RedBlackTree
 			parentToDelete = deleteNode.getKey() > parent.getKey()
 					? Child.RIGHT
 					: Child.LEFT;
-		}
-
-		// Doesn't matter what side we are, we can check this
-		// by looking at
-		if((deleteNode.getLeftChild() != externalNode &&
-				deleteNode.getRightChild().getColor() == Color.RED)
-				|| deleteNode.getRightChild() != externalNode &&
-					deleteNode.getLeftChild().getColor() == Color.RED)
-		{
-			return DeleteRotation.REDCUTCOLOR;
 		}
 
 		if(parentToDelete == Child.RIGHT)
