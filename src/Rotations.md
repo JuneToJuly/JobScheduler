@@ -4,9 +4,9 @@
 
 
 ### Delete Rotations Tested
-1. Rb01
+1. Rb01 -- **Works**
 2. Rb02 -- **Works**
-3. Rb11
+3. Rb11 -- **Works**
 4. Rb12
 5. Rb2
 7. Rr0
