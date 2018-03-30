@@ -78,6 +78,17 @@ public class RedBlackTree
 		RedBlackNode nodeC = null;
 		RedBlackNode nodeB = null;
 		RedBlackNode nodeD = null;
+
+		// node according to slides
+
+		RedBlackNode py = null;
+		RedBlackNode v = null;
+		RedBlackNode a = null;
+		RedBlackNode b = null;
+		RedBlackNode w = null;
+		RedBlackNode c = null;
+		RedBlackNode d = null;
+		RedBlackNode x = null;
 		Child parentToGrandParent = deletedNode.getParent().getKey() >
 				deletedNode.getParent().getParent().getKey()
 				? Child.RIGHT
@@ -323,22 +334,253 @@ public class RedBlackTree
 				deletedNode.getParent().getLeftChild().setParent(deletedNode.getParent());
 				break;
 			case Lb01:
+				// Color Change
+				deletedNode.getParent().getRightChild().setColor(Color.RED);
 				break;
 			case Lb02:
+				deletedNode.getParent().setColor(Color.BLACK);
+				deletedNode.getParent().getRightChild().setColor(Color.RED);
 				break;
 			case Lb11:
+				py = deletedNode.getParent();
+				v = deletedNode.getParent().getRightChild();
+				a = deletedNode.getParent().getRightChild().getRightChild();
+				b = deletedNode.getParent().getRightChild().getLeftChild();
+
+				a.setColor(Color.BLACK);
+
+				// V to GP
+				if(parentToGrandParent == Child.RIGHT)
+				{
+					deletedNode.getParent().getParent().setRightChild(v);
+				}
+				else
+				{
+					deletedNode.getParent().getParent().setLeftChild(v);
+				}
+				v.setParent(deletedNode.getParent().getParent());
+
+
+				// B to py
+				b.setParent(py);
+				py.setRightChild(b);
+
 				break;
 			case Lb12:
+				py = deletedNode.getParent();
+				v = deletedNode.getParent().getRightChild();
+				a = deletedNode.getParent().getRightChild().getRightChild();
+				w = deletedNode.getParent().getRightChild().getLeftChild();
+				b = deletedNode.getParent().getRightChild().getLeftChild().getRightChild();
+				c = deletedNode.getParent().getRightChild().getLeftChild().getLeftChild();
+
+				// W to GP
+				if(parentToGrandParent == Child.RIGHT)
+				{
+					deletedNode.getParent().getParent().setRightChild(w);
+				}
+				else
+				{
+					deletedNode.getParent().getParent().setLeftChild(w);
+				}
+				w.setParent(deletedNode.getParent().getParent());
+
+				// B to V
+				b.setParent(v);
+				v.setLeftChild(b);
+
+				// C to py
+				py.setRightChild(c);
+				c.setParent(py);
+
+				// V to W
+				w.setRightChild(v);
+				v.setParent(w);
+
+				//  Py to W
+				w.setLeftChild(py);
+				py.setParent(w);
 				break;
 			case Lb2:
+				py = deletedNode.getParent();
+				v = deletedNode.getParent().getRightChild();
+				a = deletedNode.getParent().getRightChild().getRightChild();
+				w = deletedNode.getParent().getRightChild().getLeftChild();
+				b = deletedNode.getParent().getRightChild().getLeftChild().getRightChild();
+				c = deletedNode.getParent().getRightChild().getLeftChild().getLeftChild();
+
+
+				// W to GP
+				if(parentToGrandParent == Child.RIGHT)
+				{
+					deletedNode.getParent().getParent().setRightChild(w);
+				}
+				else
+				{
+					deletedNode.getParent().getParent().setLeftChild(w);
+				}
+				w.setParent(deletedNode.getParent().getParent());
+
+				// B to V
+				b.setParent(v);
+				v.setLeftChild(b);
+
+				// C to py
+				py.setRightChild(c);
+				c.setParent(py);
+
+				// V to W
+				w.setRightChild(v);
+				v.setParent(w);
+
+				//  Py to W
+				w.setLeftChild(py);
+				py.setParent(w);
 				break;
 			case Lr0:
+				py = deletedNode.getParent();
+				v = deletedNode.getParent().getRightChild();
+				a = deletedNode.getParent().getRightChild().getRightChild();
+				b = deletedNode.getParent().getRightChild().getLeftChild();
+
+				v.setColor(Color.BLACK);
+				b.setColor(Color.RED);
+
+				// W to GP
+				if(parentToGrandParent == Child.RIGHT)
+				{
+					deletedNode.getParent().getParent().setRightChild(v);
+				}
+				else
+				{
+					deletedNode.getParent().getParent().setLeftChild(v);
+				}
+				v.setParent(deletedNode.getParent().getParent());
+
+				// B to Py
+				b.setParent(py);
+				py.setLeftChild(b);
+
+				//  Py to W
+				v.setLeftChild(py);
+				py.setParent(v);
 				break;
 			case Lr11:
+				py = deletedNode.getParent();
+				v = deletedNode.getParent().getRightChild();
+				a = deletedNode.getParent().getRightChild().getRightChild();
+				w = deletedNode.getParent().getRightChild().getLeftChild();
+				b = deletedNode.getParent().getRightChild().getLeftChild().getRightChild();
+				c = deletedNode.getParent().getRightChild().getLeftChild().getLeftChild();
+
+				b.setColor(Color.BLACK);
+
+				// W to GP
+				if(parentToGrandParent == Child.RIGHT)
+				{
+					deletedNode.getParent().getParent().setRightChild(w);
+				}
+				else
+				{
+					deletedNode.getParent().getParent().setLeftChild(w);
+				}
+				w.setParent(deletedNode.getParent().getParent());
+
+				// B to V
+				b.setParent(v);
+				v.setLeftChild(b);
+
+				// C to py
+				py.setRightChild(c);
+				c.setParent(py);
+
+				// V to W
+				w.setRightChild(v);
+				v.setParent(w);
+
+				//  Py to W
+				w.setLeftChild(py);
+				py.setParent(w);
 				break;
 			case Lr12:
+				py = deletedNode.getParent();
+				v = deletedNode.getParent().getRightChild();
+				a = deletedNode.getParent().getRightChild().getRightChild();
+				w = deletedNode.getParent().getRightChild().getLeftChild();
+				b = deletedNode.getParent().getRightChild().getLeftChild().getRightChild();
+				x = w.getLeftChild();
+				c = x.getLeftChild();
+				d = x.getRightChild();
+
+
+				x.setColor(Color.BLACK);
+
+				// X to GP
+				if(parentToGrandParent == Child.RIGHT)
+				{
+					deletedNode.getParent().getParent().setRightChild(x);
+				}
+				else
+				{
+					deletedNode.getParent().getParent().setLeftChild(x);
+				}
+				x.setParent(deletedNode.getParent().getParent());
+
+				// C to W
+				c.setParent(w);
+				c.setLeftChild(w);
+
+				// D to Py
+				py.setRightChild(d);
+				d.setParent(py);
+
+				// V to X
+				x.setRightChild(v);
+				v.setParent(x);
+
+				//  Py to X
+				x.setLeftChild(py);
+				py.setParent(x);
 				break;
 			case Lr2:
+				py = deletedNode.getParent();
+				v = deletedNode.getParent().getRightChild();
+				a = deletedNode.getParent().getRightChild().getRightChild();
+				w = deletedNode.getParent().getRightChild().getLeftChild();
+				b = deletedNode.getParent().getRightChild().getLeftChild().getRightChild();
+				x = w.getLeftChild();
+				c = x.getLeftChild();
+				d = x.getRightChild();
+
+
+				x.setColor(Color.BLACK);
+
+				// X to GP
+				if(parentToGrandParent == Child.RIGHT)
+				{
+					deletedNode.getParent().getParent().setRightChild(x);
+				}
+				else
+				{
+					deletedNode.getParent().getParent().setLeftChild(x);
+				}
+				x.setParent(deletedNode.getParent().getParent());
+
+				// C to W
+				c.setParent(w);
+				c.setLeftChild(w);
+
+				// D to Py
+				py.setRightChild(d);
+				d.setParent(py);
+
+				// V to X
+				x.setRightChild(v);
+				v.setParent(x);
+
+				//  Py to X
+				x.setLeftChild(py);
+				py.setParent(x);
 				break;
 
 			default:
