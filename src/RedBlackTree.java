@@ -1439,6 +1439,11 @@ public class RedBlackTree
 		printNodeStyle(node.getLeftChild());
 		printNodeStyle(node.getRightChild());
 	}
+
+	public void setHead(RedBlackNode head)
+	{
+		this.head = head;
+	}
 }
 
 
