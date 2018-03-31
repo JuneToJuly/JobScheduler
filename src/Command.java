@@ -59,4 +59,9 @@ public class Command
 	{
 		this.jobExecutionTime = jobExecutionTime;
 	}
+
+	public String toString()
+	{
+		return "Name: " + name + " Timestamp: " + timestamp + " Id: " + id + " ExecutionTime: " + jobExecutionTime;
+	}
 }

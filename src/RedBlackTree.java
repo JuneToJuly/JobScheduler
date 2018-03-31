@@ -51,6 +51,9 @@ public class RedBlackTree
 		}
 	}
 
+	/*
+		Searching algorithms
+	 */
 	private RedBlackNode search(RedBlackNode node, int key)
 	{
 		if(node == externalNode)
@@ -72,6 +75,11 @@ public class RedBlackTree
 		}
 	}
 
+	/**
+	 * Gets the next job.
+	 * @param newJob
+	 * @return
+	 */
 	public String next(Job newJob)
 	{
 		RedBlackNode foundNode = search(head, newJob.getId());
@@ -93,6 +101,11 @@ public class RedBlackTree
 
 	}
 
+	/**
+	 * Gets the prv Job.
+	 * @param newJob
+	 * @return
+	 */
 	public String previous(Job newJob)
 	{
 		RedBlackNode foundNode = search(head, newJob.getId());
@@ -113,18 +126,18 @@ public class RedBlackTree
 		return largest.getJob().toString();
 	}
 
-	public ArrayList<Job> searchInRange(int id, int jobExecutionTime)
+	public String searchInRange(int id, int jobExecutionTime)
 	{
 		RedBlackNode firstFoundNode = search(head,id);
 		RedBlackNode secondFoundNode = search(head,jobExecutionTime);
 		RedBlackNode searchNode = firstFoundNode;
 		StringBuilder builder = new StringBuilder();
-		if(foundNode != null && secondFoundNode)
+		if(firstFoundNode != null && secondFoundNode != null)
 		{
-			builder.append(gatherSubTree(foundNode))
+			builder.append(gatherSubTree(firstFoundNode));
 			while(searchNode != secondFoundNode)
 			{
-				if(searchNode.getLeftChild() == jobExecutionTime)
+				if(searchNode.getLeftChild().getJob().getExecutedTime() == jobExecutionTime)
 				{
 					builder.append(gatherSubTree(searchNode) + "," + searchNode.getJob().toString());
 					break;
@@ -141,6 +154,7 @@ public class RedBlackTree
 			}
 		}
 
+		return builder.toString();
 	}
 
 	private String gatherSubTree(RedBlackNode node)
@@ -148,20 +162,20 @@ public class RedBlackTree
 		if(node.getRightChild() == externalNode
 				&& node.getLeftChild() != externalNode)
 		{
-			return node.getJob().toString() + printSubTree(node.getLeftChild());
+			return node.getJob().toString() + gatherSubTree(node.getLeftChild());
 		}
 		if(node.getLeftChild() == externalNode
 				&& node.getRightChild() != externalNode)
 		{
-			return node.getJob().toString() + printSubTree(node.getRightChild());
+			return node.getJob().toString() + gatherSubTree(node.getRightChild());
 		}
 
 		if(node.getLeftChild() != externalNode
 				&& node.getRightChild() != externalNode)
 		{
-			return node.getJob().toString() + printSubTree(node.getLeftChild()) + printSubTree(node.getRightChild());
+			return node.getJob().toString() + gatherSubTree(node.getLeftChild()) + gatherSubTree(node.getRightChild());
 		}
-
+		return "";
 	}
 
 

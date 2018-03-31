@@ -1,21 +1,30 @@
+import org.omg.Messaging.SYNC_WITH_TRANSPORT;
+
 import java.io.*;
 
 public class CommandReader
 {
 	private BufferedReader inputBufferedReader;
-	private BufferedWriter outputBufferedWriter = new BufferedWriter(new FileWriter("output_file.txt"));
+	private BufferedWriter outputBufferedWriter;
 	private String nextLine;
 	private String fileName;
 	private Command currentCommand;
 	private boolean hasNext;
 
-	public CommandReader(String[] args)
+	public CommandReader(String fileName)
 	{
-		this.fileName = args[1];
+		this.fileName = fileName;
+		try
+		{
+			outputBufferedWriter = new BufferedWriter(new FileWriter("output_file.txt"));
+		} catch (IOException e)
+		{
+			e.printStackTrace();
+		}
 		nextLine = "";
 		openFile();
-		currentCommand = null;
-		hasNext = true;
+		currentCommand = new Command("",0,0,0);
+		readNextCommand(0);
 	}
 
 	public Command next(int time)
@@ -33,40 +42,42 @@ public class CommandReader
 		String name = "";
 		int id = 0;
 		int total_time = 0;
-		Command currentCopy = new Command("", 0, 0, 0);
-		currentCopy = currentCommand;
-		currentCopy = new Command();
+		Command currentCopy = new Command(currentCommand.getName(),  currentCommand.getTimestamp(), currentCommand.getId(),currentCommand.getJobExecutionTime());
+		currentCommand = new Command();
 		try
 		{
 			nextLine = inputBufferedReader.readLine();
-			systemTime = Integer.valueOf(nextLine.substring(0, nextLine.indexOf(":")));
-			name = nextLine.substring(nextLine.indexOf(":") + 1, nextLine.indexOf("("));
-			nextLine = nextLine.substring(nextLine.indexOf(":")).trim();
+			if(nextLine != null)
+			{
+				systemTime = Integer.valueOf(nextLine.substring(0, nextLine.indexOf(":")));
+				name = nextLine.substring(nextLine.indexOf(":") + 2, nextLine.indexOf("("));
+				nextLine = nextLine.substring(nextLine.indexOf(":")).trim();
 
-			if (!nextLine.contains(","))
-			{
-				id = Integer.valueOf(nextLine.substring(nextLine.indexOf('(') + 1, nextLine.indexOf(")")));
-				total_time = -1;
-			}
-			else
-			{
-				id = Integer.valueOf(nextLine.substring(nextLine.indexOf('(') + 1, nextLine.indexOf(",")));
-				total_time = Integer.valueOf(nextLine.substring(nextLine.indexOf(',') + 1, nextLine.indexOf(")")));
+				if (!nextLine.contains(","))
+				{
+					id = Integer.valueOf(nextLine.substring(nextLine.indexOf('(') + 1, nextLine.indexOf(")")));
+					total_time = -1;
+				}
+				else
+				{
+					id = Integer.valueOf(nextLine.substring(nextLine.indexOf('(') + 1, nextLine.indexOf(",")));
+					total_time = Integer.valueOf(nextLine.substring(nextLine.indexOf(',') + 1, nextLine.indexOf(")")));
+				}
 			}
 			createCommand(systemTime, name, id, total_time);
 		} catch (IOException e)
 		{
 			e.printStackTrace();
 		}
-
-		if (nextLine.isEmpty())
+		if(nextLine == null && currentCopy.getJobExecutionTime() == 0)
 		{
+//			System.out.println(nextLine);
 			return null;
 		}
 		return currentCopy;
 	}
 
-	private Command createCommand(int systemTime, String name, int id, int total_time)
+	private void createCommand(int systemTime, String name, int id, int total_time)
 	{
 		switch (name.toLowerCase())
 		{
@@ -95,31 +106,13 @@ public class CommandReader
 			default:
 				break;
 		}
-
-	}
-
-	private void executeCommand()
-	{
-		switch (nextLine.substring(0, nextLine.indexOf("(") - 1).toLowerCase())
-		{
-			case "insert":
-				break;
-			case "printjob":
-				break;
-			case "nextjob":
-				break;
-			case "previousjob":
-				break;
-			default:
-				break;
-		}
 	}
 
 	private void openFile()
 	{
 		try
 		{
-			inputBufferedReader = new BufferedReader(new FileReader(CommandReader.class.getResource(fileName).toExternalForm()));
+			inputBufferedReader = new BufferedReader(new FileReader(new File("src/sample_input3.txt")));
 		} catch (FileNotFoundException e)
 		{
 			System.out.println("Could not open the file: " + fileName);

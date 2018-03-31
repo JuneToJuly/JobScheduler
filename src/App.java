@@ -9,7 +9,7 @@ public class App
 
 	public static void main(String[] args)
 	{
-		CommandReader commandReader = new CommandReader(args);
+		CommandReader commandReader = new CommandReader(args[2]);
 		MinHeap heap = new MinHeap();
 		RedBlackTree rbt = new RedBlackTree();
 
@@ -19,12 +19,12 @@ public class App
 		int  currentTime = 0;
 		while((command = commandReader.next(currentTime)) != null)
 		{
-			if(runningJob == 0 && (runningJob.getTotalTime()-runningJob.getExecutedTime() <= 5))
+			if((runningJobCounter == 0) && ((runningJob.getTotalTime()-runningJob.getExecutedTime() <= 5)))
 			{
 				rbt.delete(runningJob);
 				heap.extrackMin();
 			}
-			else if(runningJob == 0 && (runningJob.getTotalTime()-runningJob.getExecutedTime() > 5))
+			else if((runningJobCounter == 0) && ((runningJob.getTotalTime()-runningJob.getExecutedTime() > 5)))
 			{
 				heap.increaseKey(runningJob, 5);
 			}
@@ -41,21 +41,17 @@ public class App
 						if(command.getJobExecutionTime() == -1)
 						{
 							Job job = rbt.search(newJob);
-							// print this
 						}
 						else
 						{
-							ArrayList<Job> jobs =
-									rbt.searchInRange(command.getId(), command.getJobExecutionTime());
+							String jobs = rbt.searchInRange(command.getId(), command.getJobExecutionTime());
 						}
 						break;
 					case "nextjob":
-							String job = rbt.next(newJob);
-							// print the next job
+						String next = rbt.next(newJob);
 						break;
 					case "previousjob":
-						String job = rbt.previous(newJob);
-						// Print the previous job
+						String previous = rbt.previous(newJob);
 						break;
 					default:
 						break;
@@ -63,9 +59,4 @@ public class App
 				runningJobCounter++;
 			}
 		}
-
-
-	}
-
-
 }
