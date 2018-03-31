@@ -1,6 +1,8 @@
 ## Rotations
 
 ### Insert Rotations
+I think all of these are working. Too lazy to right test cases for them though because they are easy to verify.
+deletions are a little trickier.
 
 
 ### Delete Rotations Tested
