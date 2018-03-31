@@ -5,85 +5,153 @@ public class Scheduler
 {
 	private MinHeap minHeap;
 	private RedBlackTree rbt;
+	private CommandReader commandReader;
 
 	/**
 	 * Creates the min-heap and red black tree.
 	 */
-	public Scheduler()
+	public Scheduler(CommandReader commandReader)
 	{
+		this.commandReader = commandReader;
 		minHeap = new MinHeap();
 		rbt = new RedBlackTree();
 	}
 
 	/**
-	 * 1
-	 *
+	 * Starts the scheduler
 	 */
+	public void start()
+	{
+		Job runningJob = null;
+		int runningJobCounter = 5;
+		Command command = new Command();
+		int  currentTime = 0;
+
+		while((command = commandReader.next(currentTime)) != null)
+		{
+			checkJobStatus(runningJob, runningJobCounter, currentTime);
+
+			executeCommand(command);
+
+			dispatchJob();
+			runningJobCounter++;
+		}
+
+	}
+
+	/**
+	 * I want to do this externally.
+	 * @param command
+	 */
+	public String executeCommand(Command command)
+	{
+		String commandType = "";
+		switch (command.getName().toLowerCase())
+		{
+			case "insert":
+				addJobs(command);
+				commandType = "insert";
+				break;
+			case "printjob":
+				printJob(command);
+				commandType = "printjob";
+				break;
+			case "nextjob":
+				printNextJob(command);
+				commandType = "printNextJob";
+				break;
+			case "previousjob":
+				printPreviousJob(command);
+				commandType = "prinPrevJob";
+				break;
+			default:
+				break;
+		}
+		return commandType;
+	}
+
+	/**
+	 *
+	 * @param runningJob
+	 * @param runningJobCounter
+	 * @param currentTime
+	 */
+	public void checkJobStatus(Job runningJob, int runningJobCounter, int currentTime)
+	{
+		if((runningJobCounter == 0) && ((runningJob.getTotalTime()-runningJob.getExecutedTime() <= 5)))
+		{
+			rbt.delete(runningJob);
+			minHeap.extrackMin();
+		}
+		else if((runningJobCounter == 0) && ((runningJob.getTotalTime()-runningJob.getExecutedTime() > 5)))
+		{
+			minHeap.increaseKey(runningJob, 5);
+		}
+	}
+
 	public void dispatchJob()
 	{
-		// Get the job with least amount of runtime
-		// Run job for 5ms
+
 	}
 
 	/**
-	 * 2
-	 * @param jobs
+	 *
+	 * @param command
 	 */
-	public void addJobs(Job... jobs)
+	public void addJobs(Command command)
 	{
-		for (Job currentJob: jobs)
+		Job newJob = new Job(command.getId(),command.getJobExecutionTime());
+		minHeap.add(newJob);
+		rbt.add(newJob);
+	}
+
+	/**
+	 *
+	 * @param command
+	 */
+	public void printJob(Command command)
+	{
+		Job newJob = new Job(command.getId(),command.getJobExecutionTime());
+		if(command.getJobExecutionTime() == -1)
 		{
-			minHeap.add(currentJob);
-			rbt.add(currentJob);
+			Job job = rbt.search(newJob);
+			System.out.println(job.toString());
+		}
+		else
+		{
+			String jobs = rbt.searchInRange(command.getId(), command.getJobExecutionTime());
+			System.out.println(jobs.toString());
 		}
 	}
 
 	/**
-	 * 3
-	 * @param id
+	 *
+	 * @param command
 	 */
-	public void printJob(int id)
+	public void printNextJob(Command command)
 	{
-		System.out.println(rbt.get(id).toString());
+		Job newJob = new Job(command.getId(),command.getJobExecutionTime());
+		String next = rbt.next(newJob);
 	}
 
 	/**
-	 * 4
-	 * @param low
-	 * @param high
+	 *
+	 * @param command
 	 */
-	public void printJobsInRange(int low, int high)
+	public void printPreviousJob(Command command)
 	{
-		Job currentJob;
-		for (int i = low; i < high; i++)
-		{
-//			if((currentJob = rbt.get(i)) != null)
-//			{
-//				System.out.println(currentJob.toString());
-//			}
-		}
-	}
-
-	/**
-	 * 5
-	 * @param id
-	 */
-	public void printNextJob(int id)
-	{
-		// Not sure how to find the smallest next job id, must be something in RBTs that I don't
-		// know of.
-
-	}
-
-	/**
-	 * 6
-	 * @param id
-	 */
-	public void printPreviousJob(int id)
-	{
-		// same as the printNextJob
+		Job newJob = new Job(command.getId(),command.getJobExecutionTime());
+		String next = rbt.previous(newJob);
 	}
 
 
+	public MinHeap getMinHeap()
+	{
+		return minHeap;
+	}
 
+	public RedBlackTree getRbt()
+	{
+		return rbt;
+	}
 }

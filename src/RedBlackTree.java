@@ -58,8 +58,9 @@ public class RedBlackTree
 	{
 		if(node == externalNode)
 		{
-			return null;
+			return externalNode;
 		}
+
 		if(key == node.getKey())
 		{
 			return node;
@@ -137,7 +138,7 @@ public class RedBlackTree
 			builder.append(gatherSubTree(firstFoundNode));
 			while(searchNode != secondFoundNode)
 			{
-				if(searchNode.getLeftChild().getJob().getExecutedTime() == jobExecutionTime)
+				if(searchNode.getLeftChild() != externalNode && searchNode.getLeftChild().getJob().getExecutedTime() == jobExecutionTime)
 				{
 					builder.append(gatherSubTree(searchNode) + "," + searchNode.getJob().toString());
 					break;
