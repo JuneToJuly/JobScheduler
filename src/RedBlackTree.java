@@ -12,7 +12,6 @@ import java.util.Queue;
  */
 public class RedBlackTree
 {
-
 	static RedBlackNode externalNode;
 	static RedBlackNode rootNode;
 
@@ -98,9 +97,7 @@ public class RedBlackTree
 			smallest = next;
 			next = next.getLeftChild();
 		}
-
 		return smallest.getJob().toString();
-
 	}
 
 	/**
@@ -130,29 +127,69 @@ public class RedBlackTree
 
 	public String searchInRange(int startId, int tailId)
 	{
-		// Find closest
-		RedBlackNode firstFoundNode = search(head,startId);
-		RedBlackNode searchNode = firstFoundNode;
-		StringBuilder builder = new StringBuilder();
-		if(firstFoundNode != null)
+		return searchInRangeRecursive(head, startId, tailId);
+	}
+
+	private String searchInRangeRecursive(RedBlackNode node, int startId, int tailId)
+	{
+		boolean leftInRange = false;
+		boolean rightInRange = false;
+		boolean nodeInRange = false;
+		String nodeString = node.getJob().toString();
+		String left = "";
+		String right = "";
+
+		if(node.getKey() >= startId
+				&& node.getKey() <= tailId)
 		{
-			builder.append(searchNode.getJob().toString());
-			searchNode = searchNode.getRightChild();
-			while(searchNode != externalNode)
+			nodeInRange = true;
+		}
+
+		if (node.getLeftChild() != externalNode)
+		{
+			leftInRange = node.getLeftChild().getKey() >= startId
+					&& node.getLeftChild().getKey() <= tailId;
+		}
+
+		if (node.getRightChild() != externalNode)
+		{
+			rightInRange = node.getRightChild().getKey() >= startId
+					&& node.getRightChild().getKey() <= tailId;
+		}
+
+		if(leftInRange)
+		{
+			left = searchInRangeRecursive(node.getLeftChild(), startId, tailId);
+		}
+
+		if(rightInRange)
+		{
+			right = searchInRangeRecursive(node.getRightChild(), startId, tailId);
+		}
+
+		// Both in range need a comma
+		if(rightInRange && leftInRange)
+		{
+			right = "," + right;
+		}
+
+		// Node and one in range, need a comma
+		if(nodeInRange)
+		{
+			if(rightInRange
+					|| leftInRange)
 			{
-				// We have found the node. All nodes to its left shall be added
-				if(searchNode.getKey() > tailId)
-				{
-					searchNode = searchNode.getLeftChild();
-				}
-				else
-				{
-					builder.append(gatherSubTree(searchNode.getLeftChild()) + "," + searchNode.getJob().toString());
-					searchNode = searchNode.getRightChild();
-				}
+				nodeString = nodeString + ",";
 			}
 		}
-		return builder.toString();
+
+		// We need to include the node
+		if(nodeInRange)
+		{
+			return nodeString + left + right;
+		}
+
+		return left + right;
 	}
 
 	private String gatherSubTree(RedBlackNode node)
@@ -1738,7 +1775,6 @@ public class RedBlackTree
 			}
 
 		}
-
 
 		// RR rotations
 		if(grandParentToParent == Child.RIGHT && parentToInsert == Child.RIGHT)
