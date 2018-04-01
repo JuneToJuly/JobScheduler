@@ -1,3 +1,5 @@
+import jdk.nashorn.internal.scripts.JO;
+
 /**
  * @author Ian Thomas
  */
@@ -12,6 +14,18 @@ public class MinHeap
 		lastHeapIndex = -1;
 		heapMaxSize = 1;
 		heapArray = new Job[1];
+	}
+
+	public Job peak()
+	{
+		if(lastHeapIndex != -1)
+		{
+			return heapArray[0];
+		}
+		else
+		{
+			return null;
+		}
 	}
 
 	/**
@@ -81,24 +95,29 @@ public class MinHeap
 		{
 			return null;
 		}
+		int parentIndex = 0;
+		Job min = heapArray[parentIndex];
 
-		Job min = heapArray[0];
+		// Grab last element
+		heapArray[parentIndex] = heapArray[lastHeapIndex];
+		heapArray[lastHeapIndex] = null;
+		lastHeapIndex--;
+
+		heapify(parentIndex);
+		return min;
+	}
+
+	private void heapify(int parentIndex)
+	{
 		Job parent;
 		Job leftChild = null;
 		Job rightChild = null;
 
 		int minChild;
-		int parentIndex = 0;
 
-		boolean heapPropertyMaintained = true;
+		boolean heapPropertyMaintained = false;
 		boolean leftExist;
 		boolean rightExist;
-
-		// Grab last element
-		heapArray[0] = heapArray[lastHeapIndex];
-		heapPropertyMaintained = false;
-		heapArray[lastHeapIndex] = null;
-		lastHeapIndex--;
 
 		while(!heapPropertyMaintained)
 		{
@@ -121,14 +140,22 @@ public class MinHeap
 
 
 			// Left Child is the smallest child
-			if(leftExist && (leftChild.getExecutedTime() < rightChild.getExecutedTime())
+			if(leftExist && rightExist && (leftChild.getExecutedTime() < rightChild.getExecutedTime())
 					&& parent.getExecutedTime() > leftChild.getExecutedTime())
 			{
 				minChild = ((2 * parentIndex) + 1);
 			}
+			else if (leftExist && parent.getExecutedTime() > leftChild.getExecutedTime())
+			{
+				minChild = ((2 * parentIndex) + 1);
+			}
 			// Right Child is the smallest
-			else if(rightExist && rightChild.getExecutedTime() < leftChild.getExecutedTime()
+			else if(rightExist && leftExist && rightChild.getExecutedTime() < leftChild.getExecutedTime()
 					&& parent.getExecutedTime() > rightChild.getExecutedTime())
+			{
+				minChild = ((2 * parentIndex) + 2);
+			}
+			else if(rightExist && parent.getExecutedTime() > rightChild.getExecutedTime())
 			{
 				minChild = ((2 * parentIndex) + 2);
 			}
@@ -148,8 +175,6 @@ public class MinHeap
 			}
 
 		}
-
-		return min;
 	}
 
 	public void printHeap()
@@ -165,8 +190,29 @@ public class MinHeap
 		}
 	}
 
-
 	public void increaseKey(Job runningJob, int i)
 	{
+		int key = runningJob.getExecutedTime();
+		int currentIndex = 0;
+		int foundIndex = -1;
+
+
+		// O(n) to find the value...
+		for (Job job: heapArray)
+		{
+			if(job.getExecutedTime() == key)
+			{
+				foundIndex = currentIndex;
+				break;
+			}
+			currentIndex++;
+		}
+
+		heapArray[foundIndex].setExecutedTime(heapArray[foundIndex].getExecutedTime() + 5);
+		if(foundIndex == -1)
+		{
+			return;
+		}
+		heapify(foundIndex);
 	}
 }

@@ -94,4 +94,9 @@ public class Job
 				&& this.totalTime == job.getTotalTime()
 				&& this.id == job.getId());
 	}
+
+	public void setExecutedTime(int executedTime)
+	{
+		this.executedTime = executedTime;
+	}
 }

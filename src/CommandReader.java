@@ -29,10 +29,16 @@ public class CommandReader
 
 	public Command next(int time)
 	{
+		if(firstNull)
+		{
+			return null;
+		}
 		if (time != currentCommand.getTimestamp())
 		{
 			return new Command("", 0, 0, 0);
 		}
+		System.out.println(time);
+		System.out.println(currentCommand.toString());
 		return readNextCommand(time);
 	}
 

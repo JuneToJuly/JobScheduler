@@ -1,3 +1,7 @@
+import java.io.FileWriter;
+import java.io.IOException;
+import java.io.PrintWriter;
+
 /**
  * @author Ian Thomas
  */
@@ -6,15 +10,39 @@ public class Scheduler
 	private MinHeap minHeap;
 	private RedBlackTree rbt;
 	private CommandReader commandReader;
+	private int runningJobCounter;
+	private Job runningJob;
+	private PrintWriter writer;
+	private boolean started;
 
 	/**
 	 * Creates the min-heap and red black tree.
 	 */
-	public Scheduler(CommandReader commandReader)
+	public Scheduler(CommandReader commandReader, String filename)
 	{
 		this.commandReader = commandReader;
+		openWriter(filename);
 		minHeap = new MinHeap();
 		rbt = new RedBlackTree();
+		runningJob = null;
+		runningJobCounter = 5;
+	}
+
+	public void write(String toWrite)
+	{
+		writer.println(toWrite);
+		writer.flush();
+	}
+
+	private void openWriter(String filename)
+	{
+		try
+		{
+			writer = new PrintWriter(new FileWriter(filename));
+		} catch (IOException e)
+		{
+			e.printStackTrace();
+		}
 	}
 
 	/**
@@ -22,21 +50,35 @@ public class Scheduler
 	 */
 	public void start()
 	{
-		Job runningJob = null;
-		int runningJobCounter = 5;
+		if(started){return;}
+		started = true;
+		runningJob = null;
+		runningJobCounter = 5;
 		Command command = new Command();
-		int  currentTime = 0;
+		int currentTime = 0;
+		boolean stillJobs = true;
+		boolean dispatcherFinished = false;
 
-		while((command = commandReader.next(currentTime)) != null)
+		do
 		{
-			checkJobStatus(runningJob, runningJobCounter, currentTime);
+			runningJobCounter--;
+			if((command = commandReader.next(currentTime)) == null)
+			{
+				dispatcherFinished = true;
+			}
+			else
+			{
+				executeCommand(command);
+			}
 
-			executeCommand(command);
+			// We can dispatch a new job
+			if(runningJobCounter == 0)
+			{
+				stillJobs = dispatchJob();
+			}
 
-			dispatchJob();
-			runningJobCounter++;
-		}
-
+			currentTime++;
+		}while(stillJobs || !dispatcherFinished);
 	}
 
 	/**
@@ -70,28 +112,34 @@ public class Scheduler
 		return commandType;
 	}
 
-	/**
-	 *
-	 * @param runningJob
-	 * @param runningJobCounter
-	 * @param currentTime
-	 */
-	public void checkJobStatus(Job runningJob, int runningJobCounter, int currentTime)
+	public boolean dispatchJob()
 	{
-		if((runningJobCounter == 0) && ((runningJob.getTotalTime()-runningJob.getExecutedTime() <= 5)))
+		// Get next job
+		runningJob = minHeap.peak();
+
+
+		// No more jobs
+		if(runningJob == null)
+		{
+			return false;
+		}
+
+		// Increase running time
+		minHeap.increaseKey(runningJob, 5);
+
+		if(runningJob.getExecutedTime() >= runningJob.getTotalTime())
 		{
 			rbt.delete(runningJob);
 			minHeap.extrackMin();
+			// This means we have less that 5 seconds
+			runningJobCounter = runningJob.getTotalTime()-runningJob.getExecutedTime()-5;
 		}
-		else if((runningJobCounter == 0) && ((runningJob.getTotalTime()-runningJob.getExecutedTime() > 5)))
+		else
 		{
-			minHeap.increaseKey(runningJob, 5);
+			// We just run a normal 5 seconds
+			runningJobCounter = 5;
 		}
-	}
-
-	public void dispatchJob()
-	{
-
+		return true;
 	}
 
 	/**
@@ -115,12 +163,12 @@ public class Scheduler
 		if(command.getJobExecutionTime() == -1)
 		{
 			Job job = rbt.search(newJob);
-			System.out.println(job.toString());
+			write(job.toString());
 		}
 		else
 		{
 			String jobs = rbt.searchInRange(command.getId(), command.getJobExecutionTime());
-			System.out.println(jobs.toString());
+			write(jobs.toString());
 		}
 	}
 
@@ -132,7 +180,7 @@ public class Scheduler
 	{
 		Job newJob = new Job(command.getId(),command.getJobExecutionTime());
 		String next = rbt.next(newJob);
-		System.out.println(next);
+		write(next);
 	}
 
 	/**
@@ -143,7 +191,7 @@ public class Scheduler
 	{
 		Job newJob = new Job(command.getId(),command.getJobExecutionTime());
 		String previous = rbt.previous(newJob);
-		System.out.println(previous);
+		write(previous);
 	}
 
 
@@ -155,5 +203,10 @@ public class Scheduler
 	public RedBlackTree getRbt()
 	{
 		return rbt;
+	}
+
+	public void stop()
+	{
+		writer.close();
 	}
 }

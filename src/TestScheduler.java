@@ -13,52 +13,35 @@ public class TestScheduler
 	{
 		CommandReader reader = new CommandReader(args[0]);
 		Command command = reader.next(0);
-		Scheduler scheduler = new Scheduler(reader);
-
+		Scheduler scheduler = new Scheduler(reader, "out.txt");
 		String commandType = scheduler.executeCommand(command);
 
-//		System.out.println(commandType);
 		RedBlackTree rbt = scheduler.getRbt();
-//		rbt.printNodeStyle(null);
 
 		command = reader.next(49950);
 		commandType = scheduler.executeCommand(command);
-//		System.out.println(commandType);
-//		rbt.printNodeStyle(null);
 
 		command = reader.next(99950);
 		commandType = scheduler.executeCommand(command);
-//		System.out.println(commandType);
-//		rbt.printNodeStyle(null);
 
 		command = reader.next(125900);
-//		commandType = scheduler.executeCommand(command);
-//		System.out.println(commandType);
-//		rbt.printNodeStyle(null);
+		commandType = scheduler.executeCommand(command);
 
 		command = reader.next(199500);
 		commandType = scheduler.executeCommand(command);
-//		System.out.println(commandType);
-//		rbt.printNodeStyle(null);
 
 		command = reader.next(229500);
 		commandType = scheduler.executeCommand(command);
-//		System.out.println(commandType);
-//		rbt.printNodeStyle(null);
 
 		command = reader.next(230000);
 		commandType = scheduler.executeCommand(command);
-//		System.out.println(commandType);
-//		rbt.printNodeStyle(null);
 
 		command = reader.next(235000);
 		commandType = scheduler.executeCommand(command);
-//		System.out.println(commandType);
-//		rbt.printNodeStyle(null);
 
 		command = reader.next(236000);
 		commandType = scheduler.executeCommand(command);
-//		System.out.println(commandType);
-//		rbt.printNodeStyle(null);
+
+		scheduler.stop();
 	}
 }

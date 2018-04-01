@@ -9,7 +9,8 @@ public class App
 
 	public static void main(String[] args)
 	{
-		Scheduler scheduler = new  Scheduler(new CommandReader(args[2]));
+		Scheduler scheduler = new  Scheduler(new CommandReader(args[0]), "Outter.txt");
 		scheduler.start();
+		scheduler.stop();
 	}
 }
