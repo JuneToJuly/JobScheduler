@@ -132,6 +132,7 @@ public class Scheduler
 	{
 		Job newJob = new Job(command.getId(),command.getJobExecutionTime());
 		String next = rbt.next(newJob);
+		System.out.println(next);
 	}
 
 	/**
@@ -141,7 +142,8 @@ public class Scheduler
 	public void printPreviousJob(Command command)
 	{
 		Job newJob = new Job(command.getId(),command.getJobExecutionTime());
-		String next = rbt.previous(newJob);
+		String previous = rbt.previous(newJob);
+		System.out.println(previous);
 	}
 
 

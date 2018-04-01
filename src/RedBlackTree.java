@@ -84,9 +84,22 @@ public class RedBlackTree
 	public String next(Job newJob)
 	{
 		RedBlackNode foundNode = search(head, newJob.getId());
-		if(foundNode.getRightChild() == externalNode)
+		if(foundNode.getRightChild() == externalNode
+				&& foundNode.getParent() == rootNode)
 		{
 			return "(0,0,0)";
+		}
+		else if (foundNode.getRightChild() == externalNode)
+		{
+			while(foundNode.getParent().getLeftChild() != foundNode)
+			{
+				if(foundNode.getParent() == rootNode)
+				{
+					return "(0,0,0)";
+				}
+				foundNode = foundNode.getParent();
+			}
+			return foundNode.getParent().getJob().toString();
 		}
 
 		RedBlackNode next = foundNode.getRightChild();
@@ -108,9 +121,18 @@ public class RedBlackTree
 	public String previous(Job newJob)
 	{
 		RedBlackNode foundNode = search(head, newJob.getId());
-		if(foundNode.getLeftChild() == externalNode)
+		if(foundNode.getLeftChild() == externalNode
+				&& foundNode.getParent() == rootNode)
 		{
 			return "(0,0,0)";
+		}
+		else if (foundNode.getLeftChild() == externalNode)
+		{
+			while(foundNode.getParent().getRightChild() != foundNode)
+			{
+				foundNode = foundNode.getParent();
+			}
+			return foundNode.getParent().getJob().toString();
 		}
 
 		RedBlackNode next = foundNode.getLeftChild();

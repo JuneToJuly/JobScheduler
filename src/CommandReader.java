@@ -9,7 +9,7 @@ public class CommandReader
 	private String nextLine;
 	private String fileName;
 	private Command currentCommand;
-	private boolean hasNext;
+	private boolean firstNull;
 
 	public CommandReader(String fileName)
 	{
@@ -47,6 +47,7 @@ public class CommandReader
 		try
 		{
 			nextLine = inputBufferedReader.readLine();
+			System.out.println(nextLine);
 			if(nextLine != null)
 			{
 				systemTime = Integer.valueOf(nextLine.substring(0, nextLine.indexOf(":")));
@@ -69,10 +70,15 @@ public class CommandReader
 		{
 			e.printStackTrace();
 		}
-		if(nextLine == null && currentCopy.getJobExecutionTime() == 0)
+
+		if(nextLine == null
+				&& firstNull)
 		{
-//			System.out.println(nextLine);
 			return null;
+		}
+		if(nextLine == null)
+		{
+			firstNull = true;
 		}
 		return currentCopy;
 	}

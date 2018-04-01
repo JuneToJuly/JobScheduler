@@ -57,8 +57,8 @@ public class TestScheduler
 //		rbt.printNodeStyle(null);
 
 		command = reader.next(236000);
-//		commandType = scheduler.executeCommand(command);
+		commandType = scheduler.executeCommand(command);
 //		System.out.println(commandType);
-		rbt.printNodeStyle(null);
+//		rbt.printNodeStyle(null);
 	}
 }
