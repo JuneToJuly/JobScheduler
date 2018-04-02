@@ -21,7 +21,6 @@ public class MinHeap
 	{
 		if(lastHeapIndex != -1)
 		{
-			printHeap();
 			return heapArray[0];
 		}
 		else

@@ -261,6 +261,11 @@ public class RedBlackTree
 				? head.getLeftChild()
 				: head.getRightChild();
 
+		if(head.getKey() == toDelete.getId())
+		{
+			next = head;
+		}
+
 		while(next != externalNode)
 		{
 			if(next.getKey() == toDelete.getId())
@@ -279,7 +284,6 @@ public class RedBlackTree
 		}
 		DeleteRotation deleteRotation = null;
 		RedBlackNode deficientNode = null;
-		System.out.println("New Deletion");
 		do
 		{
 
@@ -289,6 +293,7 @@ public class RedBlackTree
 			{
 				deficientNode = findDeficientNode(degree, next);
 			}
+
 			// We have fixed the problem with a one degree black that has a red child
 			// and a one degree red that has a black child.
 			// In case with one degree black having a black child, or a two degree
@@ -329,7 +334,11 @@ public class RedBlackTree
 
 	private RedBlackNode findDeficientNode(int degree, RedBlackNode node)
 	{
-
+		if(node.getParent() == rootNode && degree ==0)
+		{
+			head = null;
+			return null;
+		}
 		Child parentToDeletion = node.getKey() >
 				node.getParent().getKey()
 				? Child.RIGHT
@@ -338,11 +347,6 @@ public class RedBlackTree
 		RedBlackNode y = null;
 		RedBlackNode defiecientNode = null;
 
-
-//		if(node.getParent() == rootNode)
-//		{
-//			return null;
-//		}
 		// Degree one node:
 		// Black leaf node, we have a deficiency regardless.
 		if(degree == 0 && node.getColor() == Color.BLACK)
@@ -362,6 +366,7 @@ public class RedBlackTree
 			}
 			return null;
 		}
+
 
 		/*
 			Degree 1 Node
@@ -386,16 +391,18 @@ public class RedBlackTree
 			if(node.getLeftChild().getColor() == Color.RED)
 			{
 				y = node.getLeftChild();
-//				y.setColor(Color.BLACK);
 				y.setParent(node.getParent());
 				defiecientNode = null;
 			}
 			else if(node.getRightChild().getColor() == Color.RED)
 			{
 				y = node.getRightChild();
-//				y.setColor(Color.BLACK);
 				y.setParent(node.getParent());
 				defiecientNode = null;
+			}
+			if(y.getParent() == rootNode)
+			{
+				head = y;
 			}
 
 			// Deleting Red Node, we have black child

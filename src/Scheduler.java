@@ -61,13 +61,14 @@ public class Scheduler
 
 		do
 		{
-			if(runningJobCounter == 0)
+			if(!stillJobs)
 			{
 				runningJobCounter = 0;
 			}
 			else
 			{
 				runningJobCounter--;
+				checkJobFinished();
 			}
 			if((command = commandReader.next(currentTime)) == null)
 			{
@@ -75,10 +76,6 @@ public class Scheduler
 			}
 			else
 			{
-				if(command.getName() != "")
-				{
-					minHeap.printHeap();
-				}
 				executeCommand(command);
 			}
 
@@ -87,9 +84,26 @@ public class Scheduler
 			{
 				stillJobs = dispatchJob();
 			}
-
 			currentTime++;
 		}while(stillJobs || !dispatcherFinished);
+	}
+
+	private void checkJobFinished()
+	{
+		if(runningJobCounter == 0 && runningJob != null)
+		{
+
+			if(runningJob.getExecutedTime() + 5 >= runningJob.getTotalTime())
+			{
+				rbt.delete(runningJob);
+				minHeap.extrackMin();
+			}
+			else
+			{
+				// Increase running time
+				minHeap.increaseKey(runningJob, 5);
+			}
+		}
 	}
 
 	/**
@@ -134,18 +148,13 @@ public class Scheduler
 			return false;
 		}
 
-		if(runningJob.getExecutedTime() + 5>= runningJob.getTotalTime())
+		if(runningJob.getExecutedTime() + 5 >= runningJob.getTotalTime())
 		{
-			rbt.delete(runningJob);
-			minHeap.extrackMin();
 			// This means we have less that 5 seconds
 			runningJobCounter = runningJob.getTotalTime()-runningJob.getExecutedTime();
 		}
 		else
 		{
-			// Increase running time
-			minHeap.increaseKey(runningJob, 5);
-
 			// We just run a normal 5 seconds
 			runningJobCounter = 5;
 		}
