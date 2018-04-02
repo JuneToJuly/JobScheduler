@@ -95,6 +95,7 @@ public class Scheduler
 
 			if(runningJob.getExecutedTime() + 5 >= runningJob.getTotalTime())
 			{
+				System.out.println("Finished job: " + runningJob.getId());
 				rbt.delete(runningJob);
 				minHeap.extrackMin();
 			}

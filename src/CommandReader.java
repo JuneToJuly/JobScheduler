@@ -124,7 +124,7 @@ public class CommandReader
 	{
 		try
 		{
-			inputBufferedReader = new BufferedReader(new FileReader(new File("src/sample_input3.txt")));
+			inputBufferedReader = new BufferedReader(new FileReader(new File("src/"+ fileName)));
 		} catch (FileNotFoundException e)
 		{
 			System.out.println("Could not open the file: " + fileName);

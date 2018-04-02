@@ -116,10 +116,7 @@ public class TestRedBlackTree
 		nodeJ.setRightChild(RedBlackTree.externalNode);
 
 		rbt.setHead(nodeD);
-		rbt.printNodeStyle(null);
 		rbt.delete(g);
-		System.out.println("This is after deleted!n\n\n");
-		rbt.printNodeStyle(null);
 
 	}
 
@@ -152,9 +149,7 @@ public class TestRedBlackTree
 		nodeY.setLeftChild(RedBlackTree.externalNode);
 
 		rbt.setHead(nodePYG);
-//		rbt.printNodeStyle(null);
 		rbt.delete(py);
-//		rbt.printNodeStyle(null);
 
 		if(nodePYG.getRightChild() == nodeY
 			&& nodeY.getParent() == nodePYG
@@ -1561,10 +1556,10 @@ public class TestRedBlackTree
 		nodeA.setLeftChild(RedBlackTree.externalNode);
 		nodeA.setRightChild(RedBlackTree.externalNode);
 
-
 		rbt.setHead(nodePYG);
+		rbt.printNodeStyle(null);
 		rbt.delete(y);
-
+		rbt.printNodeStyle(null);
 		if((nodePY.getLeftChild() == nodeV)
 			&& (nodePY.getRightChild() == RedBlackTree.externalNode)
 			&& (nodeV.getLeftChild() == nodeA)
