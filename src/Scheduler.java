@@ -61,13 +61,24 @@ public class Scheduler
 
 		do
 		{
-			runningJobCounter--;
+			if(runningJobCounter == 0)
+			{
+				runningJobCounter = 0;
+			}
+			else
+			{
+				runningJobCounter--;
+			}
 			if((command = commandReader.next(currentTime)) == null)
 			{
 				dispatcherFinished = true;
 			}
 			else
 			{
+				if(command.getName() != "")
+				{
+					minHeap.printHeap();
+				}
 				executeCommand(command);
 			}
 
@@ -117,25 +128,24 @@ public class Scheduler
 		// Get next job
 		runningJob = minHeap.peak();
 
-
 		// No more jobs
 		if(runningJob == null)
 		{
 			return false;
 		}
 
-		// Increase running time
-		minHeap.increaseKey(runningJob, 5);
-
-		if(runningJob.getExecutedTime() >= runningJob.getTotalTime())
+		if(runningJob.getExecutedTime() + 5>= runningJob.getTotalTime())
 		{
 			rbt.delete(runningJob);
 			minHeap.extrackMin();
 			// This means we have less that 5 seconds
-			runningJobCounter = runningJob.getTotalTime()-runningJob.getExecutedTime()-5;
+			runningJobCounter = runningJob.getTotalTime()-runningJob.getExecutedTime();
 		}
 		else
 		{
+			// Increase running time
+			minHeap.increaseKey(runningJob, 5);
+
 			// We just run a normal 5 seconds
 			runningJobCounter = 5;
 		}

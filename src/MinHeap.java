@@ -1,4 +1,5 @@
 import jdk.nashorn.internal.scripts.JO;
+import org.omg.Messaging.SYNC_WITH_TRANSPORT;
 
 /**
  * @author Ian Thomas
@@ -20,6 +21,7 @@ public class MinHeap
 	{
 		if(lastHeapIndex != -1)
 		{
+			printHeap();
 			return heapArray[0];
 		}
 		else

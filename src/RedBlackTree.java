@@ -300,8 +300,6 @@ public class RedBlackTree
 
 			// Classify this one degree rotation
 			deleteRotation = classifyDeleteRotation(deficientNode);
-			System.out.println("Rotation is: " + deleteRotation);
-			System.out.println("Job is: " + next.getJob());
 			performDeleteRotation(deficientNode, deleteRotation);
 
 			// Only things that can keep the tree from working;
@@ -461,16 +459,13 @@ public class RedBlackTree
 
 			while(nextNode != externalNode)
 			{
-				System.out.println("Entered the loops");
 				largestNode = nextNode;
 				nextNode = nextNode.getRightChild();
 			}
 
-			System.out.println("Job is: " + node.getKey());
 			// Swap the keys because we don't ever delete this node
 			node.setJob(largestNode.getJob());
 
-			System.out.println("Job is now after swap: " + node.getKey());
 			RedBlackNode deficientNode = null;
 
 			// Change left child parent to largest nodes parent
@@ -486,7 +481,6 @@ public class RedBlackTree
 				deficientNode.setParent(largestNode.getParent());
 				largestNode.setLeftChild(externalNode);
 				largestNode.setRightChild(externalNode);
-				System.out.println("We had to creae the node: ");
 			}
 
 			if(node.getLeftChild() != largestNode)
@@ -521,7 +515,6 @@ public class RedBlackTree
 		{
 			degree++;
 		}
-		System.out.println("I am a degree: " + degree + " node.");
 		return degree;
 	}
 
@@ -1259,7 +1252,6 @@ public class RedBlackTree
 
 		InsertRotation insertRotation = classifyInsertRotation(insertNode);
 		performRotation(insertNode, insertRotation);
-		System.out.println("Insert Rotation: " + insertRotation);
 		RedBlackNode conflictingNode = null;
 		do
 		{
@@ -1510,9 +1502,6 @@ public class RedBlackTree
 					z.getParent().setLeftChild(y);
 				}
 
-				System.out.println("This is in lRB"  + y.getJob());
-				System.out.println("This is in lRB"  + x.getJob());
-				System.out.println("This is in lRB"  + z.getJob());
 				// Colors
 				y.setColor(Color.BLACK);
 				z.setColor(Color.RED);
