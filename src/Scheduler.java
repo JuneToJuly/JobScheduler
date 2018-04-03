@@ -14,6 +14,7 @@ public class Scheduler
 	private Job runningJob;
 	private PrintWriter writer;
 	private boolean started;
+	private String jobFinish;
 
 	/**
 	 * Creates the min-heap and red black tree.
@@ -68,7 +69,7 @@ public class Scheduler
 			else
 			{
 				runningJobCounter--;
-				checkJobFinished();
+				checkJobFinished(currentTime);
 			}
 			if((command = commandReader.next(currentTime)) == null)
 			{
@@ -86,16 +87,18 @@ public class Scheduler
 			}
 			currentTime++;
 		}while(stillJobs || !dispatcherFinished);
+		System.out.println(jobFinish);
 	}
 
-	private void checkJobFinished()
+	private void checkJobFinished(int currentTime)
 	{
 		if(runningJobCounter == 0 && runningJob != null)
 		{
 
 			if(runningJob.getExecutedTime() + 5 >= runningJob.getTotalTime())
 			{
-				System.out.println("Finished job: " + runningJob.getId());
+				jobFinish += " " + runningJob.getId() + ": " + currentTime +"\n";
+				rbt.printNodeStyle(null);
 				rbt.delete(runningJob);
 				minHeap.extrackMin();
 			}
@@ -183,12 +186,26 @@ public class Scheduler
 		if(command.getJobExecutionTime() == -1)
 		{
 			Job job = rbt.search(newJob);
-			write(job.toString());
+			if (job == null)
+			{
+				write("(0,0,0)");
+			}
+			else
+			{
+				write(job.toString());
+			}
 		}
 		else
 		{
 			String jobs = rbt.searchInRange(command.getId(), command.getJobExecutionTime());
-			write(jobs.toString());
+			if(jobs == null)
+			{
+				write("(0,0,0)");
+			}
+			else
+			{
+				write(jobs.toString());
+			}
 		}
 	}
 
@@ -200,7 +217,14 @@ public class Scheduler
 	{
 		Job newJob = new Job(command.getId(),command.getJobExecutionTime());
 		String next = rbt.next(newJob);
-		write(next);
+		if(next == null)
+		{
+			write("(0,0,0)");
+		}
+		else
+		{
+			write(next);
+		}
 	}
 
 	/**
@@ -211,7 +235,14 @@ public class Scheduler
 	{
 		Job newJob = new Job(command.getId(),command.getJobExecutionTime());
 		String previous = rbt.previous(newJob);
-		write(previous);
+		if(previous == null)
+		{
+			write("(0,0,0)");
+		}
+		else
+		{
+			write(previous);
+		}
 	}
 
 

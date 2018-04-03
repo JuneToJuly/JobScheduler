@@ -26,6 +26,11 @@ public class RedBlackTree
 	 */
 	public Job search(Job newJob)
 	{
+		if(head == null)
+		{
+			return null;
+		}
+
 		int key = newJob.getId();
 		if(key == head.getKey())
 		{
@@ -47,7 +52,7 @@ public class RedBlackTree
 	 */
 	private RedBlackNode search(RedBlackNode node, int key)
 	{
-		if(node == externalNode)
+		if(node == externalNode || node == null)
 		{
 			return externalNode;
 		}
@@ -74,34 +79,62 @@ public class RedBlackTree
 	 */
 	public String next(Job newJob)
 	{
-		RedBlackNode foundNode = search(head, newJob.getId());
-		if(foundNode.getRightChild() == externalNode
-				&& foundNode.getParent() == rootNode)
+		// No head
+		if(head == null)
 		{
-			return "(0,0,0)";
+			return null;
 		}
-		else if (foundNode.getRightChild() == externalNode)
+		// Head is only element and it is larger
+		// than our search job
+		if(head.getJob().getId() > newJob.getId()
+				&& head.getRightChild() == externalNode
+				&& head.getLeftChild() == externalNode)
 		{
-			while(foundNode.getParent().getLeftChild() != foundNode)
+			return head.getJob().toString();
+		}
+
+		RedBlackNode lastLeft = null;
+		RedBlackNode searchNode = head;
+		do
+		{
+			if (searchNode.getJob().getId() < newJob.getId())
 			{
-				if(foundNode.getParent() == rootNode)
-				{
-					return "(0,0,0)";
-				}
-				foundNode = foundNode.getParent();
+				searchNode = searchNode.getRightChild();
 			}
-			return foundNode.getParent().getJob().toString();
-		}
+			else
+			{
+				lastLeft = searchNode;
+				searchNode = searchNode.getLeftChild();
+			}
+		} while(searchNode.getJob().getId() != newJob.getId()
+				|| searchNode != externalNode);
 
-		RedBlackNode next = foundNode.getRightChild();
-		RedBlackNode smallest = next;
-
-		while(next != externalNode)
+		// If we fall off, the parent of the last left child is
+		// the previous node
+		if(searchNode == externalNode)
 		{
-			smallest = next;
-			next = next.getLeftChild();
+			return lastLeft.getJob().toString();
 		}
-		return smallest.getJob().toString();
+
+		// We didn't fall off so we need to check if we have any
+		// children, if so we need to go to right and farthest
+		// down to the left
+		// If not, we need to return the last left
+		if(searchNode.getRightChild() == externalNode)
+		{
+			return lastLeft.getJob().toString();
+		}
+		else
+		{
+			lastLeft = searchNode.getRightChild();
+			searchNode = searchNode.getRightChild();
+			while (searchNode.getLeftChild() != externalNode)
+			{
+				lastLeft = searchNode;
+				searchNode = searchNode.getLeftChild();
+			}
+			return lastLeft.getJob().toString();
+		}
 	}
 
 	/**
@@ -111,37 +144,76 @@ public class RedBlackTree
 	 */
 	public String previous(Job newJob)
 	{
-		printNodeStyle(null);
-		RedBlackNode foundNode = search(head, newJob.getId());
-		if(foundNode.getLeftChild() == externalNode
-				&& foundNode.getParent() == rootNode)
+		// No head
+		if(head == null)
 		{
-			return "(0,0,0)";
+			return null;
 		}
-		else if (foundNode.getLeftChild() == externalNode)
+
+		if(head.getJob().getId() < newJob.getId()
+				&& head.getRightChild() == externalNode
+				&& head.getLeftChild() == externalNode)
 		{
-			while(foundNode.getParent().getRightChild() != foundNode)
+			return head.getJob().toString();
+		}
+		else if(head.getJob().getId() > newJob.getId()
+				&& head.getRightChild() == externalNode
+				&& head.getLeftChild() == externalNode)
+		{
+			return null;
+		}
+
+		// So if we have more nodes, we need to search for the
+		// node and find it's next largest
+
+		RedBlackNode lastRight = null;
+		RedBlackNode searchNode = head;
+
+		do
+		{
+			if (searchNode.getJob().getId() < newJob.getId())
 			{
-				foundNode = foundNode.getParent();
+				lastRight = searchNode;
+				searchNode = searchNode.getRightChild();
 			}
-			return foundNode.getParent().getJob().toString();
-		}
+			else
+			{
+				searchNode = searchNode.getLeftChild();
+			}
+		} while(searchNode.getJob().getId() != newJob.getId()
+					|| searchNode != externalNode);
 
-		RedBlackNode next = foundNode.getLeftChild();
-		RedBlackNode largest = next;
-
-		while(next != externalNode)
+		// If we fall off, the parent of the last right child is
+		// the previous node
+		if(searchNode == externalNode)
 		{
-			largest = next;
-			next = next.getRightChild();
+			return lastRight.getJob().toString();
 		}
 
-		return largest.getJob().toString();
+		// We didn't fall off so we need to check if we have any
+		// children, if so we need to go to left and farthest
+		// down to the right
+		// If not, we need to return the last right
+		if(searchNode.getLeftChild() == externalNode)
+		{
+			return lastRight.getJob().toString();
+		}
+		else
+		{
+			lastRight = searchNode.getLeftChild();
+			searchNode = searchNode.getLeftChild();
+			while (searchNode.getRightChild() != externalNode)
+			{
+				lastRight = searchNode;
+				searchNode = searchNode.getRightChild();
+			}
+			return lastRight.getJob().toString();
+		}
 	}
 
 	public String searchInRange(int startId, int tailId)
 	{
-		if(head==rootNode || head==null)
+		if(head == rootNode || head==null)
 		{
 			return "(0,0,0)";
 		}
@@ -209,35 +281,6 @@ public class RedBlackTree
 
 		return left + right;
 	}
-
-	private String gatherSubTree(RedBlackNode node)
-	{
-		if(node.getRightChild() == externalNode
-				&& node.getLeftChild() != externalNode)
-		{
-			return node.getJob().toString() + ","+ gatherSubTree(node.getLeftChild());
-		}
-		if(node.getLeftChild() == externalNode
-				&& node.getRightChild() != externalNode)
-		{
-			return node.getJob().toString()  + "," + gatherSubTree(node.getRightChild());
-		}
-
-		if(node.getLeftChild() != externalNode
-				&& node.getRightChild() != externalNode)
-		{
-			return node.getJob().toString() + gatherSubTree(node.getLeftChild()) + "," + gatherSubTree(node.getRightChild());
-		}
-		if(node == externalNode)
-		{
-			return "";
-		}
-		else
-		{
-			return node.getJob().toString();
-		}
-	}
-
 
 	public enum Color { RED, BLACK}
 
