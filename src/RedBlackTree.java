@@ -106,8 +106,16 @@ public class RedBlackTree
 				lastLeft = searchNode;
 				searchNode = searchNode.getLeftChild();
 			}
-		} while(searchNode.getJob().getId() != newJob.getId()
-				|| searchNode != externalNode);
+		} while(searchNode != externalNode
+		        && searchNode.getJob().getId() != newJob.getId());
+
+		// We never went left, and we have no external nodes
+		// Therefore we have not previous value
+		if(searchNode.getLeftChild() == externalNode
+				&& lastLeft == null)
+		{
+			return null;
+		}
 
 		// If we fall off, the parent of the last left child is
 		// the previous node
@@ -115,6 +123,7 @@ public class RedBlackTree
 		{
 			return lastLeft.getJob().toString();
 		}
+
 
 		// We didn't fall off so we need to check if we have any
 		// children, if so we need to go to right and farthest
@@ -180,8 +189,16 @@ public class RedBlackTree
 			{
 				searchNode = searchNode.getLeftChild();
 			}
-		} while(searchNode.getJob().getId() != newJob.getId()
-					|| searchNode != externalNode);
+		} while(searchNode != externalNode
+				&& searchNode.getJob().getId() != newJob.getId());
+
+		// We never went left, and we have no external nodes
+		// Therefore we have not previous value
+		if(searchNode.getLeftChild() == externalNode
+				&& lastRight == null)
+		{
+			return null;
+		}
 
 		// If we fall off, the parent of the last right child is
 		// the previous node
@@ -213,9 +230,9 @@ public class RedBlackTree
 
 	public String searchInRange(int startId, int tailId)
 	{
-		if(head == rootNode || head==null)
+		if(head == rootNode || head == null)
 		{
-			return "(0,0,0)";
+			return "";
 		}
 		return searchInRangeRecursive(head, startId, tailId);
 	}
@@ -884,12 +901,10 @@ public class RedBlackTree
 			case Lb01:
 				// Color Change
 				deletedNode.getParent().getRightChild().setColor(Color.RED);
-				deletedNode.getParent().setLeftChild(RedBlackTree.externalNode);
 				break;
 			case Lb02:
 				deletedNode.getParent().setColor(Color.BLACK);
 				deletedNode.getParent().getRightChild().setColor(Color.RED);
-				deletedNode.getParent().setLeftChild(RedBlackTree.externalNode);
 				break;
 			case Lb11:
 				py = deletedNode.getParent();
@@ -1820,7 +1835,7 @@ public class RedBlackTree
 	 */
 	public void printNodeStyle(RedBlackNode node)
 	{
-		if(node == null)
+		if(node == null && head != null)
 		{
 			System.out.println("Head: " + head.getJob().toString() + " Color: " + head.getColor());
 			System.out.println("Parent: " + head.getParent().getKey());

@@ -198,7 +198,8 @@ public class Scheduler
 		else
 		{
 			String jobs = rbt.searchInRange(command.getId(), command.getJobExecutionTime());
-			if(jobs == null)
+			if(jobs == null
+					|| jobs.isEmpty())
 			{
 				write("(0,0,0)");
 			}
