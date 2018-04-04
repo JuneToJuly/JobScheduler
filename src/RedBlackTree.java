@@ -101,7 +101,7 @@ public class RedBlackTree
 			{
 				searchNode = searchNode.getRightChild();
 			}
-			else
+			else if(searchNode.getJob().getId() > newJob.getId())
 			{
 				lastLeft = searchNode;
 				searchNode = searchNode.getLeftChild();
@@ -112,7 +112,8 @@ public class RedBlackTree
 		// We never went left, and we have no external nodes
 		// Therefore we have not previous value
 		if(searchNode.getLeftChild() == externalNode
-				&& lastLeft == null)
+				&& lastLeft == null
+				&& searchNode.getRightChild() == externalNode)
 		{
 			return null;
 		}
@@ -195,7 +196,8 @@ public class RedBlackTree
 		// We never went left, and we have no external nodes
 		// Therefore we have not previous value
 		if(searchNode.getLeftChild() == externalNode
-				&& lastRight == null)
+				&& lastRight == null
+				&& searchNode.getRightChild() == externalNode)
 		{
 			return null;
 		}
@@ -232,7 +234,7 @@ public class RedBlackTree
 	{
 		if(head == rootNode || head == null)
 		{
-			return "";
+			return "(0,0,0)";
 		}
 		return searchInRangeRecursive(head, startId, tailId);
 	}
@@ -245,6 +247,34 @@ public class RedBlackTree
 		String nodeString = node.getJob().toString();
 		String left = "";
 		String right = "";
+		String additional = "";
+
+		// Smaller than start Id
+		if(node.getLeftChild().getKey() < startId
+				&& node.getKey() > startId
+				&& node.getLeftChild().getRightChild() != externalNode)
+		{
+			additional = searchInRangeRecursive(node.getLeftChild(), startId, tailId);
+		}
+		if(node.getRightChild().getKey() < startId
+				&& node.getRightChild().getRightChild() != externalNode)
+		{
+			additional = searchInRangeRecursive(node.getRightChild(), startId, tailId);
+		}
+
+		// Greater than tail Id
+		if(node.getRightChild().getKey() > tailId
+				&& node.getKey() < tailId
+				&& node.getRightChild().getLeftChild() != externalNode)
+		{
+			additional = searchInRangeRecursive(node.getRightChild(), startId, tailId);
+		}
+		if(node.getLeftChild().getKey() > tailId
+				&& node.getLeftChild().getLeftChild() != externalNode)
+		{
+			additional = searchInRangeRecursive(node.getLeftChild(), startId, tailId);
+		}
+
 
 		if(node.getKey() >= startId
 				&& node.getKey() <= tailId)
@@ -280,6 +310,12 @@ public class RedBlackTree
 			right = "," + right;
 		}
 
+		if(additional != ""
+			&&  (rightInRange || leftInRange || nodeInRange))
+		{
+			additional = "," + additional;
+		}
+
 		// Node and one in range, need a comma
 		if(nodeInRange)
 		{
@@ -293,10 +329,10 @@ public class RedBlackTree
 		// We need to include the node
 		if(nodeInRange)
 		{
-			return nodeString + left + right;
+			return nodeString + left + right + additional;
 		}
 
-		return left + right;
+		return left + right + additional;
 	}
 
 	public enum Color { RED, BLACK}
