@@ -109,10 +109,10 @@ public class RedBlackTree
 		} while(searchNode != externalNode
 		        && searchNode.getJob().getId() != newJob.getId());
 
+		System.out.println("search node" + searchNode.getJob().toString());
 		// We never went left, and we have no external nodes
 		// Therefore we have not previous value
-		if(searchNode.getLeftChild() == externalNode
-				&& lastLeft == null
+		if(lastLeft == null
 				&& searchNode.getRightChild() == externalNode)
 		{
 			return null;
@@ -130,7 +130,8 @@ public class RedBlackTree
 		// children, if so we need to go to right and farthest
 		// down to the left
 		// If not, we need to return the last left
-		if(searchNode.getRightChild() == externalNode)
+		if(searchNode.getRightChild() == externalNode
+				&& lastLeft != null)
 		{
 			return lastLeft.getJob().toString();
 		}
@@ -196,8 +197,7 @@ public class RedBlackTree
 		// We never went left, and we have no external nodes
 		// Therefore we have not previous value
 		if(searchNode.getLeftChild() == externalNode
-				&& lastRight == null
-				&& searchNode.getRightChild() == externalNode)
+				&& lastRight == null)
 		{
 			return null;
 		}
@@ -213,7 +213,8 @@ public class RedBlackTree
 		// children, if so we need to go to left and farthest
 		// down to the right
 		// If not, we need to return the last right
-		if(searchNode.getLeftChild() == externalNode)
+		if(searchNode.getLeftChild() == externalNode
+				&& lastRight != null)
 		{
 			return lastRight.getJob().toString();
 		}
@@ -250,26 +251,30 @@ public class RedBlackTree
 		String additional = "";
 
 		// Smaller than start Id
-		if(node.getLeftChild().getKey() < startId
+		if(node.getLeftChild()!= externalNode
+				&&  node.getLeftChild().getKey() < startId
 				&& node.getKey() > startId
 				&& node.getLeftChild().getRightChild() != externalNode)
 		{
 			additional = searchInRangeRecursive(node.getLeftChild(), startId, tailId);
 		}
-		if(node.getRightChild().getKey() < startId
+		if(node.getRightChild() != externalNode
+				&& node.getRightChild().getKey() < startId
 				&& node.getRightChild().getRightChild() != externalNode)
 		{
 			additional = searchInRangeRecursive(node.getRightChild(), startId, tailId);
 		}
 
 		// Greater than tail Id
-		if(node.getRightChild().getKey() > tailId
+		if(node.getRightChild()!= externalNode
+				&& node.getRightChild().getKey() > tailId
 				&& node.getKey() < tailId
 				&& node.getRightChild().getLeftChild() != externalNode)
 		{
 			additional = searchInRangeRecursive(node.getRightChild(), startId, tailId);
 		}
-		if(node.getLeftChild().getKey() > tailId
+		if(node.getLeftChild() != externalNode
+				&& node.getLeftChild().getKey() > tailId
 				&& node.getLeftChild().getLeftChild() != externalNode)
 		{
 			additional = searchInRangeRecursive(node.getLeftChild(), startId, tailId);
@@ -310,8 +315,11 @@ public class RedBlackTree
 			right = "," + right;
 		}
 
-		if(additional != ""
-			&&  (rightInRange || leftInRange || nodeInRange))
+		if(!additional.isEmpty() && rightInRange)
+		{
+			additional = "," + additional;
+		}
+		else if(!additional.isEmpty() && leftInRange)
 		{
 			additional = "," + additional;
 		}
@@ -320,7 +328,8 @@ public class RedBlackTree
 		if(nodeInRange)
 		{
 			if(rightInRange
-					|| leftInRange)
+					|| leftInRange
+					|| !additional.isEmpty())
 			{
 				nodeString = nodeString + ",";
 			}

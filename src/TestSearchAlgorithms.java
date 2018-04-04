@@ -19,9 +19,12 @@ public class TestSearchAlgorithms
 		rbt.add(new Job(15,0,0));
 		rbt.add(new Job(2,0,0));
 		rbt.add(new Job(16,0,0));
+		rbt.add(new Job(28,0,0));
+		rbt.add(new Job(27,0,0));
+		rbt.add(new Job(29,0,0));
+
 
 		rbt.printNodeStyle(null);
-
 
 		testNext();
 		testPrev();
@@ -37,7 +40,7 @@ public class TestSearchAlgorithms
 		System.out.println(rbt.searchInRange(3,15));
 		System.out.println(rbt.searchInRange(15,20));
 		System.out.println(rbt.searchInRange(2,40));
-		System.out.println(rbt.searchInRange(17,40));
+		System.out.println(rbt.searchInRange(17,28));
 	}
 
 	private void testPrint()
