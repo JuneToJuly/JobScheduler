@@ -111,7 +111,6 @@ public class RedBlackTree
 		} while(searchNode != externalNode
 		        && searchNode.getJob().getId() != newJob.getId());
 
-		System.out.println("search node" + searchNode.getJob().toString());
 		// We never went left, and we have no external nodes
 		// Therefore we have not previous value
 		if(lastLeft == null
@@ -233,6 +232,12 @@ public class RedBlackTree
 		}
 	}
 
+	/**
+	 * Searches the tree for all nodes in a given range.
+	 * @param startId
+	 * @param tailId
+	 * @return
+	 */
 	public String searchInRange(int startId, int tailId)
 	{
 		if(head == rootNode || head == null)
@@ -242,6 +247,9 @@ public class RedBlackTree
 		return searchInRangeRecursive(head, startId, tailId);
 	}
 
+	/*
+		Performs a recursive search.
+	 */
 	private String searchInRangeRecursive(RedBlackNode node, int startId, int tailId)
 	{
 		boolean leftInRange = false;
@@ -342,16 +350,19 @@ public class RedBlackTree
 		{
 			return nodeString + left + right + additional;
 		}
-
 		return left + right + additional;
 	}
 
+	// Color Enum
 	public enum Color { RED, BLACK}
 
+	// Insert Rotation Enum
 	public enum InsertRotation { NONE, RRr, RRb, LLr, LLb, RLr, RLb, LRr, LRb}
 
+	// Easier way to classify children
 	public enum Child {LEFT, RIGHT}
 
+	// Delete Rotation Enum
 	public enum DeleteRotation { Rb01, Rb02, Rb11, Rb12, Rb2, Rr0, Rr11, Rr12, Rr2,
 								 Lb01, Lb02, Lb11, Lb12, Lb2, Lr0, Lr11, Lr12, Lr2}
 
@@ -362,6 +373,10 @@ public class RedBlackTree
 		head = null;
 	}
 
+	/**
+	 * Deletes a node for the RBT.
+	 * @param toDelete
+	 */
 	public void delete(Job toDelete)
 	{
 		if(head == null)
@@ -463,6 +478,11 @@ public class RedBlackTree
 		colorChanged = false;
 	}
 
+	/*
+		Finds the deficient node. There are many different situations where
+		a node can become deficient from a deletion. If a black node is
+		deleted and cannot be replaced by a red node it becomes deficient.
+	 */
 	private RedBlackNode findDeficientNode(int degree, RedBlackNode node)
 	{
 		// If we delete the head and it is only node
@@ -619,6 +639,9 @@ public class RedBlackTree
 		return null;
 	}
 
+	/*
+		Checks the degree of a node.
+	 */
 	private int checkDegreeOfDeletion(RedBlackNode next)
 	{
 		int degree = 0;
@@ -633,6 +656,9 @@ public class RedBlackTree
 		return degree;
 	}
 
+	/*
+		Performs the deletion rotations.
+	 */
 	private void performDeleteRotation(RedBlackNode deletedNode, DeleteRotation deleteRotation)
 	{
 		Color initRootColor = null;
@@ -1293,6 +1319,10 @@ public class RedBlackTree
 	}
 
 
+	/**
+	 * Adds a job to the RBT.
+	 * @param currentJob
+	 */
 	public void add(Job currentJob)
 	{
 
@@ -1365,6 +1395,9 @@ public class RedBlackTree
 		} while (conflictingNode != null);
 	}
 
+	/*
+		Checks to see if RBT propertyis maintained.
+	 */
 	private RedBlackNode checkForPropertyMaintained(RedBlackNode node)
 	{
 		// We set our GP to Red So if our GGp is red also, we need to keep going
@@ -1626,7 +1659,6 @@ public class RedBlackTree
 	{
 		RedBlackNode py = deleteNode.getParent();
 
-		System.out.println(deleteNode.getParent().getJob().toString());
 		Child parentToDelete = null;
 
 		if(py.getParent() != null)

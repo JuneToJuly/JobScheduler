@@ -1,3 +1,6 @@
+/**
+ * @author Ian Thomas
+ */
 public class Command
 {
 	private String name;
@@ -60,6 +63,7 @@ public class Command
 		this.jobExecutionTime = jobExecutionTime;
 	}
 
+	@Override
 	public String toString()
 	{
 		return "Name: " + name + " Timestamp: " + timestamp + " Id: " + id + " ExecutionTime: " + jobExecutionTime;

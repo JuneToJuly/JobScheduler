@@ -1,5 +1,5 @@
 /**
- * @author Ian
+ * @author Ian Thomas
  */
 public class TestHeap
 {
@@ -39,13 +39,13 @@ public class TestHeap
 		heap.printHeap();
 		System.out.println("This is new add\n");
 
-		heap.extrackMin();
+		heap.extractMin();
 		heap.printHeap();
 
-		heap.extrackMin();
+		heap.extractMin();
 		heap.printHeap();
 
-		heap.extrackMin();
+		heap.extractMin();
 		heap.printHeap();
 	}
 }

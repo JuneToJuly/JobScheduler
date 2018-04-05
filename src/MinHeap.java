@@ -1,6 +1,3 @@
-import jdk.nashorn.internal.scripts.JO;
-import org.omg.Messaging.SYNC_WITH_TRANSPORT;
-
 /**
  * @author Ian Thomas
  */
@@ -90,7 +87,11 @@ public class MinHeap
 		heapMaxSize *= 2;
 	}
 
-	public Job extrackMin()
+	/**
+	 * Extracts the minimum value in the heap.
+	 * @return
+	 */
+	public Job extractMin()
 	{
 		if(lastHeapIndex == -1)
 		{
@@ -108,6 +109,9 @@ public class MinHeap
 		return min;
 	}
 
+	/*
+		Performs the heapify action at a given index.
+	 */
 	private void heapify(int parentIndex)
 	{
 		Job parent;
@@ -178,6 +182,9 @@ public class MinHeap
 		}
 	}
 
+	/**
+	 * Prints the heap.
+	 */
 	public void printHeap()
 	{
 		int count = 0;
@@ -191,6 +198,11 @@ public class MinHeap
 		}
 	}
 
+	/**
+	 * Increases the current job by the amount *i*
+	 * @param runningJob
+	 * @param i
+	 */
 	public void increaseKey(Job runningJob, int i)
 	{
 		int key = runningJob.getExecutedTime();

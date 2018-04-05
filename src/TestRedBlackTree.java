@@ -1,5 +1,6 @@
-import sun.reflect.generics.tree.Tree;
-
+/**
+ * @author Ian Thomas
+ */
 public class TestRedBlackTree
 {
 	public RedBlackTree rbt = new RedBlackTree();
@@ -12,31 +13,31 @@ public class TestRedBlackTree
 	public TestRedBlackTree()
 	{
 		sb.append("Test Results\n");
-//		testRb01();
-//		testRb02();
-//		testRb11();
-//		testRb12();
-//		testRb2();
-//		testRr0();
-//		testRr11();
-//		testRr12();
-//		testRr2();
+		testRb01();
+		testRb02();
+		testRb11();
+		testRb12();
+		testRb2();
+		testRr0();
+		testRr11();
+		testRr12();
+		testRr2();
 
-//		testLb01();
-//		testLb02();
-//		testLb11();
-//		testLb12();
-//		testLb2();
-//		testLr0();
-//		testLr11();
-//		testLr12();
-//		testLr2();
+		testLb01();
+		testLb02();
+		testLb11();
+		testLb12();
+		testLb2();
+		testLr0();
+		testLr11();
+		testLr12();
+		testLr2();
 
-//		testDeleteRedLeaf();
-//		testDeleteBlackDegreeOneWithRedChild();
-//		testDeleteDegree2();
-//		testDeleteColorChangePropagtation();
-//		testDeleteMin();
+		testDeleteRedLeaf();
+		testDeleteBlackDegreeOneWithRedChild();
+		testDeleteDegree2();
+		testDeleteColorChangePropagtation();
+		testDeleteMin();
 		testDelete();
 
 
@@ -69,6 +70,7 @@ public class TestRedBlackTree
 		rbt.delete(new Job(17,0,0));
 		rbt.delete(new Job(15,0,0));
 		rbt.delete(new Job(16,0,0));
+		rbt.delete(new Job(29,0,0));
 //		rbt.delete(new Job(28,0,0));
 
 		System.out.println("After delete");

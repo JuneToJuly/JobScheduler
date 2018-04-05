@@ -1,3 +1,6 @@
+/**
+ * @author Ian Thomas
+ */
 public class TestScheduler
 {
 		/*

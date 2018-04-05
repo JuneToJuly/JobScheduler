@@ -29,12 +29,17 @@ public class Scheduler
 		runningJobCounter = 5;
 	}
 
+	/**
+	 * Writes to the buffer.
+	 * @param toWrite
+	 */
 	public void write(String toWrite)
 	{
 		writer.println(toWrite);
 		writer.flush();
 	}
 
+	// Opens writer
 	private void openWriter(String filename)
 	{
 		try
@@ -87,9 +92,11 @@ public class Scheduler
 			}
 			currentTime++;
 		}while(stillJobs || !dispatcherFinished);
-		System.out.println(jobFinish);
 	}
 
+	/*
+		Checks for jobs to still needing to run
+	 */
 	private void checkJobFinished(int currentTime)
 	{
 		if(runningJobCounter == 0 && runningJob != null)
@@ -98,9 +105,8 @@ public class Scheduler
 			if(runningJob.getExecutedTime() + 5 >= runningJob.getTotalTime())
 			{
 				jobFinish += " " + runningJob.getId() + ": " + currentTime +"\n";
-				rbt.printNodeStyle(null);
 				rbt.delete(runningJob);
-				minHeap.extrackMin();
+				minHeap.extractMin();
 			}
 			else
 			{
@@ -141,7 +147,10 @@ public class Scheduler
 		return commandType;
 	}
 
-	public boolean dispatchJob()
+	/*
+		Dispatches jobs.
+	 */
+	private boolean dispatchJob()
 	{
 		// Get next job
 		runningJob = minHeap.peak();
@@ -166,7 +175,7 @@ public class Scheduler
 	}
 
 	/**
-	 *
+	 *  Command to add a job.
 	 * @param command
 	 */
 	public void addJobs(Command command)
@@ -177,7 +186,8 @@ public class Scheduler
 	}
 
 	/**
-	 *
+	 * Command to print a job, either printing the single job or
+	 * a range of jobs.
 	 * @param command
 	 */
 	public void printJob(Command command)
@@ -211,7 +221,7 @@ public class Scheduler
 	}
 
 	/**
-	 *
+	 * Prints the next largest job.
 	 * @param command
 	 */
 	public void printNextJob(Command command)
@@ -229,7 +239,7 @@ public class Scheduler
 	}
 
 	/**
-	 *
+	 * Prints the greatest job before the current job.
 	 * @param command
 	 */
 	public void printPreviousJob(Command command)
@@ -245,7 +255,6 @@ public class Scheduler
 			write(previous);
 		}
 	}
-
 
 	public MinHeap getMinHeap()
 	{

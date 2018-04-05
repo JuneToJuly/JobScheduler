@@ -73,6 +73,5 @@ public class TestSearchAlgorithms
 		System.out.println(rbt.next(new Job(36,0,0)));
 		System.out.println(rbt.next(new Job(15,0,0)));
 		System.out.println(rbt.next(new Job(2,0,0)));
-		System.out.println("");
 	}
 }

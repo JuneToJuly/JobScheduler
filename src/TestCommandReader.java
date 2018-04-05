@@ -1,3 +1,6 @@
+/**
+ * @author Ian Thomas
+ */
 public class TestCommandReader
 {
 	public static void main(String[] args)

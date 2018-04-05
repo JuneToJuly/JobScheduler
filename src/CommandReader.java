@@ -1,7 +1,8 @@
-import org.omg.Messaging.SYNC_WITH_TRANSPORT;
-
 import java.io.*;
 
+/**
+ * @author Ian Thomas
+ */
 public class CommandReader
 {
 	private BufferedReader inputBufferedReader;
@@ -27,6 +28,12 @@ public class CommandReader
 		readNextCommand(0);
 	}
 
+	/**
+	 * Used to access a command. The timestamp must match the
+	 * command's timestamp to retrieve it.
+	 * @param time
+	 * @return
+	 */
 	public Command next(int time)
 	{
 		if(firstNull)
@@ -37,11 +44,12 @@ public class CommandReader
 		{
 			return new Command("", 0, 0, 0);
 		}
-		System.out.println(time);
-		System.out.println(currentCommand.toString());
 		return readNextCommand(time);
 	}
 
+	/*
+		Reads the next command from the file.
+	 */
 	private Command readNextCommand(int time)
 	{
 		int systemTime = 0;
@@ -53,7 +61,6 @@ public class CommandReader
 		try
 		{
 			nextLine = inputBufferedReader.readLine();
-			System.out.println(nextLine);
 			if(nextLine != null)
 			{
 				systemTime = Integer.valueOf(nextLine.substring(0, nextLine.indexOf(":")));
@@ -89,6 +96,9 @@ public class CommandReader
 		return currentCopy;
 	}
 
+	/*
+		Creates the command from some given information.
+	 */
 	private void createCommand(int systemTime, String name, int id, int total_time)
 	{
 		switch (name.toLowerCase())
@@ -120,6 +130,9 @@ public class CommandReader
 		}
 	}
 
+	/*
+		Opens the file.
+	 */
 	private void openFile()
 	{
 		try
