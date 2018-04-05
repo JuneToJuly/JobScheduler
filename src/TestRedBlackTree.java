@@ -12,33 +12,58 @@ public class TestRedBlackTree
 	public TestRedBlackTree()
 	{
 		sb.append("Test Results\n");
-		testRb01();
-		testRb02();
-		testRb11();
-		testRb12();
-		testRb2();
-		testRr0();
-		testRr11();
-		testRr12();
-		testRr2();
+//		testRb01();
+//		testRb02();
+//		testRb11();
+//		testRb12();
+//		testRb2();
+//		testRr0();
+//		testRr11();
+//		testRr12();
+//		testRr2();
 
-		testLb01();
-		testLb02();
-		testLb11();
-		testLb12();
-		testLb2();
-		testLr0();
-		testLr11();
-		testLr12();
-		testLr2();
+//		testLb01();
+//		testLb02();
+//		testLb11();
+//		testLb12();
+//		testLb2();
+//		testLr0();
+//		testLr11();
+//		testLr12();
+//		testLr2();
 
-		testDeleteRedLeaf();
-		testDeleteBlackDegreeOneWithRedChild();
-		testDeleteDegree2();
-		testDeleteColorChangePropagtation();
-		testDeleteMin();
+//		testDeleteRedLeaf();
+//		testDeleteBlackDegreeOneWithRedChild();
+//		testDeleteDegree2();
+//		testDeleteColorChangePropagtation();
+//		testDeleteMin();
+		testDelete();
+
 
 		System.out.println(sb.toString());
+	}
+
+	private void testDelete()
+	{
+		rbt = new RedBlackTree();
+		rbt.add(new Job(3,0,0));
+		rbt.add(new Job(20,0,0));
+		rbt.add(new Job(25,0,0));
+		rbt.add(new Job(36,0,0));
+		rbt.add(new Job(15,0,0));
+		rbt.add(new Job(2,0,0));
+		rbt.add(new Job(16,0,0));
+		rbt.add(new Job(28,0,0));
+		rbt.add(new Job(27,0,0));
+		rbt.add(new Job(29,0,0));
+
+		rbt.printNodeStyle(null);
+
+//		rbt.delete(new Job(20,0,0));
+		rbt.delete(new Job(3,0,0));
+
+		System.out.println("After delete");
+		rbt.printNodeStyle(null);
 	}
 
 	private void testDeleteMin()

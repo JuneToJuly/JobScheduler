@@ -5,6 +5,7 @@ public class RedBlackTree
 {
 	static RedBlackNode externalNode;
 	static RedBlackNode rootNode;
+	boolean shouldDelete;
 
 	static
 	{
@@ -399,7 +400,6 @@ public class RedBlackTree
 		RedBlackNode deficientNode = null;
 		do
 		{
-
 			// Check the degree of the deletion
 			int degree = checkDegreeOfDeletion(next);
 
@@ -424,11 +424,20 @@ public class RedBlackTree
 			deleteRotation = classifyDeleteRotation(deficientNode);
 			performDeleteRotation(deficientNode, deleteRotation);
 
-			// Only things that can keep the tree from working;
-			if (deleteRotation == DeleteRotation.Rb01
-					|| deleteRotation == DeleteRotation.Lb01)
+			if(shouldDelete)
 			{
-
+				Child parentToDeletion = deficientNode.getKey() >
+						deficientNode.getParent().getKey()
+						? Child.RIGHT
+						: Child.LEFT;
+				if(parentToDeletion == Child.RIGHT)
+				{
+					deficientNode.getParent().setRightChild(externalNode);
+				}
+				else
+				{
+					deficientNode.getParent().setLeftChild(externalNode);
+				}
 			}
 
 			next = deficientNode.getParent();
@@ -461,6 +470,7 @@ public class RedBlackTree
 		if(degree == 0
 				&& node.getColor() == Color.BLACK)
 		{
+			shouldDelete = true;
 			return node;
 		}
 		// Red Leaf node, we delete this node and we are done.
@@ -474,6 +484,7 @@ public class RedBlackTree
 			{
 				node.getParent().setLeftChild(externalNode);
 			}
+			shouldDelete = false;
 			return null;
 		}
 
@@ -567,6 +578,7 @@ public class RedBlackTree
 			}
 			y.setColor(Color.BLACK);
 
+			shouldDelete = false;
 			return defiecientNode;
 		}
 

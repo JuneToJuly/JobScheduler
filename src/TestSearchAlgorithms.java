@@ -23,7 +23,6 @@ public class TestSearchAlgorithms
 		rbt.add(new Job(27,0,0));
 		rbt.add(new Job(29,0,0));
 
-
 		rbt.printNodeStyle(null);
 
 		testNext();
