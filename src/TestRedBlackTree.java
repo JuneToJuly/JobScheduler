@@ -56,11 +56,20 @@ public class TestRedBlackTree
 		rbt.add(new Job(28,0,0));
 		rbt.add(new Job(27,0,0));
 		rbt.add(new Job(29,0,0));
+		rbt.add(new Job(31,0,0));
+		rbt.add(new Job(37,0,0));
 
-		rbt.printNodeStyle(null);
+//		rbt.printNodeStyle(null);
 
 //		rbt.delete(new Job(20,0,0));
-		rbt.delete(new Job(3,0,0));
+//		rbt.delete(new Job(3,0,0));
+//		rbt.delete(new Job(2,0,0));
+//		rbt.delete(new Job(25,0,0));
+//		rbt.delete(new Job(28,0,0));
+		rbt.delete(new Job(17,0,0));
+		rbt.delete(new Job(15,0,0));
+		rbt.delete(new Job(16,0,0));
+//		rbt.delete(new Job(28,0,0));
 
 		System.out.println("After delete");
 		rbt.printNodeStyle(null);

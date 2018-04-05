@@ -6,6 +6,7 @@ public class RedBlackTree
 	static RedBlackNode externalNode;
 	static RedBlackNode rootNode;
 	boolean shouldDelete;
+	boolean colorChanged;
 
 	static
 	{
@@ -403,10 +404,17 @@ public class RedBlackTree
 			// Check the degree of the deletion
 			int degree = checkDegreeOfDeletion(next);
 
+			// We don't want to do any more deleting when color changes
+			// we are just making tree adjustments
+			if(colorChanged)
+			{
+				deficientNode = next;
+			}
 			// We need find the deficient node, some cases for example degree two
 			// the deficient node is not the node we are deleting, but the one we
 			// move to its place
-			if (deficientNode == null)
+			if (deficientNode == null
+					&& !colorChanged)
 			{
 				deficientNode = findDeficientNode(degree, next);
 			}
@@ -424,6 +432,11 @@ public class RedBlackTree
 			deleteRotation = classifyDeleteRotation(deficientNode);
 			performDeleteRotation(deficientNode, deleteRotation);
 
+			next = deficientNode.getParent();
+
+			/*
+				Some deletions have already had their nodes deleted
+			 */
 			if(shouldDelete)
 			{
 				Child parentToDeletion = deficientNode.getKey() >
@@ -433,17 +446,21 @@ public class RedBlackTree
 				if(parentToDeletion == Child.RIGHT)
 				{
 					deficientNode.getParent().setRightChild(externalNode);
+					shouldDelete = false;
 				}
 				else
 				{
 					deficientNode.getParent().setLeftChild(externalNode);
+					shouldDelete = false;
 				}
 			}
 
-			next = deficientNode.getParent();
 		}while(deleteRotation == DeleteRotation.Rb01
 				|| deleteRotation == DeleteRotation.Lb01
 				&& next != rootNode);
+
+		shouldDelete = false;
+		colorChanged = false;
 	}
 
 	private RedBlackNode findDeficientNode(int degree, RedBlackNode node)
@@ -644,6 +661,7 @@ public class RedBlackTree
 		{
 			case Rb01:
 				deletedNode.getParent().getLeftChild().setColor(Color.RED);
+				colorChanged = true;
 				break;
 			case Rb02:
 				deletedNode.getParent().setColor(Color.BLACK);
@@ -958,6 +976,7 @@ public class RedBlackTree
 			case Lb01:
 				// Color Change
 				deletedNode.getParent().getRightChild().setColor(Color.RED);
+				colorChanged = true;
 				break;
 			case Lb02:
 				deletedNode.getParent().setColor(Color.BLACK);
@@ -1607,6 +1626,7 @@ public class RedBlackTree
 	{
 		RedBlackNode py = deleteNode.getParent();
 
+		System.out.println(deleteNode.getParent().getJob().toString());
 		Child parentToDelete = null;
 
 		if(py.getParent() != null)
