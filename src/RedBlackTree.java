@@ -1560,7 +1560,7 @@ public class RedBlackTree
 				d = z.getLeftChild();
 
 				// Set GGP child to new root of rotation
-				if(y.getKey() > z.getParent().getKey())
+				if (y.getKey() > z.getParent().getKey())
 				{
 					z.getParent().setRightChild(y);
 				}
@@ -1588,7 +1588,7 @@ public class RedBlackTree
 
 				if(y.getParent() == rootNode)
 				{
-					head = insertNode.getParent();
+					head = y;
 					head.setColor(Color.BLACK);
 				}
 				break;
@@ -1861,7 +1861,6 @@ public class RedBlackTree
 					? Child.RIGHT
 					: Child.LEFT;
 		}
-
 
 		// The node is black, we can insert with no problems
 		if (parent.getColor() == Color.BLACK)
