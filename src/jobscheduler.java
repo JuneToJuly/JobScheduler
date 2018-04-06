@@ -1,7 +1,7 @@
 /**
  * @author Ian Thomas
  */
-public class App
+public class jobscheduler
 {
 	public static void main(String[] args)
 	{
