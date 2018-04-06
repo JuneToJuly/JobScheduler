@@ -8,6 +8,8 @@ public class RedBlackTree
 	boolean shouldDelete;
 	boolean colorChanged;
 
+    // Static nodes that will be used for when we want to set children
+    // to null to avoid nulls.
 	static
 	{
 		externalNode = new RedBlackNode(null, RedBlackTree.Color.BLACK);
@@ -22,7 +24,7 @@ public class RedBlackTree
 	}
 
 	/**
-	 * Returns the job.
+	 * Simple search for a job.
 	 * @param newJob
 	 * @return
 	 */
@@ -34,6 +36,7 @@ public class RedBlackTree
 		}
 
 		int key = newJob.getId();
+
 		if(key == head.getKey())
 		{
 			return head.getJob();
@@ -51,7 +54,8 @@ public class RedBlackTree
 
 	/*
 		Searching algorithms
-	 */
+	*/
+
 	private RedBlackNode search(RedBlackNode node, int key)
 	{
 		if(node == externalNode || node == null)
@@ -86,6 +90,7 @@ public class RedBlackTree
 		{
 			return null;
 		}
+
 		// Head is only element and it is larger
 		// than our search job
 		if(head.getJob().getId() > newJob.getId()
@@ -95,6 +100,7 @@ public class RedBlackTree
 			return head.getJob().toString();
 		}
 
+        // Finds the node
 		RedBlackNode lastLeft = null;
 		RedBlackNode searchNode = head;
 		do
@@ -112,7 +118,7 @@ public class RedBlackTree
 		        && searchNode.getJob().getId() != newJob.getId());
 
 		// We never went left, and we have no external nodes
-		// Therefore we have not previous value
+		// Therefore we have no previous value
 		if(lastLeft == null
 				&& searchNode.getRightChild() == externalNode)
 		{
@@ -162,12 +168,14 @@ public class RedBlackTree
 			return null;
 		}
 
+        // The head is less that the key, and it the only value in the tree.
 		if(head.getJob().getId() < newJob.getId()
 				&& head.getRightChild() == externalNode
 				&& head.getLeftChild() == externalNode)
 		{
 			return head.getJob().toString();
 		}
+        // The head is larger than the key, and it is the only value in the tree.
 		else if(head.getJob().getId() > newJob.getId()
 				&& head.getRightChild() == externalNode
 				&& head.getLeftChild() == externalNode)
@@ -175,12 +183,9 @@ public class RedBlackTree
 			return null;
 		}
 
-		// So if we have more nodes, we need to search for the
-		// node and find it's next largest
-
 		RedBlackNode lastRight = null;
 		RedBlackNode searchNode = head;
-
+        // Search for nodes previous
 		do
 		{
 			if (searchNode.getJob().getId() < newJob.getId())
@@ -195,7 +200,7 @@ public class RedBlackTree
 		} while(searchNode != externalNode
 				&& searchNode.getJob().getId() != newJob.getId());
 
-		// We never went left, and we have no external nodes
+		// We never went right, and we have no external nodes
 		// Therefore we have not previous value
 		if(searchNode.getLeftChild() == externalNode
 				&& lastRight == null)
@@ -374,7 +379,7 @@ public class RedBlackTree
 	}
 
 	/**
-	 * Deletes a node for the RBT.
+	 * Deletes a node in the RBT.
 	 * @param toDelete
 	 */
 	public void delete(Job toDelete)
@@ -1843,6 +1848,7 @@ public class RedBlackTree
 		}
 		return null;
 	}
+
 	/*
 		Classify the rotations for an insert.
 	 */
