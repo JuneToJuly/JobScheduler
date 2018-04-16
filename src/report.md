@@ -1,12 +1,14 @@
 # Advanced Data Structures Report
 
 ### Information:
-1. Name: Ian Thomas
-2. UFID:
-3. EMAIL:
+
+1. Name: 
+2. UFID: 
+3. EMAIL: 
 
 ### Structure:
-The program is separated into three components: the scheduler, the
+
+The program is separated into three components: the scheduler,
 command reader, and the backend data structures(Min Heap, Red Black Tree). The command reader reads a command and
 holds it until the appropriate time stamp. The scheduler is querying the the command reader each time step to see if
 the scheduler can execute the command. Additionally, the scheduler is dispatching a job whenever the processor has
@@ -14,23 +16,24 @@ opened up. The scheduler uses the data structures for efficient job dispatching.
 
 Once all commands have been read, the scheduler finishes running jobs and exits.
 
-**DataFlow Diagram:**
+![Data Flow Diagram](dataflow.png)
 
-![classDiagram](dataflow.png)
+![Class Diagram](cd.png)
 
-**Class Diagram:**
-![classDiagram](cd.png)
 
 **RedBlackTree.java**
+
 Contains the implementation of the RedBlackTree.
 
 Supports:
+
 * add
 * delete
 * search
 * next
 * prev
 * search in range
+
 ```java
     // Searching methods
 	public Job search(Job newJob);
@@ -62,13 +65,16 @@ Supports:
 ```
 
 **MinHeap.java**
+
 Contains the implementation of the MinHeap
 
 Supports:
+
 * peak
 * extract min
 * increase key
 * print heap
+
 ```java
 	public MinHeap();
 	public Job peak();
@@ -85,12 +91,15 @@ Supports:
 ```
 
 **Scheduler.java**
+
 This class contains the implementation of the job scheduler.
 
 The `start()` method starts the scheduler.
 
 Within this method, `checkJobFinished(currentTime)`is called so the job may be removed. Following this, obtaining the next command,
 `commandReader.next(currentTime)`, `executeCommand(command)`, and finally `dispatchJob()`
+
+
 ```java
 	public Scheduler(CommandReader commandReader, String filename);
 	public void write(String toWrite);
@@ -111,7 +120,9 @@ Within this method, `checkJobFinished(currentTime)`is called so the job may be r
 ```
 
 **Job.java**
+
 This class serves a a structure for the job's data
+
 ```java
 	public Job(int id, int totalTime);
 	public void setTotalTime(int totalTime);
@@ -128,14 +139,15 @@ important to the structure of the program.
 
 
 Sample input files: 1, 2 and 3 have been tested on the program with correct results and no errors.
-All files have been tested on cise computers to verify build and execution.
+All files have been tested on *cise* computers to verify build and execution.
 
 All files have finished in less than 50 milliseconds.
 
 ### Difficulties
+
 The difficulty of the program was directly related to the implementation of the RedBlackTree. There are many details
-that must be accounted for such as degree of deletion, colors, rotations, and external nodes. I have done my best to account of
-all of the details in the implementation.
+that must be accounted for such as degree of deletion, colors, rotations, and external nodes. I have done my best to account for
+all of these details in the implementation.
 
 All search algorithms have been implemented efficiently.
 
@@ -143,30 +155,35 @@ All search algorithms have been implemented efficiently.
 
 2. **PrintNext**: O(lg(n))
 
-PrintNext does not require the job to be present, it searches on the value. PrintNext keeps track of the last left child transition to find the next in exactly one pass of the tree in case no
-right external node is present.
+PrintNext does not require the job to be present, it searches on the value. PrintNext keeps track of the last left child transition to find next in exactly one pass of the tree in case no
+right external node is present. (Doesn't have to retrace steps)
 
 3. **PrintPrev**: O(lg(n))
 
 PrintPrev does not require the job to be present, it searches on the value. PrintPrev also keeps track of the last right child transition to find the next in exactly one pass of the tree in case no
-left external node it present.
+left external node it present. (Doesn't have to retrace steps)
 
 4. **PrintInRange**: O(lg(n) + S) S is the number of nodes returned
 
 Print in range really has a time complexity of: O(2lg(n) + S), has to search for two different keys.
 
+
 #### Incrementing Min Heap
-The algorithm that increases the key in a min heap runs in `O(n)` because we can't directly increment the key without
+
+The algorithm that increases the key in a min heap runs in O(n) because we can't directly increment the key without
 checking for changes in the heap. The runtime could be improved by checking multiple paths for the key, but I have
 chosen to go with the simple solution of searching the array linearly as there were no constraints for this.
 
 ### Running Instructions
 
 In the directory of the folder run:
+
 ```
 make
 ```
+
 then:
+
 ```
 java jobscheduler input_file
 ```

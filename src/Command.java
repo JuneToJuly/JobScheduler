@@ -15,6 +15,7 @@ public class Command
 		this.id = 0;
 		this.jobExecutionTime = 0;
 	}
+
 	public Command(String name, int timestamp, int id, int jobExecutionTime)
 	{
 		this.name = name;
