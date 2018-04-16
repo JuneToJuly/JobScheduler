@@ -186,6 +186,7 @@ public class RedBlackTree
 
 		RedBlackNode lastRight = null;
 		RedBlackNode searchNode = head;
+
         // Search for nodes previous
 		do
 		{
@@ -220,8 +221,7 @@ public class RedBlackTree
 		// children, if so we need to go to left and farthest
 		// down to the right
 		// If not, we need to return the last right
-		if(searchNode.getLeftChild() == externalNode
-				&& lastRight != null)
+		if(searchNode.getLeftChild() == externalNode)
 		{
 			return lastRight.getJob().toString();
 		}
@@ -436,7 +436,6 @@ public class RedBlackTree
 			// the deficient node is not the node we are deleting, but the one we
 			// move to its place
 			if (deficientNode == null
-					&& next != null
 					&& !colorChanged)
 			{
 				deficientNode = findDeficientNode(degree, next);
@@ -644,7 +643,7 @@ public class RedBlackTree
 			RedBlackNode largestNode = node.getLeftChild();
 			RedBlackNode nextNode = largestNode.getRightChild();
 
-			while(nextNode != null && nextNode != externalNode)
+			while(nextNode != externalNode)
 			{
 				largestNode = nextNode;
 				nextNode = nextNode.getRightChild();
