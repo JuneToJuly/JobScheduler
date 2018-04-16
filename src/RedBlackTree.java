@@ -8,6 +8,7 @@ public class RedBlackTree
 	public RedBlackNode nullNode;
 	boolean shouldDelete;
 	boolean colorChanged;
+	public RedBlackNode nodeeeee;
 
     // Static nodes that will be used for when we want to set children
     // to null to avoid nulls.
@@ -385,7 +386,17 @@ public class RedBlackTree
 	 */
 	public void delete(Job toDelete)
 	{
-		if(toDelete.getId() == 6109)
+		if(externalNode.getRightChild() != externalNode
+				|| externalNode.getLeftChild() != externalNode)
+		{
+			System.out.println();
+		}
+		if(toDelete.getId() == 5144)
+
+		{
+			System.out.println();
+		}
+		if(toDelete.getId() == 13166)
 		{
 			System.out.println();
 		}
@@ -468,11 +479,7 @@ public class RedBlackTree
 			 */
 			if(shouldDelete)
 			{
-				Child parentToDeletion = deficientNode.getKey() >
-						deficientNode.getParent().getKey()
-						? Child.RIGHT
-						: Child.LEFT;
-				if(parentToDeletion == Child.RIGHT)
+				if(deficientNode.getParent().getRightChild() == deficientNode)
 				{
 					deficientNode.getParent().setRightChild(externalNode);
 					shouldDelete = false;
@@ -499,6 +506,10 @@ public class RedBlackTree
 	 */
 	private RedBlackNode findDeficientNode(int degree, RedBlackNode node)
 	{
+		if(node.getKey() == 204)
+		{
+			System.out.println();
+		}
 		// If we delete the head and it is only node
 		if(node.getParent() == rootNode && degree ==0)
 		{
@@ -659,8 +670,7 @@ public class RedBlackTree
 
 	/*
 		Checks the degree of a node.
-	 */
-	private int checkDegreeOfDeletion(RedBlackNode next)
+	 */	private int checkDegreeOfDeletion(RedBlackNode next)
 	{
 		int degree = 0;
 		if(next.getLeftChild() != externalNode)
@@ -712,7 +722,11 @@ public class RedBlackTree
 				break;
 			case Rb02:
 				deletedNode.getParent().setColor(Color.BLACK);
-				deletedNode.getParent().getLeftChild().setColor(Color.RED);
+				if(deletedNode.getParent().getLeftChild() != externalNode)
+				{
+					deletedNode.getParent().getLeftChild().setColor(Color.RED);
+					colorChanged = true;
+				}
 				break;
 			case Rb11:
 				// Change colors first
@@ -1036,6 +1050,7 @@ public class RedBlackTree
 				if(deletedNode.getParent().getRightChild() != externalNode)
 				{
 					deletedNode.getParent().getRightChild().setColor(Color.RED);
+					colorChanged = true;
 				}
 				break;
 			case Lb11:
@@ -1374,11 +1389,16 @@ public class RedBlackTree
 		insertNode.setRightChild(externalNode);
 		int insertKey = insertNode.getKey();
 
-		if(currentJob.getId() == 12220)
+		if(externalNode.getRightChild() != externalNode
+				|| externalNode.getLeftChild() != externalNode)
 		{
 			nullNode = insertNode;
 		}
 
+		if(currentJob.getId() == 13166)
+		{
+			nodeeeee = insertNode;
+		}
 
 		// We are at the top of the tree. If our key is less than this value
 		// We go to the left subtree, else we go to the right

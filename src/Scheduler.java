@@ -97,7 +97,7 @@ public class Scheduler
 			}
 			currentTime++;
 		}while(stillJobs || !dispatcherFinished);
-
+		System.out.println();
 	}
 
 	/*
@@ -111,6 +111,7 @@ public class Scheduler
 			{
 				System.out.println("Deleting: " + runningJob + " At time: " + currentTime);
 				rbt.delete(runningJob);
+//				rbt.printNodeStyle(null);
 				minHeap.extractMin();
 			}
 			else
