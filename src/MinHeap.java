@@ -145,22 +145,24 @@ public class MinHeap
 
 
 			// Left Child is the smallest child
-			if(leftExist && rightExist && (leftChild.getExecutedTime() < rightChild.getExecutedTime())
+			if(leftExist && rightExist && (leftChild.getExecutedTime() <= rightChild.getExecutedTime())
 					&& parent.getExecutedTime() > leftChild.getExecutedTime())
 			{
 				minChild = ((2 * parentIndex) + 1);
 			}
-			else if (leftExist && parent.getExecutedTime() > leftChild.getExecutedTime())
+			// Left child is the smallest and oen exist
+			else if (leftExist && !rightExist && parent.getExecutedTime() > leftChild.getExecutedTime())
 			{
 				minChild = ((2 * parentIndex) + 1);
 			}
-			// Right Child is the smallest
-			else if(rightExist && leftExist && rightChild.getExecutedTime() < leftChild.getExecutedTime()
+			// Right Child is the smallest and both exist
+			else if(rightExist && leftExist && rightChild.getExecutedTime() <= leftChild.getExecutedTime()
 					&& parent.getExecutedTime() > rightChild.getExecutedTime())
 			{
 				minChild = ((2 * parentIndex) + 2);
 			}
-			else if(rightExist && parent.getExecutedTime() > rightChild.getExecutedTime())
+			// // right child is smallest and one exist
+			else if(rightExist && !leftExist && parent.getExecutedTime() > rightChild.getExecutedTime())
 			{
 				minChild = ((2 * parentIndex) + 2);
 			}
@@ -182,6 +184,31 @@ public class MinHeap
 		}
 	}
 
+	public void checkHeap(){
+		int count = 0;
+		for (Job heapValue:
+		     heapArray)
+		{
+			if((count * 2) + 2 > lastHeapIndex)
+			{
+				break;
+			}
+			if(heapValue.getExecutedTime() > heapArray[(2 * count) + 1].getExecutedTime())
+			{
+				System.out.println("failed property");
+				System.out.println(heapValue + " child: " + heapArray[(2 * count) + 1]);
+				break;
+			}
+
+			if(heapValue.getExecutedTime() > heapArray[(2 * count) + 2].getExecutedTime())
+			{
+				System.out.println("failed property");
+				System.out.println(heapValue + " child: " + heapArray[(2 * count) + 2]);
+				break;
+			}
+			count++;
+		}
+	}
 	/**
 	 * Prints the heap.
 	 */
@@ -213,7 +240,8 @@ public class MinHeap
 		// O(n) to find the value...
 		for (Job job: heapArray)
 		{
-			if(job.getExecutedTime() == key)
+			if(job.getExecutedTime() == key
+					&& job.getId() == runningJob.getId())
 			{
 				foundIndex = currentIndex;
 				break;
@@ -221,11 +249,11 @@ public class MinHeap
 			currentIndex++;
 		}
 
-		heapArray[foundIndex].setExecutedTime(heapArray[foundIndex].getExecutedTime() + 5);
 		if(foundIndex == -1)
 		{
 			return;
 		}
+		heapArray[foundIndex].setExecutedTime(heapArray[foundIndex].getExecutedTime() + 5);
 		heapify(foundIndex);
 	}
 }

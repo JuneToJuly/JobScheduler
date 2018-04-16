@@ -5,6 +5,7 @@ public class RedBlackTree
 {
 	static RedBlackNode externalNode;
 	static RedBlackNode rootNode;
+	public RedBlackNode nullNode;
 	boolean shouldDelete;
 	boolean colorChanged;
 
@@ -86,6 +87,7 @@ public class RedBlackTree
 		{
 			return null;
 		}
+
 		// Head is only element and it is larger
 		// than our search job
 		if(head.getJob().getId() > newJob.getId()
@@ -379,6 +381,10 @@ public class RedBlackTree
 	 */
 	public void delete(Job toDelete)
 	{
+		if(toDelete.getId() == 6109)
+		{
+			System.out.println();
+		}
 		if(head == null)
 		{
 			return;
@@ -395,7 +401,7 @@ public class RedBlackTree
 		}
 
 		// Looking for element to delete
-		while(next != externalNode)
+		while(next != null && next != externalNode)
 		{
 			if(next.getKey() == toDelete.getId())
 			{
@@ -407,7 +413,7 @@ public class RedBlackTree
 		}
 
 		// Failed to find the key, exit
-		if(next == externalNode)
+		if(next == externalNode || next == null)
 		{
 			return;
 		}
@@ -421,14 +427,12 @@ public class RedBlackTree
 
 			// We don't want to do any more deleting when color changes
 			// we are just making tree adjustments
-			if(colorChanged)
-			{
-				deficientNode = next;
-			}
+
 			// We need find the deficient node, some cases for example degree two
 			// the deficient node is not the node we are deleting, but the one we
 			// move to its place
 			if (deficientNode == null
+					&& next != null
 					&& !colorChanged)
 			{
 				deficientNode = findDeficientNode(degree, next);
@@ -443,9 +447,16 @@ public class RedBlackTree
 				return;
 			}
 
+
 			// Classify this one degree rotation
 			deleteRotation = classifyDeleteRotation(deficientNode);
+
+			// We have solved provlem
+			if(deleteRotation == null)
+			{break;}
+
 			performDeleteRotation(deficientNode, deleteRotation);
+
 
 			next = deficientNode.getParent();
 
@@ -578,7 +589,7 @@ public class RedBlackTree
 				defiecientNode = null;
 			}
 
-			if(y.getParent() == rootNode)
+			if(y != null && y.getParent() == rootNode)
 			{
 				head = y;
 			}
@@ -613,7 +624,11 @@ public class RedBlackTree
 			{
 				node.getParent().setLeftChild(y);
 			}
-			y.setColor(Color.BLACK);
+
+			if(y != null)
+			{
+				y.setColor(Color.BLACK);
+			}
 
 			shouldDelete = false;
 			return defiecientNode;
@@ -625,7 +640,7 @@ public class RedBlackTree
 			RedBlackNode largestNode = node.getLeftChild();
 			RedBlackNode nextNode = largestNode.getRightChild();
 
-			while(nextNode != externalNode)
+			while(nextNode != null && nextNode != externalNode)
 			{
 				largestNode = nextNode;
 				nextNode = nextNode.getRightChild();
@@ -664,14 +679,14 @@ public class RedBlackTree
 		Color initRootColor = null;
 
 		// node according to slides
-		RedBlackNode py = null;
-		RedBlackNode v = null;
-		RedBlackNode a = null;
-		RedBlackNode b = null;
-		RedBlackNode w = null;
-		RedBlackNode c = null;
-		RedBlackNode d = null;
-		RedBlackNode x = null;
+		RedBlackNode py = externalNode;
+		RedBlackNode v = externalNode;
+		RedBlackNode a = externalNode;
+		RedBlackNode b = externalNode;
+		RedBlackNode w = externalNode;
+		RedBlackNode c = externalNode;
+		RedBlackNode d = externalNode;
+		RedBlackNode x = externalNode;
 
 		Child parentToGrandParent = deletedNode.getParent().getKey() >
 				deletedNode.getParent().getParent().getKey()
@@ -686,8 +701,11 @@ public class RedBlackTree
 		switch (deleteRotation)
 		{
 			case Rb01:
-				deletedNode.getParent().getLeftChild().setColor(Color.RED);
-				colorChanged = true;
+				if(deletedNode.getParent().getLeftChild() != externalNode)
+				{
+					deletedNode.getParent().getLeftChild().setColor(Color.RED);
+					colorChanged = true;
+				}
 				break;
 			case Rb02:
 				deletedNode.getParent().setColor(Color.BLACK);
@@ -834,7 +852,10 @@ public class RedBlackTree
 				b = deletedNode.getParent().getLeftChild().getRightChild();
 
 				v.setColor(Color.BLACK);
-				b.setColor(Color.RED);
+				if(b!= externalNode)
+				{
+					b.setColor(Color.RED);
+				}
 
 				// W to GP
 				if(parentToGrandParent == Child.RIGHT)
@@ -1001,12 +1022,18 @@ public class RedBlackTree
 				break;
 			case Lb01:
 				// Color Change
-				deletedNode.getParent().getRightChild().setColor(Color.RED);
-				colorChanged = true;
+				if(deletedNode.getParent().getRightChild() !=externalNode)
+				{
+					deletedNode.getParent().getRightChild().setColor(Color.RED);
+					colorChanged = true;
+				}
 				break;
 			case Lb02:
 				deletedNode.getParent().setColor(Color.BLACK);
-				deletedNode.getParent().getRightChild().setColor(Color.RED);
+				if(deletedNode.getParent().getRightChild() != externalNode)
+				{
+					deletedNode.getParent().getRightChild().setColor(Color.RED);
+				}
 				break;
 			case Lb11:
 				py = deletedNode.getParent();
@@ -1142,7 +1169,10 @@ public class RedBlackTree
 
 				v.setColor(Color.BLACK);
 				py.setColor(Color.BLACK);
-				b.setColor(Color.RED);
+				if(b != externalNode)
+				{
+					b.setColor(Color.RED);
+				}
 
 				// W to GP
 				if(parentToGrandParent == Child.RIGHT)
@@ -1316,6 +1346,7 @@ public class RedBlackTree
 			default:
 		}
 
+
 	}
 
 
@@ -1325,7 +1356,6 @@ public class RedBlackTree
 	 */
 	public void add(Job currentJob)
 	{
-
 		if(head == null)
 		{
 			head = new RedBlackNode(currentJob, Color.BLACK);
@@ -1340,6 +1370,11 @@ public class RedBlackTree
 		insertNode.setLeftChild(externalNode);
 		insertNode.setRightChild(externalNode);
 		int insertKey = insertNode.getKey();
+
+		if(currentJob.getId() == 12220)
+		{
+			nullNode = insertNode;
+		}
 
 
 		// We are at the top of the tree. If our key is less than this value
@@ -1372,6 +1407,7 @@ public class RedBlackTree
 
 		InsertRotation insertRotation = classifyInsertRotation(insertNode);
 		performRotation(insertNode, insertRotation);
+
 		RedBlackNode conflictingNode = null;
 		do
 		{
@@ -1386,7 +1422,6 @@ public class RedBlackTree
 					insertRotation = classifyInsertRotation(conflictingNode);
 					performRotation(conflictingNode, insertRotation);
 				}
-
 			}
 			else
 			{
@@ -1401,7 +1436,8 @@ public class RedBlackTree
 	private RedBlackNode checkForPropertyMaintained(RedBlackNode node)
 	{
 		// We set our GP to Red So if our GGp is red also, we need to keep going
-		if(node.getParent().getParent().getParent().getColor() == Color.RED)
+		if(node.getParent().getParent().getParent().getColor() == Color.RED
+				&& node.getParent().getParent().getColor() == Color.RED)
 		{
 			// Bad node, our Grandparent
 			return node.getParent().getParent();
@@ -1414,14 +1450,14 @@ public class RedBlackTree
 	 */
 	private void performRotation(RedBlackNode insertNode, InsertRotation insertRotation)
 	{
-		RedBlackNode grandParentsParent;
-		RedBlackNode x;
-		RedBlackNode y;
-		RedBlackNode z;
-		RedBlackNode a;
-		RedBlackNode b;
-		RedBlackNode c;
-		RedBlackNode d;
+		RedBlackNode grandParentsParent = externalNode;
+		RedBlackNode x = externalNode;
+		RedBlackNode y = externalNode;
+		RedBlackNode z = externalNode;
+		RedBlackNode a = externalNode;
+		RedBlackNode b = externalNode;
+		RedBlackNode c = externalNode;
+		RedBlackNode d = externalNode;
 
 		Child greatToRootRotation;
 
@@ -1650,6 +1686,14 @@ public class RedBlackTree
 				break;
 				default:
 		}
+		grandParentsParent = externalNode;
+		x = externalNode;
+		y = externalNode;
+		z = externalNode;
+		a = externalNode;
+		b = externalNode;
+		c = externalNode;
+		d = externalNode;
 	}
 
 	/*
@@ -1658,6 +1702,7 @@ public class RedBlackTree
 	private DeleteRotation classifyDeleteRotation(RedBlackNode deleteNode)
 	{
 		RedBlackNode py = deleteNode.getParent();
+
 
 		Child parentToDelete = null;
 
@@ -1679,6 +1724,7 @@ public class RedBlackTree
 			if ((py.getColor() == Color.BLACK)
 					&& (v.getColor() == Color.BLACK)
 					&& (a.getColor() == Color.BLACK)
+					&& (v != externalNode)
 					&& (b.getColor() == Color.BLACK))
 			{
 				return DeleteRotation.Rb01;
@@ -1717,6 +1763,7 @@ public class RedBlackTree
 					&& (v.getColor() == Color.RED)
 					&& (a.getColor() == Color.BLACK)
 					&& (b.getColor() == Color.BLACK)
+					&& (b != externalNode)
 					&& (b_left.getColor() == Color.BLACK)
 					&& (b_right.getColor() == Color.BLACK))
 			{
@@ -1765,6 +1812,7 @@ public class RedBlackTree
 
 			if ((py.getColor() == Color.BLACK)
 			&& (v.getColor() == Color.BLACK)
+					&& (v != externalNode)
 			&& (b.getColor() == Color.BLACK)
 			&& (a.getColor() == Color.BLACK))
 			{
@@ -1804,6 +1852,7 @@ public class RedBlackTree
 					&& (v.getColor() == Color.RED)
 					&& (b.getColor() == Color.BLACK)
 					&& (a.getColor() == Color.BLACK)
+					&& b != externalNode
 					&& (b_right.getColor() == Color.BLACK)
 					&& (b_left.getColor() == Color.BLACK))
 			{
@@ -1839,7 +1888,6 @@ public class RedBlackTree
 			{
 				return DeleteRotation.Lr2;
 			}
-
 		}
 		return null;
 	}

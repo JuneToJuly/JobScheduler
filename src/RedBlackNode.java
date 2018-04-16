@@ -17,9 +17,9 @@ public class RedBlackNode
 		if (job !=null)	this.key = job.getId();
 		this.color = color;
 
-		parent = null;
-		leftChild = null;
-		rightChild = null;
+		parent = RedBlackTree.externalNode;
+		leftChild = RedBlackTree.externalNode;
+		rightChild = RedBlackTree.externalNode;
 	}
 
 	public void setJob(Job job)

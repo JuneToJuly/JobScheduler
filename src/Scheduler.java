@@ -90,8 +90,14 @@ public class Scheduler
 			{
 				stillJobs = dispatchJob();
 			}
+			if (runningJobCounter < 0)
+			{
+				System.out.println(currentTime);
+				System.out.println(runningJob.toString());
+			}
 			currentTime++;
 		}while(stillJobs || !dispatcherFinished);
+
 	}
 
 	/*
@@ -101,10 +107,9 @@ public class Scheduler
 	{
 		if(runningJobCounter == 0 && runningJob != null)
 		{
-
-			if(runningJob.getExecutedTime() + 5 >= runningJob.getTotalTime())
+			if((runningJob.getExecutedTime() + 5) >= runningJob.getTotalTime())
 			{
-				jobFinish += " " + runningJob.getId() + ": " + currentTime +"\n";
+				System.out.println("Deleting: " + runningJob + " At time: " + currentTime);
 				rbt.delete(runningJob);
 				minHeap.extractMin();
 			}
@@ -164,7 +169,7 @@ public class Scheduler
 		if(runningJob.getExecutedTime() + 5 >= runningJob.getTotalTime())
 		{
 			// This means we have less that 5 seconds
-			runningJobCounter = runningJob.getTotalTime()-runningJob.getExecutedTime();
+			runningJobCounter = runningJob.getTotalTime() - runningJob.getExecutedTime();
 		}
 		else
 		{
