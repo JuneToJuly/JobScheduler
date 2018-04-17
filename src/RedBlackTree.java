@@ -391,7 +391,7 @@ public class RedBlackTree
 		{
 			System.out.println();
 		}
-		if(toDelete.getId() == 5144)
+		if(toDelete.getId() == 13166)
 
 		{
 			System.out.println();
@@ -506,7 +506,7 @@ public class RedBlackTree
 	 */
 	private RedBlackNode findDeficientNode(int degree, RedBlackNode node)
 	{
-		if(node.getKey() == 204)
+		if(node.getKey() == 13166)
 		{
 			System.out.println();
 		}
@@ -663,6 +663,12 @@ public class RedBlackTree
 			// Swap the keys because we don't ever delete this node
 			node.setJob(largestNode.getJob());
 			degree = checkDegreeOfDeletion(largestNode);
+			if(degree == 0)
+			{
+				node.setLeftChild(externalNode);
+				externalNode.setParent(node);
+				return externalNode;
+			}
 			return findDeficientNode(degree, largestNode);
 		}
 		return null;
