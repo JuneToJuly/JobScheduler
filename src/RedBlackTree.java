@@ -391,12 +391,11 @@ public class RedBlackTree
 		{
 			System.out.println();
 		}
-		if(toDelete.getId() == 13166)
-
+		if(toDelete.getId() == 13651)
 		{
 			System.out.println();
 		}
-		if(toDelete.getId() == 13166)
+		if(toDelete.getId() == 19848)
 		{
 			System.out.println();
 		}
@@ -477,20 +476,6 @@ public class RedBlackTree
 			/*
 				Some deletions have already had their nodes deleted
 			 */
-			if(shouldDelete)
-			{
-				if(deficientNode.getParent().getRightChild() == deficientNode)
-				{
-					deficientNode.getParent().setRightChild(externalNode);
-					shouldDelete = false;
-				}
-				else
-				{
-					deficientNode.getParent().setLeftChild(externalNode);
-					shouldDelete = false;
-				}
-			}
-
 		}while(deleteRotation == DeleteRotation.Rb01
 				|| deleteRotation == DeleteRotation.Lb01
 				&& next != rootNode);
@@ -506,7 +491,7 @@ public class RedBlackTree
 	 */
 	private RedBlackNode findDeficientNode(int degree, RedBlackNode node)
 	{
-		if(node.getKey() == 13166)
+		if(node.getKey() == 13651)
 		{
 			System.out.println();
 		}
@@ -533,18 +518,26 @@ public class RedBlackTree
 				&& node.getColor() == Color.BLACK)
 		{
 			shouldDelete = true;
-			return node;
+			if (node.getParent().getLeftChild().getKey() == node.getKey())
+			{
+				node.getParent().setLeftChild(externalNode);
+			}
+			else if (node.getParent().getRightChild().getKey() == node.getKey())
+			{
+				node.getParent().setRightChild(externalNode);
+			}
+			return node.getParent();
 		}
 		// Red Leaf node, we delete this node and we are done.
 		else if(degree == 0 && node.getColor() == Color.RED)
 		{
-			if(parentToDeletion == Child.RIGHT)
-			{
-				node.getParent().setRightChild(externalNode);
-			}
-			else
+			if (node.getParent().getLeftChild().getKey() == node.getKey())
 			{
 				node.getParent().setLeftChild(externalNode);
+			}
+			else if (node.getParent().getRightChild().getKey() == node.getKey())
+			{
+				node.getParent().setRightChild(externalNode);
 			}
 			shouldDelete = false;
 			return null;
@@ -630,7 +623,7 @@ public class RedBlackTree
 			// Regardless, we need to set the parent of deleted
 			// node to our deleted nodes child, and our child node's
 			// parent needs to be set to our deleted nodes parent.
-			if(parentToDeletion == Child.RIGHT)
+			if(node.getParent().getRightChild().getKey() == node.getKey())
 			{
 				node.getParent().setRightChild(y);
 			}
@@ -638,11 +631,11 @@ public class RedBlackTree
 			{
 				node.getParent().setLeftChild(y);
 			}
-
-			if(y != null)
-			{
-				y.setColor(Color.BLACK);
-			}
+//
+//			if(y != null)
+//			{
+//				y.setColor(Color.BLACK);
+//			}
 
 			shouldDelete = false;
 			return defiecientNode;
@@ -663,12 +656,6 @@ public class RedBlackTree
 			// Swap the keys because we don't ever delete this node
 			node.setJob(largestNode.getJob());
 			degree = checkDegreeOfDeletion(largestNode);
-			if(degree == 0)
-			{
-				node.setLeftChild(externalNode);
-				externalNode.setParent(node);
-				return externalNode;
-			}
 			return findDeficientNode(degree, largestNode);
 		}
 		return null;
@@ -1737,7 +1724,7 @@ public class RedBlackTree
 
 		if(py.getParent() != null)
 		{
-			parentToDelete = deleteNode.getKey() > py.getKey()
+			parentToDelete = deleteNode.getParent().getRightChild().getKey() == deleteNode.getKey()
 					? Child.RIGHT
 					: Child.LEFT;
 		}

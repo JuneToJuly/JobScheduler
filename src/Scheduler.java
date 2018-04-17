@@ -110,6 +110,10 @@ public class Scheduler
 			if((runningJob.getExecutedTime() + 5) >= runningJob.getTotalTime())
 			{
 				System.out.println("Deleting: " + runningJob + " At time: " + currentTime);
+				if(runningJob.getId() == 11071)
+				{
+					System.out.println();
+				}
 				rbt.delete(runningJob);
 //				rbt.printNodeStyle(null);
 				minHeap.extractMin();
