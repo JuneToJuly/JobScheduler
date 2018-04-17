@@ -105,18 +105,20 @@ public class Scheduler
 	 */
 	private void checkJobFinished(int currentTime)
 	{
+		if(currentTime == 7420)
+		{
+			System.out.println();
+			minHeap.printHeap();
+			System.out.println();
+		}
 		if(runningJobCounter == 0 && runningJob != null)
 		{
 			if((runningJob.getExecutedTime() + 5) >= runningJob.getTotalTime())
 			{
 				System.out.println("Deleting: " + runningJob + " At time: " + currentTime);
-				if(runningJob.getId() == 11071)
-				{
-					System.out.println();
-				}
-				rbt.delete(runningJob);
+//				rbt.delete(runningJob);
 //				rbt.printNodeStyle(null);
-				minHeap.extractMin();
+//				minHeap.extractMin();
 			}
 			else
 			{
@@ -175,6 +177,8 @@ public class Scheduler
 		{
 			// This means we have less that 5 seconds
 			runningJobCounter = runningJob.getTotalTime() - runningJob.getExecutedTime();
+				rbt.delete(runningJob);
+				minHeap.extractMin();
 		}
 		else
 		{
@@ -191,6 +195,10 @@ public class Scheduler
 	public void addJobs(Command command)
 	{
 		Job newJob = new Job(command.getId(),command.getJobExecutionTime());
+		if(command.getId() == 11071)
+		{
+			System.out.println();
+		}
 		minHeap.add(newJob);
 		rbt.add(newJob);
 	}
