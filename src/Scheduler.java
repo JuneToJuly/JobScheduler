@@ -90,14 +90,8 @@ public class Scheduler
 			{
 				stillJobs = dispatchJob();
 			}
-			if (runningJobCounter < 0)
-			{
-				System.out.println(currentTime);
-				System.out.println(runningJob.toString());
-			}
 			currentTime++;
 		}while(stillJobs || !dispatcherFinished);
-		System.out.println();
 	}
 
 	/*
@@ -105,19 +99,11 @@ public class Scheduler
 	 */
 	private void checkJobFinished(int currentTime)
 	{
-		if(currentTime == 7420)
-		{
-			System.out.println();
-			minHeap.printHeap();
-			System.out.println();
-		}
 		if(runningJobCounter == 0 && runningJob != null)
 		{
 			if((runningJob.getExecutedTime() + 5) >= runningJob.getTotalTime())
 			{
-				System.out.println("Deleting: " + runningJob + " At time: " + currentTime);
 //				rbt.delete(runningJob);
-//				rbt.printNodeStyle(null);
 //				minHeap.extractMin();
 			}
 			else
@@ -195,10 +181,6 @@ public class Scheduler
 	public void addJobs(Command command)
 	{
 		Job newJob = new Job(command.getId(),command.getJobExecutionTime());
-		if(command.getId() == 11071)
-		{
-			System.out.println();
-		}
 		minHeap.add(newJob);
 		rbt.add(newJob);
 	}

@@ -5,10 +5,8 @@ public class RedBlackTree
 {
 	static RedBlackNode externalNode;
 	static RedBlackNode rootNode;
-	public RedBlackNode nullNode;
 	boolean shouldDelete;
 	boolean colorChanged;
-	public RedBlackNode nodeeeee;
 
     // Static nodes that will be used for when we want to set children
     // to null to avoid nulls.
@@ -187,7 +185,6 @@ public class RedBlackTree
 
 		RedBlackNode lastRight = null;
 		RedBlackNode searchNode = head;
-
         // Search for nodes previous
 		do
 		{
@@ -222,7 +219,8 @@ public class RedBlackTree
 		// children, if so we need to go to left and farthest
 		// down to the right
 		// If not, we need to return the last right
-		if(searchNode.getLeftChild() == externalNode)
+		if(searchNode.getLeftChild() == externalNode
+				&& lastRight != null)
 		{
 			return lastRight.getJob().toString();
 		}
@@ -386,19 +384,6 @@ public class RedBlackTree
 	 */
 	public void delete(Job toDelete)
 	{
-		if(externalNode.getRightChild() != externalNode
-				|| externalNode.getLeftChild() != externalNode)
-		{
-			System.out.println();
-		}
-		if(toDelete.getId() == 13651)
-		{
-			System.out.println();
-		}
-		if(toDelete.getId() == 19848)
-		{
-			System.out.println();
-		}
 		if(head == null)
 		{
 			return;
@@ -415,7 +400,7 @@ public class RedBlackTree
 		}
 
 		// Looking for element to delete
-		while(next != null && next != externalNode)
+		while(next != externalNode)
 		{
 			if(next.getKey() == toDelete.getId())
 			{
@@ -427,7 +412,7 @@ public class RedBlackTree
 		}
 
 		// Failed to find the key, exit
-		if(next == externalNode || next == null)
+		if(next == externalNode)
 		{
 			return;
 		}
@@ -460,16 +445,12 @@ public class RedBlackTree
 				return;
 			}
 
-
 			// Classify this one degree rotation
 			deleteRotation = classifyDeleteRotation(deficientNode);
-
 			// We have solved provlem
 			if(deleteRotation == null)
 			{break;}
-
 			performDeleteRotation(deficientNode, deleteRotation);
-
 
 			next = deficientNode.getParent();
 
@@ -491,10 +472,6 @@ public class RedBlackTree
 	 */
 	private RedBlackNode findDeficientNode(int degree, RedBlackNode node)
 	{
-		if(node.getKey() == 13651)
-		{
-			System.out.println();
-		}
 		// If we delete the head and it is only node
 		if(node.getParent() == rootNode && degree ==0)
 		{
@@ -631,11 +608,7 @@ public class RedBlackTree
 			{
 				node.getParent().setLeftChild(y);
 			}
-//
-//			if(y != null)
-//			{
 //				y.setColor(Color.BLACK);
-//			}
 
 			shouldDelete = false;
 			return defiecientNode;
@@ -663,7 +636,8 @@ public class RedBlackTree
 
 	/*
 		Checks the degree of a node.
-	 */	private int checkDegreeOfDeletion(RedBlackNode next)
+	 */
+	private int checkDegreeOfDeletion(RedBlackNode next)
 	{
 		int degree = 0;
 		if(next.getLeftChild() != externalNode)
@@ -685,14 +659,14 @@ public class RedBlackTree
 		Color initRootColor = null;
 
 		// node according to slides
-		RedBlackNode py = externalNode;
-		RedBlackNode v = externalNode;
-		RedBlackNode a = externalNode;
-		RedBlackNode b = externalNode;
-		RedBlackNode w = externalNode;
-		RedBlackNode c = externalNode;
-		RedBlackNode d = externalNode;
-		RedBlackNode x = externalNode;
+		RedBlackNode py = null;
+		RedBlackNode v = null;
+		RedBlackNode a = null;
+		RedBlackNode b = null;
+		RedBlackNode w = null;
+		RedBlackNode c = null;
+		RedBlackNode d = null;
+		RedBlackNode x = null;
 
 		Child parentToGrandParent = deletedNode.getParent().getKey() >
 				deletedNode.getParent().getParent().getKey()
@@ -862,7 +836,7 @@ public class RedBlackTree
 				b = deletedNode.getParent().getLeftChild().getRightChild();
 
 				v.setColor(Color.BLACK);
-				if(b!= externalNode)
+				if(b != externalNode)
 				{
 					b.setColor(Color.RED);
 				}
@@ -1357,7 +1331,6 @@ public class RedBlackTree
 			default:
 		}
 
-
 	}
 
 
@@ -1367,6 +1340,7 @@ public class RedBlackTree
 	 */
 	public void add(Job currentJob)
 	{
+
 		if(head == null)
 		{
 			head = new RedBlackNode(currentJob, Color.BLACK);
@@ -1382,16 +1356,6 @@ public class RedBlackTree
 		insertNode.setRightChild(externalNode);
 		int insertKey = insertNode.getKey();
 
-		if(externalNode.getRightChild() != externalNode
-				|| externalNode.getLeftChild() != externalNode)
-		{
-			nullNode = insertNode;
-		}
-
-		if(currentJob.getId() == 13166)
-		{
-			nodeeeee = insertNode;
-		}
 
 		// We are at the top of the tree. If our key is less than this value
 		// We go to the left subtree, else we go to the right
@@ -1423,7 +1387,6 @@ public class RedBlackTree
 
 		InsertRotation insertRotation = classifyInsertRotation(insertNode);
 		performRotation(insertNode, insertRotation);
-
 		RedBlackNode conflictingNode = null;
 		do
 		{
@@ -1438,6 +1401,7 @@ public class RedBlackTree
 					insertRotation = classifyInsertRotation(conflictingNode);
 					performRotation(conflictingNode, insertRotation);
 				}
+
 			}
 			else
 			{
@@ -1452,8 +1416,7 @@ public class RedBlackTree
 	private RedBlackNode checkForPropertyMaintained(RedBlackNode node)
 	{
 		// We set our GP to Red So if our GGp is red also, we need to keep going
-		if(node.getParent().getParent().getParent().getColor() == Color.RED
-				&& node.getParent().getParent().getColor() == Color.RED)
+		if(node.getParent().getParent().getParent().getColor() == Color.RED)
 		{
 			// Bad node, our Grandparent
 			return node.getParent().getParent();
@@ -1466,14 +1429,14 @@ public class RedBlackTree
 	 */
 	private void performRotation(RedBlackNode insertNode, InsertRotation insertRotation)
 	{
-		RedBlackNode grandParentsParent = externalNode;
-		RedBlackNode x = externalNode;
-		RedBlackNode y = externalNode;
-		RedBlackNode z = externalNode;
-		RedBlackNode a = externalNode;
-		RedBlackNode b = externalNode;
-		RedBlackNode c = externalNode;
-		RedBlackNode d = externalNode;
+		RedBlackNode grandParentsParent;
+		RedBlackNode x;
+		RedBlackNode y;
+		RedBlackNode z;
+		RedBlackNode a;
+		RedBlackNode b;
+		RedBlackNode c;
+		RedBlackNode d;
 
 		Child greatToRootRotation;
 
@@ -1702,14 +1665,6 @@ public class RedBlackTree
 				break;
 				default:
 		}
-		grandParentsParent = externalNode;
-		x = externalNode;
-		y = externalNode;
-		z = externalNode;
-		a = externalNode;
-		b = externalNode;
-		c = externalNode;
-		d = externalNode;
 	}
 
 	/*
@@ -1719,12 +1674,11 @@ public class RedBlackTree
 	{
 		RedBlackNode py = deleteNode.getParent();
 
-
 		Child parentToDelete = null;
 
 		if(py.getParent() != null)
 		{
-			parentToDelete = deleteNode.getParent().getRightChild().getKey() == deleteNode.getKey()
+			parentToDelete = deleteNode.getKey() > py.getKey()
 					? Child.RIGHT
 					: Child.LEFT;
 		}
@@ -1779,7 +1733,7 @@ public class RedBlackTree
 					&& (v.getColor() == Color.RED)
 					&& (a.getColor() == Color.BLACK)
 					&& (b.getColor() == Color.BLACK)
-					&& (b != externalNode)
+//					&& (b != externalNode)
 					&& (b_left.getColor() == Color.BLACK)
 					&& (b_right.getColor() == Color.BLACK))
 			{
@@ -1868,7 +1822,7 @@ public class RedBlackTree
 					&& (v.getColor() == Color.RED)
 					&& (b.getColor() == Color.BLACK)
 					&& (a.getColor() == Color.BLACK)
-					&& b != externalNode
+//					&& b != externalNode
 					&& (b_right.getColor() == Color.BLACK)
 					&& (b_left.getColor() == Color.BLACK))
 			{
@@ -1904,6 +1858,7 @@ public class RedBlackTree
 			{
 				return DeleteRotation.Lr2;
 			}
+
 		}
 		return null;
 	}

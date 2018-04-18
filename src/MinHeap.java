@@ -150,18 +150,15 @@ public class MinHeap
 			{
 				minChild = ((2 * parentIndex) + 1);
 			}
-			// Left child is the smallest and oen exist
 			else if (leftExist && !rightExist && parent.getExecutedTime() > leftChild.getExecutedTime())
 			{
 				minChild = ((2 * parentIndex) + 1);
 			}
-			// Right Child is the smallest and both exist
 			else if(rightExist && leftExist && rightChild.getExecutedTime() <= leftChild.getExecutedTime()
 					&& parent.getExecutedTime() > rightChild.getExecutedTime())
 			{
 				minChild = ((2 * parentIndex) + 2);
 			}
-			// // right child is smallest and one exist
 			else if(rightExist && !leftExist && parent.getExecutedTime() > rightChild.getExecutedTime())
 			{
 				minChild = ((2 * parentIndex) + 2);
@@ -184,31 +181,6 @@ public class MinHeap
 		}
 	}
 
-	public void checkHeap(){
-		int count = 0;
-		for (Job heapValue:
-		     heapArray)
-		{
-			if((count * 2) + 2 > lastHeapIndex)
-			{
-				break;
-			}
-			if(heapValue.getExecutedTime() > heapArray[(2 * count) + 1].getExecutedTime())
-			{
-				System.out.println("failed property");
-				System.out.println(heapValue + " child: " + heapArray[(2 * count) + 1]);
-				break;
-			}
-
-			if(heapValue.getExecutedTime() > heapArray[(2 * count) + 2].getExecutedTime())
-			{
-				System.out.println("failed property");
-				System.out.println(heapValue + " child: " + heapArray[(2 * count) + 2]);
-				break;
-			}
-			count++;
-		}
-	}
 	/**
 	 * Prints the heap.
 	 */
